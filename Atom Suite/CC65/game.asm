@@ -1,9 +1,10 @@
 ;----------------------------------------------
 ; Common AGD engine
 ; Z80 conversion by Kees van Oss 2017
+; BBC Micro version by Kieran Connell 2018
 ;----------------------------------------------
-	.DEFINE asm_code $0220
-	.DEFINE header   1		; Header Wouter Ras emulator
+	.DEFINE asm_code $1100	; assembly address _BEEB
+	.DEFINE header   0		; Header Wouter Ras emulator
 	.DEFINE filenaam "AGD"
 
 .org asm_code-22*header

@@ -20,7 +20,7 @@ Reset 8271
 Loading :0 -autoboot 
 Loading :1  
 atom_reset(1)
-exedir=C:\Users\gebruiker\Documents\AGD\Atom Suite\Atomulator\
+exedir=C:\Users\kconnell\OneDrive\BEEB\Repos\Atomic-AGD-Suite\Atom Suite\Atomulator\
 InitMMC()
 InitMMC():Done
 Reset 8271
@@ -36,7 +36,5 @@ utility_ptr = 0x0c000
 akernel_ptr = 0x1f000
 reset_rom():done
 atom_reset():done
-file_exists(C:/Users/gebruiker/Documents/AGD/Atom Suite/Atomulator/mmc/MENU)
+file_exists(C:/Users/kconnell/OneDrive/BEEB/Repos/Atomic-AGD-Suite/Atom Suite/Atomulator/mmc/MENU)
 get_fileinfo_special()
-size=27997, attr=0
-gfxmode changed at PC=044A from 00 to 0F
