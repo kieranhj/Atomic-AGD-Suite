@@ -115,3 +115,22 @@ So would need to figure out ability to reorder CPU instructions between commands
 I.e. do all X first then all Y
 
 Need to start brushing up on languages & compiler theory...
+
+Easy MOS RAM to steal:
+&300 - &400 = VDU workspace (1 page)
+&400 - &800 = Language workspace (4 pages)
+&800 - &9BF = Sound workspace (keep for audio)
+&9C0 - &C00 = CFS & Soft key (&240)
+&C00 - &D00 = Character defs (keep for font)
+&D00 - &E00 = NMI etc. (leave alone)
+&E00 = Free
+
+Easy ZP to steal:
+&00 - &A0 = Language workspace + Econet workspace
+
+Needs
+MAP = 3x pages = &300 - &600
+SCREEN ADDRESS TABLES = 2x pages (could be reduced) = &600 - &800
+SHRAPNEL TABLE = 330 = &14A bytes = &B00 - 330
+
+Still available &C00 - &D00 and &E00 - &1100 (3 pages)
