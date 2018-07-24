@@ -65,9 +65,9 @@
 
 ; System constants
 
-	ScreenAddr  = $5800	; Startaddress video RAM _BEEB
-	ScreenSize 	= $8000 - ScreenAddr	; Screen size bytes _BEEB
-	ScreenRowBytes = 320				; 40 columns
+	ScreenSize  = $1800	; Startaddress video RAM _BEEB
+	ScreenAddr 	= $8000 - ScreenSize	; Screen size bytes _BEEB
+	ScreenRowBytes = 256				; 40 columns
 
 	SpriteMaxY	= 185	; used for clipping bottom of screen
 
@@ -97,6 +97,9 @@
 	OSFIND	 = $ffce
 	OSGBPB	 = $ffd1
 	OSARGS	 = $ffda
+
+	PAL_black = 0 ^ 7
+	PAL_white = 7 ^ 7
 
 ; Conditional compilation flags
 ; Flags are set in commandline assembly
@@ -925,8 +928,63 @@ clsloop:
 ; Atomic palette is static 
 ;----------------------------------------------------------------------
 
-setpal:
+setcrtc:
+	ldx #13
+crtcloop:
+	stx $FE00
+	lda crtc_regs_high,x
+	sta $FE01
+	dex
+	bpl crtcloop
+
+    ; Set ULA
+    lda #$88            ; MODE 4
+    sta $248            ; Tell the OS or it will mess with ULA settings at vsync
+    sta $FE20
 	rts
+
+setpal:
+	ldx #15
+palloop:
+	lda ula_pal,x
+	sta $fe21
+	dex
+	bpl palloop
+	rts
+
+crtc_regs_high:
+	.byte 63				; R0  horizontal total
+	.byte 32				; R1  horizontal displayed
+	.byte 49				; R2  horizontal position
+	.byte $24				; R3  sync width 40 = &28
+	.byte 38				; R4  vertical total
+	.byte 0					; R5  vertical total adjust
+	.byte 24				; R6  vertical displayed
+	.byte 35				; R7  vertical position; 35=top of screen
+	.byte $00				; R8  interlace
+	.byte 7					; R9  scanlines per row
+	.byte 32				; R10 cursor start
+	.byte 8					; R11 cursor end
+	.byte >(ScreenAddr/8)	; R12 screen start address, high
+	.byte <(ScreenAddr/8)	; R13 screen start address, low
+
+ula_pal:
+	.byte $00 + PAL_black
+	.byte $10 + PAL_black
+	.byte $20 + PAL_black
+	.byte $30 + PAL_black
+	.byte $40 + PAL_black
+	.byte $50 + PAL_black
+	.byte $60 + PAL_black
+	.byte $70 + PAL_black
+	.byte $80 + PAL_white
+	.byte $90 + PAL_white
+	.byte $a0 + PAL_white
+	.byte $b0 + PAL_white
+	.byte $c0 + PAL_white
+	.byte $d0 + PAL_white
+	.byte $e0 + PAL_white
+	.byte $f0 + PAL_white
 
 ;----------------------------------------------------------------------
 ; FODDER check
@@ -1904,10 +1962,7 @@ setsa0:
 
 ; Init graphics mode
 
-	lda #22
-	jsr OSWRCH		; _BEEB screen select VDU command
-	lda #ScrMode	; graphics mode
-	jsr OSWRCH		; _BEEB screen mode
+	jsr setcrtc
 	jsr setpal 		; set up palette.
 
 ; Init AtoMMC joystick
