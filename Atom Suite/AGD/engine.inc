@@ -47,36 +47,22 @@
 
 ; System constants
 
-	ScreenAddr  = $5800	; Startaddress video RAM _BEEB
-	ScreenSize 	= $8000 - ScreenAddr	; Screen size bytes _BEEB
-	ScreenRowBytes = 320				; 40 columns
-
-;	ScrSelAddr  = $b000	; Screen selection address
-;	KeyRowAddr  = $b000	; PIA key matrix row
-;	KeyColAddr  = $b001	; PIA key matrix column
-;	SpeakerBit  = $b002	; Speaker bit
-;	CmdReg      = $b400	; Command register AtoMMC
-;	DatReg      = $b401	; Data register AtoMMC 
-;	Timer2_Low  = $b808	; Timer 2 low byte
-;	Timer2_High = $b809	; Timer 2 high byte
+	ScreenAddr  = $8000	; Startaddress video RAM
+	ScrSelAddr  = $b000	; Screen selection address
+	KeyRowAddr  = $b000	; PIA key matrix row
+	KeyColAddr  = $b001	; PIA key matrix column
+	SpeakerBit  = $b002	; Speaker bit
+	CmdReg      = $b400	; Command register AtoMMC
+	DatReg      = $b401	; Data register AtoMMC 
+	Timer2_Low  = $b808	; Timer 2 low byte
+	Timer2_High = $b809	; Timer 2 high byte
 
 ; System calls
 
-;	SCRSYNC	 = $fe66	; wait for next CRT field flyback 60 Hz
-;	SCRSYNC1 = $fe6b	; wait for CRT field flyback 60 Hz
-;	OSRDCH   = $fe94	; get key subroutine
-;   READKEY  = $fe71	; scan key matrix subroutine
-
-; _BEEB MOS calls
-
-	OSBYTE	 = $fff4
-	OSFILE	 = $ffdd
-	OSWRCH	 = $ffee
-	OSASCI	 = $ffe3
-	OSWORD	 = $fff1
-	OSFIND	 = $ffce
-	OSGBPB	 = $ffd1
-	OSARGS	 = $ffda
+	SCRSYNC	 = $fe66	; wait for next CRT field flyback 60 Hz
+	SCRSYNC1 = $fe6b	; wait for CRT field flyback 60 Hz
+	OSRDCH   = $fe94	; get key subroutine
+        READKEY  = $fe71	; scan key matrix subroutine
 
 ; Conditional compilation flags
 ; Flags are set in commandline assembly
@@ -85,7 +71,6 @@
 ;	pflag = 0		; Particle engine
 ;	sflag = 0		; scrollytext
 ;	fflag = 1		; Fontflag
-
 .if iflag
 	TxtInvert   = $ff	; Invert byte for character printing
 	ScrFillByte = $ff	; Screen fill byte for CLS
@@ -93,7 +78,7 @@
 	TxtInvert   = $00	; Invert byte for character printing
 	ScrFillByte = $00	; Screen fill byte for CLS
 .endif
-	ScrMode     = 4		; Screen mode:	_BEEB
+	ScrMode     = $f0	; Screen mode:
 				;  $d0 = CLEAR4a colour
 				;  $f0 = CLEAR4  mono
 
@@ -112,17 +97,9 @@
 	lda #>(FONT-256)
 	sta FontPtr+1
 
-:
 	jsr game	 	; start the game.
-
-	ldx #$ff
-	ldy #$7f
-	lda #$81
-	jsr OSBYTE
-
-	jmp :-
-
-	rts				; exit (to BASIC?)
+	lda #12			; Clear screen + exit to Basic
+	jmp $fff4
 	
 contrl:	.byte 0			; control, 0 = keyboard, 1 = Kempston, 2 = Sinclair, 3 = Mouse.
 joyval:	.byte 0			; joystick reading.
@@ -550,14 +527,7 @@ dbar0:
 	dex			; next line down.
 	bpl dbar0		; draw rest of character.
 
-	clc
-	lda scraddr		; one char right.
-	adc #8
-	sta scraddr
-	bcc :+
-	inc scraddr+1
-:
-
+	inc scraddr		; one char right.
 	dec z80_c		; decrement character counter.
 	beq :+
 	jmp dbar1		; repeat for whole line.
@@ -640,18 +610,15 @@ blft:	.byte 0
 ;----------------------------------------------------
 
 prskey:
-	txa
+	tya
 	pha
 prsloop:
 	jsr vsync
-; _BEEB KEYS
-	lda #$79
-	ldx #$01
-	jsr OSBYTE
-	cpx #$ff
+	jsr READKEY
+	cpy #255
 	beq prsloop		; wait until key pressed
 	pla
-	tax
+	tay
 	rts
 
 ;----------------------------------------------------
@@ -667,8 +634,7 @@ prsloop:
 delay:
 	sta xtmp
 del_loop:
-	lda #19
-	jsr OSBYTE		; wait for vsync _BEEB
+	jsr SCRSYNC		; wait for flyback
 
 	ldy #208		; wait 208 x 16 = 3328 usec
 delay1:
@@ -768,15 +734,12 @@ vsync:
 	pha
 	jsr joykey		; read joystick/keyboard.
 vsync1:
-;	lda Timer2_High		; sync framerate with clock
-;	bne vsync1
-;	lda #>50000
-;	sta Timer2_High
-;	lda #<50000
-;	sta Timer2_Low
-
-	lda #19
-	jsr OSBYTE		; _BEEB vsync
+	lda Timer2_High		; sync framerate with clock
+	bne vsync1
+	lda #>50000
+	sta Timer2_High
+	lda #<50000
+	sta Timer2_Low
 
 	lda clock
 	and #1
@@ -785,17 +748,16 @@ vsync1:
 :
 	lda sndtyp
 	beq sndskip
-; _BEEB TODO SOUND
-;sndloop:
-;	lda SpeakerBit		; handle sound
-;	ldy sndtyp
-;sndwait:
-;	dey
-;	bne sndwait
-;	eor #4
-;	sta SpeakerBit
-;	dec sndtyp
-;	bne sndloop
+sndloop:
+	lda SpeakerBit		; handle sound
+	ldy sndtyp
+sndwait:
+	dey
+	bne sndwait
+	eor #4
+	sta SpeakerBit
+	dec sndtyp
+	bne sndloop
 sndskip: 
 	pla
 	tax
@@ -877,7 +839,7 @@ clsloop:
 	bne clsloop
 	inc clsloop+2
 	ldx clsloop+2
-	cpx #>(ScreenAddr+ScreenSize)		; _BEEB
+	cpx #>(ScreenAddr+$1800)
 	bne clsloop
 	rts
 
@@ -1857,6 +1819,10 @@ setsa0:
 	lda scraddr
 	sta SCADTB_lb,y		; write low byte.
 	lda scraddr+1
+	cpy #192		; vertical lines on screen.
+	bcc :+
+	ora #$F0		; plot sprites in rom if of screen
+:
 	sta SCADTB_hb,y		; write high byte.
 	jsr nline		; next line down.
 	iny			; next position in table.
@@ -1864,10 +1830,8 @@ setsa0:
 	
 ; Init graphics mode
 
-	lda #22
-	jsr OSWRCH		; _BEEB screen select VDU command
-	lda #ScrMode	; graphics mode
-	jsr OSWRCH		; _BEEB screen mode
+	lda #ScrMode		; graphics mode
+	sta ScrSelAddr 		; screen selection address
 	jsr setpal 		; set up palette.
 
 ; Init AtoMMC joystick
@@ -2855,36 +2819,11 @@ swpsb0:
 ;----------------------------------------------------
 
 gprad:
-	tya
-	pha
-
-	lda dispx 		; x coordinate.
-	sta scraddr
-	lda #0
-	sta scraddr+1
-	asl scraddr  	; multiply char by 8
-	rol scraddr+1
-	asl scraddr
-	rol scraddr+1
-	asl scraddr
-	rol scraddr+1
-
-	lda dispy		; y coordinate.
-	asl a
-	asl a
-	asl a			; multiply char by 8
-	tay
-
-	clc
-	lda scraddr
-	adc SCADTB_lb,y
-	sta scraddr
-	lda scraddr+1
-	adc SCADTB_hb,y
-	sta scraddr+1
-
-	pla
-	tay
+	lda dispx		; get x
+	sta scraddr		; store lb address
+	lda dispy		; get y
+	ora #$80		; add $80
+	sta scraddr+1		; store hb address
 	rts
 
 ;--------------------------------------------------------------
@@ -2963,8 +2902,7 @@ pchar0:
 	bpl pchar0		; repeat.
 	rts
 
-scrtab:		.byte $07,$06,$05,$04,$03,$02,$01,$00
-;scrtab:	.byte $e0,$c0,$a0,$80,$60,$40,$20,$00
+scrtab:		.byte $e0,$c0,$a0,$80,$60,$40,$20,$00
 
 ;----------------------------------------------
 ; Print attributes, properties and pixels.
@@ -3083,24 +3021,28 @@ sprit2:
 	sta spr+2
 	jsr sprit7		; shift sprite
 
+	dex
 	lda spr			; fetch graphic.
-	ldy #0			; _BEEB
+	ldy spritetab,x
 	eor (scraddr),y		; merge with screen image.
 	sta (scraddr),y		; write to screen.
+	inx			; next screen byte.
 
 	lda spr+1		; fetch graphic.
-	ldy #8			; _BEEB
+	ldy spritetab,x
 	eor (scraddr),y		; merge with screen image.
 	sta (scraddr),y		; write to screen.
+	iny
 
 	lda spr+2		; fetch graphic.
-	ldy #16			; _BEEB
 	eor (scraddr),y		; merge with screen image.
 	sta (scraddr),y		; write to screen.
 
-	jsr nline
-
 	inx			; next source byte.
+	cpx #16
+	bne :+
+	inc scraddr+1
+:
 	cpx #32
 	bne sprit1		; repeat
 
@@ -3796,15 +3738,10 @@ random:
 ;--------------------------------------------------------
 
 ;              X   Z   .   ;  SPC  Q   P
-keys:   .byte $42,$61,$68,$48,$62,$10,$37       ; Keys defined by game designer.
-        .byte $30,$31,$11,$12                   ; menu options.
-;keys:   .byte $35,$15,$93,$22,$90,$04,$14       ; Keys defined by game designer.
-;        .byte $21,$11,$01,$92                   ; menu options.
-
-jkeys:  .byte $42,$61,$68,$48,$62,$10,$37       ; Keys defined by game designer.
-        .byte $30,$31,$11,$12                   ; menu options.
-;jkeys:  .byte $03,$01,$02,$04,$00,$04,$14       ; Joykey keys
-;        .byte $21,$11,$01,$92                   ; menu options.
+keys:   .byte $35,$15,$93,$22,$90,$04,$14       ; Keys defined by game designer.
+        .byte $21,$11,$01,$92                   ; menu options.
+jkeys:  .byte $03,$01,$02,$04,$00,$04,$14       ; Joykey keys
+        .byte $21,$11,$01,$92                   ; menu options.
 
 ;--------------------------------------------------------
 ; Keyboard test routine.
@@ -3819,29 +3756,25 @@ jkeys:  .byte $42,$61,$68,$48,$62,$10,$37       ; Keys defined by game designer.
 
 ktest:
 	sta z80_a		; save key
-	tya
-	pha
 
-; _BEEB keyboard read
+	lsr a			; set row
+	lsr a
+	lsr a
+	lsr a
+	ora #ScrMode		; don't flip screenmode
+	sta KeyRowAddr
+
 	lda z80_a
-	eor #$80		; _BEEB just look for this key
+	and #$0f
 	tax
+	lda KeyColAddr		; read column
 
-	lda #$79
-	jsr OSBYTE
-
-	txa
-	bmi pressed 	; _BEEB X is negative if key is pressed
-
+	and keymask,x		; check key pressed
+	beq pressed
 	sec			; key not pressed
-	pla
-	tay
 	rts
-
 pressed:
 	clc			; key pressed
-	pla
-	tay
 	rts
 
 keymask:	.byte $01,$02,$04,$08,$10,$20
@@ -3901,11 +3834,10 @@ joyjo2:
 
 
 ; AtoMMC joystick controls.
-; _BEEB TODO
+
 ; Set PORTB direction
 
 joyinit:
-.if 0
 	lda #$ff   		; Write value to latch, bits 0-7 input
 	sta DatReg
 	jsr interwritedelay
@@ -3915,13 +3847,11 @@ joyinit:
 wait_until_not_busy:
 	lda CmdReg
 	bmi wait_until_not_busy
-.endif
 	rts
 
 ; Get PORTB value
 
 joysin:
-.if 0
 	lda #$a2   		; Read value PORTB in latch
 	sta CmdReg
 	jsr interwritedelay
@@ -3956,7 +3886,6 @@ interwritedelay:
 loop:
 	sbc  #1
 	bne  loop
-.endif
 	rts
 
 ;tmp_byte:   .byte 0
@@ -3968,10 +3897,9 @@ loop:
 ;  A = high nibble=row and low nibble=column key in matrix
 ;---------------------------------------------------------------
 
-.if 0
 kget:
-;	lda #ScrMode		; high-mono mode.
-;	jsr OSWRCH			; _BEEB VDU
+	lda #ScrMode		; high-mono mode.
+	sta ScrSelAddr		; screen select port
 	stx xtmp
 kget4:
 	jsr READKEY		; read key until pressed
@@ -4006,7 +3934,6 @@ kget2:
 	adc rrow
 	ldx xtmp
 	rts
-.endif
 
 ;---------------------------------------------------------------
 ; Display message.
@@ -4650,13 +4577,18 @@ gspra0:
 
 scadd:
 	ldx dispy
+	cpx #192
+	bcc :+
+	ldx #192
+:
 	lda dispx
-	and #$f8
+	lsr a
+	lsr a
+	lsr a
 	clc
 	adc SCADTB_lb,x
 	sta scraddr
 	lda SCADTB_hb,x
-	adc #0
 	sta scraddr+1
 	rts
 
@@ -4729,14 +4661,8 @@ dline:
 	eor (scraddr),y 	; XOR with what's there.
 	sta (scraddr),y 	; bung it in.
 
-; _BEEB screen arrangement
-	clc
-	lda scraddr
-	adc #16
-	sta scraddr
-	bcc :+
-	inc scraddr+1
-:
+	inc scraddr 		; next screen address.
+	inc scraddr 		; next screen address.
 
 	lda (z80_de),y 		; fetch data.
 	and z80_b 		; mask away unwanted bits.
@@ -4747,14 +4673,7 @@ dline:
 	bne :+
 	inc z80_d
 :
-; _BEEB screen arrangement
-	sec
-	lda scraddr 		; one character cell to the left.
-	sbc #8
-	sta scraddr
-	lda scraddr+1
-	sbc #0
-	sta scraddr+1
+	dec scraddr 		; one character cell to the left.
 
 	lda (z80_de),y 		; second bit of data.
 	eor (scraddr),y 	; XOR with what's there.
@@ -4764,42 +4683,20 @@ dline:
 	bne :+
 	inc z80_d
 :
-; _BEEB screen arrangement
-	sec
-	lda scraddr 		; another char left.
-	sbc #8
-	sta scraddr
-	lda scraddr+1
-	sbc #0
-	sta scraddr+1
+	dec scraddr 		; another char left.
 
 ;----------------------------------------------------------------------
 ; Line drawn, now work out next target address.
 ;----------------------------------------------------------------------
 
-; _BEEB screen arrangement
-
 nline:
-	lda scraddr 		; get low byte of address.
-	and #7				
-	cmp #7				; is this last line of row?
-	beq beeb_next_row
-
-	; within same row
-	inc scraddr			; new low byte of address.
-;	bne :+
-;	inc scraddr+1		; new high byte of address.
-:
-	rts
-
-beeb_next_row:
 	clc
-	lda scraddr
-	adc #<(ScreenRowBytes-7)
-	sta scraddr			; new low byte of address.
-	lda scraddr+1
-	adc #>(ScreenRowBytes-7)
-	sta scraddr+1		; new high byte of address.
+	lda scraddr 		; get low byte of address.
+	adc #$20
+	sta scraddr 		; new low byte of address.
+	bcc :+
+	inc scraddr+1 		; new high byte of address.
+:
 	rts
 
 ;-----------------------------------------------------------
@@ -5847,10 +5744,10 @@ user:
 ; Missing vars 
 ;----------------------------------------------------
 
-MAP: .res 3*256,0					; properties map buffer (3x256 bytes)
-SCADTB_lb: .res 256,0				; screen address table lo-byte (256 bytes)
-SCADTB_hb: .res 256,0				; screen address table hi-byte (256 bytes)
-SHRAPN: .res 55*6,0					; shrapnel table (55x6 bytes)
+MAP 		= $9800			; properties map buffer (3x256 bytes)
+SCADTB_lb 	= MAP+3*256		; screen address table lo-byte (256 bytes)
+SCADTB_hb 	= SCADTB_lb+256		; screen address table hi-byte (256 bytes)
+SHRAPN 		= SCADTB_hb+256		; shrapnel table (55x6 bytes)
 
 FontPtr:	.byte 0,0
 TmpAddr:	.byte 0,0
