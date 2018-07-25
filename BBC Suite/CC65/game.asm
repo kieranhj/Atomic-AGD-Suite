@@ -3,10 +3,15 @@
 ; Z80 conversion by Kees van Oss 2017
 ; BBC Micro version by Kieran Connell 2018
 ;----------------------------------------------
-	.DEFINE asm_code $0e00	; assembly address _BEEB
-	.DEFINE load_address $1100	; load address _BEEB
-	.DEFINE header   0		; Header Wouter Ras emulator
-	.DEFINE filenaam "AGD"
+.DEFINE asm_code $0e00		; assembly address _BEEB
+.DEFINE load_address $1200	; load address _BEEB
+.DEFINE header   0			; Header Wouter Ras emulator
+.DEFINE filenaam "AGD"
+
+.segment "ZEROPAGE"
+
+.include "z80-zp.inc"
+.include "engine-zp.inc"
 
 .org asm_code-22*header
 
@@ -28,10 +33,9 @@ name_end:
 ;********************************************************************
 .ENDIF
 
-start_asm:
-	.include "z80-zp.inc"
-
 .segment "CODE"
+
+start_asm:
 
 	jmp relocate + load_address - asm_code
 

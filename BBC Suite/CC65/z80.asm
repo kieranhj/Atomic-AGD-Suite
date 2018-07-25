@@ -52,6 +52,7 @@
 ;z80_r	 = ws+$1a
 
 ; Contains seperatly 1 bit set
+; _BEEB this is not safe memory to use as required by MOS
 
 _bitmem0	= $f8
 _bitmem1	= $f9
@@ -142,15 +143,15 @@ _notbitvalue7	= $7f
 ;		sta z80_iy+1
 ;		rts
 ;		
-sbc_hl_de:
-		lda z80_l
-		sbc z80_e
-		sta z80_l
-		lda z80_h
-		sbc z80_d
-		sta z80_h
-		rts
-
+;sbc_hl_de:
+;		lda z80_l
+;		sbc z80_e
+;		sta z80_l
+;		lda z80_h
+;		sbc z80_d
+;		sta z80_h
+;		rts
+;
 ;sbc_hl_bc:
 ;		lda z80_l
 ;		sbc z80_c
@@ -324,7 +325,8 @@ exx:
 ;-------------------------------------------------------------
 ; Set bits in bitmem
 ;-------------------------------------------------------------
-	
+
+.if 0
 z80_init:
 	ldx #$00
 	lda #$01
@@ -334,6 +336,7 @@ z80_init_loop:
 	asl a
 	bne z80_init_loop
 	rts
+.endif
 
 push_af:
 push_bc:

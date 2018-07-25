@@ -94,6 +94,13 @@ E.g. Dodgy
 Script &2C80 - &300A = &38A (<1K)
 Data &300A - &38B2 = &8A8 (>2K)
 
+E.g. Terrapins
+Engine = &E00 - &2CD0 = &1ED0 (<8K)
+Script = &2CD0 - &52D0 = &2F00 (~12K) became &2AAF (saved &451 bytes using ZP vars)
+Data = &7C10 - &52D0 = &2940 (~10K)
+Screen = &6800 - &8000 = &1800 (6K)
+Free = &1F00 - &6800 = &4900 (~18K)
+
 Could potentially create a code optimiser down the line
 Only uses A register with Y as index to indirect ptr
 (Mainly manipulating sprites in a table)
@@ -134,3 +141,6 @@ SCREEN ADDRESS TABLES = 2x pages (could be reduced) = &600 - &800
 SHRAPNEL TABLE = 330 = &14A bytes = &B00 - 330
 
 Still available &C00 - &D00 and &E00 - &1100 (3 pages)
+
+Moving all variables to ZP saved 1K of script from Terrapins!!
+Still over by 4K though...

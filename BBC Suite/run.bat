@@ -8,7 +8,7 @@ REM Locate your BeebAsm & b-em exes here
 REM Use BeebAsm to make a BBC disc image
 
  IF NOT EXIST Output/%1.bin goto error
- echo PUTFILE "Output/%1.bin", "AGDGAME", $1100, $1100 > disc.asm
+ echo PUTFILE "Output/%1.bin", "AGDGAME", $1200, $1200 > disc.asm
  %BEEBASM% -i disc.asm -do Discs\%1.ssd -boot AGDGAME
  del disc.asm
 

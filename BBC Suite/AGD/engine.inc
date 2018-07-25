@@ -6,11 +6,11 @@
 
 ; Global definitions ------------------------------------------------------------
 
-	FONT = font		; Font address
+	FONT = font			; Font address
 
 ; Block characteristics.
 
-	PLATFM = 1		; platform.
+	PLATFM = 1			; platform.
 	WALL = PLATFM + 1	; solid wall.
 	LADDER = WALL + 1	; ladder.
 	FODDER = LADDER + 1	; fodder block.
@@ -20,18 +20,20 @@
 
 ; Sprites.
 
-	NUMSPR = 12		; number of sprites.
-	TABSIZ = 17		; size of each entry.
+	NUMSPR = 12			; number of sprites.
+	TABSIZ = 17			; size of each entry.
 	SPRBUF = NUMSPR * TABSIZ; size of entire table.
-	NMESIZ = 4		; bytes stored in nmetab for each sprite.
+	NMESIZ = 4			; bytes stored in nmetab for each sprite.
 
-	var_Type = 0	; sprite type
-	var_Image = 1	; sprite time number
-	var_Frame = 2	; sprite frame
-	var_Y = 3		; sprite y coordinate
-	var_X = 4		; sprite X coordinate
+; Sprite table variable offsets.
 
-	var_newType = 5	; sprite new type
+	var_Type = 0		; sprite type
+	var_Image = 1		; sprite time number
+	var_Frame = 2		; sprite frame
+	var_Y = 3			; sprite y coordinate
+	var_X = 4			; sprite X coordinate
+
+	var_newType = 5		; sprite new type
 	var_newImage = 6	; sprite new image number
 	var_newFrame = 7	; sprite new frame
 	var_newY = 8		; sprite new y coordinate
@@ -48,20 +50,8 @@
 
 ; Particle engine.
 
-	NUMSHR = 55		; pieces of shrapnel.
-	SHRSIZ = 6		; bytes per particle.
-
-; Local vars
-
-	scraddr	= $80
-	fntaddr	= $82
-	tileaddr= $84
-	bufaddr	= $86
-	tmp     = $88
-
-	scr_l	= $90
-	scr_r	= $92
-	scr_txt	= $94
+	NUMSHR = 55			; pieces of shrapnel.
+	SHRSIZ = 6			; bytes per particle.
 
 ; System constants
 
@@ -70,22 +60,6 @@
 	ScreenRowBytes = 256				; 40 columns
 
 	SpriteMaxY	= 185	; used for clipping bottom of screen
-
-;	ScrSelAddr  = $b000	; Screen selection address
-;	KeyRowAddr  = $b000	; PIA key matrix row
-;	KeyColAddr  = $b001	; PIA key matrix column
-;	SpeakerBit  = $b002	; Speaker bit
-;	CmdReg      = $b400	; Command register AtoMMC
-;	DatReg      = $b401	; Data register AtoMMC 
-;	Timer2_Low  = $b808	; Timer 2 low byte
-;	Timer2_High = $b809	; Timer 2 high byte
-
-; System calls
-
-;	SCRSYNC	 = $fe66	; wait for next CRT field flyback 60 Hz
-;	SCRSYNC1 = $fe6b	; wait for CRT field flyback 60 Hz
-;	OSRDCH   = $fe94	; get key subroutine
-;   READKEY  = $fe71	; scan key matrix subroutine
 
 ; _BEEB MOS calls
 
@@ -118,7 +92,7 @@
 .endif
 	ScrMode     = 4		; Screen mode:	_BEEB (320x256x2)
 
-; Workspace
+; Workspace _BEEB Lower RAM
 
 MAP 	= $300				; properties map buffer (3x256 bytes)
 SCADTB_lb = MAP + $300
@@ -136,26 +110,38 @@ SHRAPN 	= $B00 - (NUMSHR * SHRSIZ)	; shrapnel table (55x6 bytes)
 ; If a font is required...
 ;--------------------------------------------------------------
 
+clear_zp:
+	ldx #0
+	txa
+	:
+	sta $00, x
+	inx
+	cpx #$a0
+	bne :-
+
+	; Init vars
+	lda #3
+	sta numlif
+
+	ldx #255
+	stx varrnd
+	stx varopt
+	stx varblk
+	dex
+	stx varobj
 	lda #<(FONT-256)	; address of font.
 	sta FontPtr
 	lda #>(FONT-256)
 	sta FontPtr+1
 
-:
-	jsr game	 	; start the game.
+	jsr game	 		; start the game.
 
 	ldx #$ff
 	ldy #$7f
 	lda #$81
 	jsr OSBYTE
 
-	jmp :-
-
-	rts				; exit (to BASIC?)
-	
-contrl:	.byte 0			; control, 0 = keyboard, 1 = Kempston, 2 = Sinclair, 3 = Mouse.
-joyval:	.byte 0			; joystick reading.
-frmno:	.byte 0			; selected frame.
+	jmp clear_zp
 
 ; Don't change the order of these four.  
 ; Menu routine relies on winlft following wintop.
@@ -166,7 +152,6 @@ winhgt:	.byte WINDOWHGT		; window height.
 winwid:	.byte WINDOWWID		; window width.
 numob:	.byte NUMOBJ		; number of objects in game.
 
-; Variables start here.
 ; Pixel versions of wintop, winlft, winhgt, winwid.
 
 wntopx:	.byte (8 * WINDOWTOP)
@@ -174,62 +159,9 @@ wnlftx:	.byte (8 * WINDOWLFT)
 wnbotx:	.byte ((WINDOWTOP * 8) + (WINDOWHGT * 8) - 16)
 wnrgtx:	.byte ((WINDOWLFT * 8) + (WINDOWWID * 8) - 16)-2
 
-scno:	.byte 0			; present screen number.
-numlif:	.byte 3			; number of lives.
-
-vara:	.byte 0			; general-purpose variable.
-varb:	.byte 0			; general-purpose variable.
-varc:	.byte 0			; general-purpose variable.
-vard:	.byte 0			; general-purpose variable.
-vare:	.byte 0			; general-purpose variable.
-varf:	.byte 0			; general-purpose variable.
-varg:	.byte 0			; general-purpose variable.
-varh:	.byte 0			; general-purpose variable.
-vari:	.byte 0			; general-purpose variable.
-varj:	.byte 0			; general-purpose variable.
-vark:	.byte 0			; general-purpose variable.
-varl:	.byte 0			; general-purpose variable.
-varm:	.byte 0			; general-purpose variable.
-varn:	.byte 0			; general-purpose variable.
-varo:	.byte 0			; general-purpose variable.
-varp:	.byte 0			; general-purpose variable.
-varq:	.byte 0			; general-purpose variable.
-varr:	.byte 0			; general-purpose variable.
-vars:	.byte 0			; general-purpose variable.
-vart:	.byte 0			; general-purpose variable.
-varu:	.byte 0			; general-purpose variable.
-varv:	.byte 0			; general-purpose variable.
-varw:	.byte 0			; general-purpose variable.
-varz:	.byte 0			; general-purpose variable.
-
-charx:	.byte 0			; cursor x position.
-chary:	.byte 0			; cursor y position.
-
-clock:	.byte 0			; last clock reading.
-varrnd:	.byte 255		; last random number.
-varobj:	.byte 254		; last object number.
-varopt:	.byte 255		; last option chosen from menu.
-varblk:	.byte 255		; block type.
-nexlev:	.byte 0			; next level flag.
-restfl:	.byte 0			; restart screen flag.
-deadf:	.byte 0			; dead flag.
-gamwon:	.byte 0			; game won flag.
-dispx:	.byte 0			; cursor x position.
-dispy:	.byte 0			; cursor y position.
-
 ; Make sure pointers are arranged in the same order as the data itself.
 
 frmptr:	.word frmlst         ; sprite frames.
-
-;----------------------------------------------------
-; Missing vars 
-;----------------------------------------------------
-
-FontPtr:	.byte 0,0
-
-loopa:		.byte 0
-loopb:		.byte 0
-loopc:		.byte 0
 
 ; Assorted game routines which can go in contended memory.
 
