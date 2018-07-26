@@ -139,8 +139,9 @@ Needs
 MAP = 3x pages = &300 - &600
 SCREEN ADDRESS TABLES = 2x pages (could be reduced) = &600 - &800
 SHRAPNEL TABLE = 330 = &14A bytes = &B00 - 330
-
-Still available &C00 - &D00 and &E00 - &1100 (3 pages)
+SPRITE TABLE = &B00 - &C00
 
 Moving all variables to ZP saved 1K of script from Terrapins!!
 Still over by 4K though...
+
+Could save another page by copying font data over BBC char defs...

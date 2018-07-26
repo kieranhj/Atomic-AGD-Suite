@@ -1,49 +1,126 @@
 ;----------------------------------------------
-; Common AGD engine
+; BBC AGD Engine
 ; Z80 conversion by Kees van Oss 2017
 ; BBC Micro version by Kieran Connell 2018
 ;----------------------------------------------
+
 .DEFINE asm_code $0e00		; assembly address _BEEB
 .DEFINE load_address $1200	; load address _BEEB
-.DEFINE header   0			; Header Wouter Ras emulator
-.DEFINE filenaam "AGD"
+
+;----------------------------------------------------------------------
+; BBC MICRO PLATFORM DEFINES
+;----------------------------------------------------------------------
+
+; _BEEB MOS calls
+
+	OSBYTE	 = $fff4
+	OSFILE	 = $ffdd
+	OSWRCH	 = $ffee
+	OSASCI	 = $ffe3
+	OSWORD	 = $fff1
+	OSFIND	 = $ffce
+	OSGBPB	 = $ffd1
+	OSARGS	 = $ffda
+
+	PAL_black = 0 ^ 7
+	PAL_white = 7 ^ 7
+
+; System constants
+
+	ScreenSize  = $1800	; Startaddress video RAM _BEEB
+	ScreenAddr 	= $8000 - ScreenSize	; Screen size bytes _BEEB
+	ScreenRowBytes = 256				; 40 columns
+
+	SpriteMaxY	= 177	; used for clipping bottom of screen
+
+; AGD Engine Workspace
+
+	MAP 		= $300				; properties map buffer (3x256 bytes)
+	SCADTB_lb	= MAP + $300
+	SCADTB_hb	= SCADTB_lb + $100
+
+.if pflag
+    SHRAPN 		= $B00 - (NUMSHR * SHRSIZ)	; shrapnel table (55x6 bytes)
+.endif
+
+	sprtab		= $B00				; NUMSPR*TABSIZ
+
+;----------------------------------------------------------------------
+; ZERO PAGE SEGMENT
+;----------------------------------------------------------------------
 
 .segment "ZEROPAGE"
 
 .include "z80-zp.inc"
 .include "engine-zp.inc"
 
-.org asm_code-22*header
-
-.IF header
-;********************************************************************
-; ATM Header for Atom emulator Wouter Ras
-
-name_start:
-	.byte filenaam			; Filename
-name_end:
-	.repeat 16-name_end+name_start	; Fill with 0 till 16 chars
-	  .byte $0
-	.endrep
-
-	.word asm_code			; 2 bytes startaddress
-	.word exec			; 2 bytes linkaddress
-	.word eind_asm-start_asm	; 2 bytes filelength
-
-;********************************************************************
-.ENDIF
+;----------------------------------------------------------------------
+; ZCODE SEGMENT
+;----------------------------------------------------------------------
 
 .segment "CODE"
+.org asm_code
 
 start_asm:
 
 	jmp relocate + load_address - asm_code
 
-exec_game:
-	.include "game.inc"
-	.include "z80.asm"
+boot_game:
 
-eind_asm:
+; Zero ZP vars
+
+clear_zp:
+	ldx #0
+	txa
+	:
+	sta $00, x
+	inx
+	cpx #$a0
+	bne :-
+
+	; Init non-zero vars
+	lda #3
+	sta numlif
+
+	ldx #255
+	stx varrnd
+	stx varopt
+	stx varblk
+	dex
+	stx varobj
+
+	; Call AGD Engine start game
+	jsr start_game
+
+    ; Wait for keypress
+	ldx #$ff
+	ldy #$7f
+	lda #$81
+	jsr OSBYTE
+
+	; Restart or exit
+	jmp boot_game
+
+;----------------------------------------------------------------------
+; PLATFORM SPECIFIC ENGINE CODE
+;----------------------------------------------------------------------
+
+	.include "z80.asm"
+	.include "bbc.inc"
+
+;----------------------------------------------------------------------
+; AGD 6502 ENGINE CODE + COMPILED GAME SCRIPT
+;----------------------------------------------------------------------
+
+start_game:
+
+	.include "game.inc"
+
+end_asm:
+
+;----------------------------------------------------------------------
+; RELOCATION OF BEEB CODE FROM LOAD ADDRESS
+;----------------------------------------------------------------------
 
 relocate:
 ; Issue *TAPE otherwise DFS goes mental that we've overwritten workspace from &E00 - &1100
@@ -53,8 +130,10 @@ relocate:
     ldy #$00
     jsr OSBYTE					; *FX &8C,0,0 - *TAPE 1200
 
+; Other one off initialisation could happen here...
+
 ; Relocate all code down to &E00
-	ldx #>(eind_asm - start_asm) + 1
+	ldx #>(end_asm - start_asm) + 1
 	ldy #0
 reloop:
 	lda load_address, y
@@ -65,4 +144,4 @@ reloop:
 	inc reloop + 5 + load_address - asm_code
 	dex
 	bne reloop
-	jmp exec_game
+	jmp boot_game

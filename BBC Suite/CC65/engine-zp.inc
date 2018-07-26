@@ -1,3 +1,7 @@
+;----------------------------------------------------------------------
+; AGD 6502 Engine Zero Page Variables
+;----------------------------------------------------------------------
+
 ; Variables start here.
 
 scno:	.res 1			; present screen number.
@@ -54,7 +58,6 @@ frmno:	.res 1			; selected frame.
 loopa:		.res 1
 loopb:		.res 1
 loopc:		.res 1
-
 FontPtr:    .res 2
 
 ; Local vars
@@ -63,7 +66,45 @@ scraddr:    .res 2
 fntaddr:    .res 2
 tileaddr:   .res 2
 bufaddr:    .res 2
+
 tmp:        .res 2
 scr_l:      .res 2
 scr_r:      .res 2
 scr_txt:    .res 2
+
+xtmp:	    .res 1
+spcnt:	    .res 1
+spptr:	    .res 2		; spawned sprite pointer.
+seed:	    .res 1		; seed for random numbers.
+
+ccnt:       .res 1
+flag:	    .res 1
+rcol:	    .res 1
+rrow:	    .res 1
+
+combyt:	    .res 1		; byte type compressed.
+comcnt:	    .res 1		; compression counter.
+prtmod:	    .res 1      ; print mode, 0 = standard, 1 = double-height.
+qscnt:	    .res 1
+
+sprptr:	    .res 1      ; not a ptr
+sprcnt:	    .res 1
+
+skptr:	    .res 2		; search pointer.
+sktptr:	    .res 1      ; not a ptr
+tmproom:	.res 1
+ogptr:	    .res 2		; original sprite pointer.
+
+.if mflag
+TmpAddr:	.res 2
+bwid:	    .res 1     ; box/menu width.
+blen:	    .res 1     ; box/menu height.
+btop:	    .res 1     ; box coordinates.
+blft:	    .res 1
+.endif
+
+.if pflag
+shrctr:	    .res 1
+explcnt:	.res 1
+seed3:	    .res 1
+.endif
