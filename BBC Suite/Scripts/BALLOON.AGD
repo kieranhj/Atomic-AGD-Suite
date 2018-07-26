@@ -602,9 +602,9 @@ DEFINEOBJECT    71 255 0 0
                 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
 
 
-MAP             WIDTH 11
+MAP             WIDTH 3
                 STARTSCREEN 255
-                255 255 255 255   0 255 255 255 255 255 255
+                255   0 255
 ENDMAP
 
 
@@ -613,20 +613,20 @@ EVENT PLAYER
 IF E = 1
     IF IMAGE = 2
         IF CANGORIGHT
-            SPRITEINK 6
+            ; SPRITEINK 6
         ELSE
-            SPRITEINK 4
+            ; SPRITEINK 4
         ENDIF
     ENDIF
     IF IMAGE = 3
         IF CANGOLEFT
-            SPRITEINK 6
+            ; SPRITEINK 6
         ELSE
-            SPRITEINK 4
+            ; SPRITEINK 4
         ENDIF
     ENDIF
     IF CUSTOM
-        SPRITEINK 7
+        ; SPRITEINK 7
     ENDIF
 ENDIF
 IF 200 > Y
@@ -636,17 +636,17 @@ IF 200 > Y
             IF E = 1
                 IF CANGORIGHT
                 ELSE
-                    SPRITEINK 4
+                    ; SPRITEINK 4
                 ENDIF
             ENDIF
             IF IMAGE = 3
                 IF CANGOLEFT
                 ELSE
-                    SPRITEINK 4
+                    ; SPRITEINK 4
                 ENDIF
             ENDIF
             IF CUSTOM
-                SPRITEINK 7
+                ; SPRITEINK 7
             ENDIF
         ENDIF
         LET Q 0
@@ -979,10 +979,10 @@ IF 200 > Y
     LET B X
 ENDIF
 IF E = 1
-    SPRITEINK 6
+    ; SPRITEINK 6
     IF Y > 15
         SUBTRACT 16 TO Y
-        SPRITEINK 2
+        ; SPRITEINK 2
         ADD 16 TO Y
     ENDIF
 ENDIF
@@ -1353,7 +1353,7 @@ IF C > 3
 ENDIF
 LET LINE 0
 LET COLUMN 0
-COLOUR 71
+; COLOUR 71
 SHOWSCORE
 
 
@@ -1369,7 +1369,7 @@ LET E 0
 
 
 EVENT RESTARTSCREEN
-BORDER 0
+; BORDER 0
 LET Q 0
 REPEAT 21
     LET LINE Q

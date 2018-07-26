@@ -172,7 +172,7 @@ DEFINEBLOCK     CUSTOMBLOCK
                 0 1 1 0 0 1 1 0
                 66
 
-DEFINEBLOCK     EMPTYBLOCK
+DEFINEBLOCK     WATERBLOCK
                 0 32 0 0 8 0 0 0
                 79
 
@@ -1103,9 +1103,14 @@ DEFINEOBJECT    69 14 104 224
                 15 176 7 96 3 192 3 64 3 64 3 64 3 64 3 192
 
 
-MAP             WIDTH 11
+MAP             WIDTH 13
                 STARTSCREEN 1
-                255 255 255 255 255 255 255 255   3   5 255
+                255 255 255 255 255 255 255 255 255   3   5 255 255
+                255 255 255 255 255 255 255 255 255 255 255 255 255
+                255 255 255 255 255  14 255 255 255 255 255 255 255
+                255 255 255 255 255   0   1   6   7   8 255 255 255
+                255 255 255 255 255 255 255 255 255 255 255 255 255
+                255   2   4   9  10  11  12  13  16  17  18  19 255
 ENDMAP
 
 
@@ -1179,7 +1184,7 @@ LET D X
 DETECTOBJ
 IF OBJ = 0
     GET OBJ
-    ; 50
+    BEEP 50
     LET G 1
 ENDIF
 IF KEY FIRE
@@ -1352,27 +1357,27 @@ ELSE
     IF SCREEN > 1
         IF SCREEN <= 3
             IF Y > 64
-                ; 69
+                ; SPRITEINK 69
             ELSE
-                ; 66
+                ; SPRITEINK 66
                 SUBTRACT 8 FROM Y
-                ; 67
+                ; SPRITEINK 67
                 SUBTRACT 8 FROM Y
-                ; 66
+                ; SPRITEINK 66
                 ADD 16 TO Y
             ENDIF
         ELSE
-            ; 66
+            ; SPRITEINK 66
             SUBTRACT 8 FROM Y
-            ; 67
+            ; SPRITEINK 67
             ADD 8 TO Y
         ENDIF
     ENDIF
 ENDIF
 IF SCREEN <= 1
-    ; 66
+    ; SPRITEINK 66
     SUBTRACT 8 FROM Y
-    ; 67
+    ; SPRITEINK 67
     ADD 8 TO Y
 ENDIF
 IF A = 0
@@ -1466,19 +1471,19 @@ IF IMAGE = 6
 ENDIF
 IF CANGORIGHT
     IF CANGOLEFT
-        ; 68
+        ; SPRITEINK 68
         SUBTRACT 8 FROM Y
-        ; 71
+        ; SPRITEINK 71
         ADD 8 TO Y
     ENDIF
 ENDIF
 IF IMAGE > 6
     IF IMAGE <= 8
-        ; 68
+        ; SPRITEINK 68
         SUBTRACT 8 FROM Y
-        ; 71
+        ; SPRITEINK 71
         SUBTRACT 8 FROM Y
-        ; 66
+        ; SPRITEINK 66
         ADD 16 TO Y
     ENDIF
 ENDIF
@@ -1503,7 +1508,7 @@ ENDIF
 IF A = 0
     ANIMATE
 ENDIF
-; 69
+; SPRITEINK 69
 IF IMAGE = 10
     IF DEADLY
     ELSE
@@ -1511,7 +1516,7 @@ IF IMAGE = 10
         ELSE
             SUBTRACT 8 FROM Y
             SUBTRACT 8 FROM X
-            ; 67
+            ; SPRITEINK 67
             ADD 8 TO Y
             ADD 8 TO X
         ENDIF
@@ -1561,7 +1566,7 @@ IF IMAGE = 11
         ELSE
             SUBTRACT 8 FROM Y
             ADD 8 TO X
-            ; 67
+            ; SPRITEINK 67
             SUBTRACT 8 FROM X
             ADD 8 TO Y
         ENDIF
@@ -1596,7 +1601,7 @@ IF IMAGE = 29
     IF X <= 7
         LET X 220
     ENDIF
-    ; 6
+    ; SPRITEINK 6
     IF Y <= 152
         ADD 4 TO Y
     ELSE
@@ -1626,7 +1631,7 @@ IF IMAGE <= 28
 ENDIF
 IF IMAGE = 14
     IF COLLISION 0 SCREEN 1
-        ; 50
+        BEEP 50
         OTHER
         LET Y 72
         LET X 64
@@ -1641,14 +1646,14 @@ IF IMAGE = 13
     IF COLLISION 0
         IF Y <= 100
             IF E > 0 SCREEN 2
-                ; 50
+                BEEP 50
                 OTHER
                 LET Y 24
                 LET X 24
                 ENDSPRITE
             ENDIF
             IF E = 0 SCREEN 3
-                ; 50
+                BEEP 50
                 OTHER
                 LET Y 24
                 LET X 24
@@ -1663,14 +1668,14 @@ IF IMAGE = 13
     ENDIF
 ENDIF
 IF IMAGE = 12
-    ; 66
+    ; SPRITEINK 66
     SUBTRACT 8 FROM Y
-    ; 70
+    ; SPRITEINK 70
     ADD 8 TO Y
     IF COLLISION 0
         IF SCREEN <> 2
             REMOVE
-            ; 50
+            BEEP 50
             ADD 1 TO E
         ENDIF
     ENDIF
@@ -1689,7 +1694,7 @@ ENDIF
 IF IMAGE = 19
     IF SCREEN = 8
         IF G = 1
-            ; 6
+            ; SPRITEINK 6
             IF COLLISION 0
                 OTHER
                 SUBTRACT 10 FROM Y
@@ -1734,19 +1739,19 @@ IF IMAGE = 19
             OTHER
             IF CANGODOWN
                 ADD 8 TO Y
-                ; Y
+                BEEP Y
             ENDIF
             ENDSPRITE
         ENDIF
         IF Y <= 150
             IF CANGODOWN
-                ; 70
+                ; SPRITEINK 70
             ENDIF
         ENDIF
         IF CANGODOWN
             ADD 4 TO Y
         ELSE
-            ; 50
+            BEEP 50
             LET Y 16
             GETRANDOM 180
             ADD 32 TO RND
@@ -1761,20 +1766,20 @@ IF IMAGE = 16
     IF SCREEN <> 13
         IF Y <= 150
             ADD 4 TO Y
-            ; Y
+            BEEP Y
         ELSE
             REMOVE
-            ; 0
+            ; SOUND 0
             LET F 0
         ENDIF
     ENDIF
     IF SCREEN = 13
         IF Y > 16
             SUBTRACT 8 FROM Y
-            ; Y
+            BEEP Y
         ELSE
             REMOVE
-            ; 0
+            ; SOUND 0
             LET F 0
         ENDIF
     ENDIF
@@ -1813,11 +1818,11 @@ IF IMAGE = 15
             LET DIRECTION = 0
         ENDIF
     ENDIF
-    ; 70
+    ; SPRITEINK 70
     ADD 8 TO X
-    ; 69
+    ; SPRITEINK 69
     SUBTRACT 8 FROM Y
-    ; 68
+    ; SPRITEINK 68
     ADD 8 TO Y
     SUBTRACT 8 FROM X
 ENDIF
@@ -1848,18 +1853,18 @@ IF IMAGE = 0
     ENDIF
     IF SCREEN = 2
         IF CANGOLEFT
-            ; 70
+            ; SPRITEINK 70
             IF C = 0
                 TRAIL 1
             ENDIF
         ENDIF
     ENDIF
     IF SCREEN = 3
-        ; 0
+        ; SPRITEINK 0
     ENDIF
     IF SCREEN = 11
         IF Y <= 152
-            ; 68
+            ; SPRITEINK 68
         ENDIF
     ENDIF
     IF CANGOLEFT
@@ -1883,9 +1888,9 @@ IF KEY FIRE3
 ENDIF
 IF IMAGE = 22
     IF E <> 8
-        ; E
+        ; SPRITEINK E
     ELSE
-        ; 1
+        ; SPRITEINK 1
     ENDIF
     IF KEY RIGHT
         SUBTRACT 1 FROM X
@@ -1931,9 +1936,9 @@ IF IMAGE > 4
                 JUMP 7
             ENDIF
         ENDIF
-        ; 68
+        ; SPRITEINK 68
         SUBTRACT 8 FROM Y
-        ; 70
+        ; SPRITEINK 70
         ADD 8 TO Y
         IF A = 0
             ANIMATE
@@ -1966,7 +1971,7 @@ IF IMAGE = 4
             ENDIF
         ENDIF
         IF SCREEN = 11
-            ; 69
+            ; SPRITEINK 69
             IF Y > 158
                 REMOVE
                 SPAWN 8 20
@@ -1980,7 +1985,7 @@ IF IMAGE = 4
             ENDIF
             LET LINE 21
             LET COLUMN 1
-            ; 75
+            ; COLOUR 75
             IF A = 0
                 MESSAGE 17
             ENDIF
@@ -1992,9 +1997,9 @@ IF IMAGE = 4
             ENDIF
         ENDIF
         IF SCREEN = 10
-            ; 66
+            ; SPRITEINK 66
             SUBTRACT 8 FROM Y
-            ; 67
+            ; SPRITEINK 67
             ADD 8 TO Y
             FALL
             IF E = 5
@@ -2006,7 +2011,7 @@ IF IMAGE = 4
             ENDIF
             LET LINE 13
             LET COLUMN 1
-            ; 70
+            ; COLOUR 70
             IF A = 0
                 MESSAGE 14
             ENDIF
@@ -2019,7 +2024,7 @@ IF IMAGE = 4
         ENDIF
         LET LINE 3
         LET COLUMN 1
-        ; 70
+        ; COLOUR 70
         IF A = 0
             MESSAGE 14
         ENDIF
@@ -2031,7 +2036,7 @@ IF IMAGE = 4
         ENDIF
     ELSE
         IF X <= 200
-            ; 69
+            ; SPRITEINK 69
             ADD 8 TO X
         ELSE TYPE 0
         ENDIF
@@ -2044,7 +2049,7 @@ ENDIF
 
 EVENT SPRITETYPE6
 IF IMAGE = 23
-    ; 69
+    ; SPRITEINK 69
     IF COLLISION 0
         REMOVE
         OTHER
@@ -2082,9 +2087,9 @@ IF E > 14
     LET LINE 12
     LET COLUMN 26
     IF A <= 1
-        ; 14
+        ; COLOUR 14
     ELSE
-        ; 9
+        ; COLOUR 9
     ENDIF
     MESSAGE 31
 ENDIF
@@ -2135,7 +2140,7 @@ IF K > 0
         IF IMAGE = 26
         ELSE
             LET L 3
-            ; 68
+            ; COLOUR 68
             REPEAT 2
                 LET LINE L
                 LET COLUMN 1
@@ -2148,12 +2153,12 @@ IF K > 0
                 IF A = 2
                     MESSAGE 22
                 ENDIF
-                ; 8
+                ; COLOUR 8
                 ADD 6 TO L
             ENDREPEAT
             LET LINE 21
             LET COLUMN 1
-            ; 77
+            ; COLOUR 77
             IF A = 0
                 MESSAGE 23
             ENDIF
@@ -2176,14 +2181,14 @@ IF K > 0
 ENDIF
 LET Y 32
 IF IMAGE = 24
-    ; 68
+    ; SPRITEINK 68
 ELSE
     IF IMAGE = 26
-        ; 68
+        ; SPRITEINK 68
     ELSE
-        ; 67
+        ; SPRITEINK 67
         ADD 8 TO Y
-        ; 66
+        ; SPRITEINK 66
         SUBTRACT 8 FROM Y
     ENDIF
 ENDIF
@@ -2289,7 +2294,7 @@ IF SCREEN > 14
     IF SCREEN <= 18
         LET LINE 10
         LET COLUMN 1
-        ; 72
+        ; COLOUR 72
         IF A = 0
             MESSAGE 26
         ENDIF
@@ -2342,7 +2347,7 @@ IF IMAGE = 28
     ENDIF
     LET LINE 10
     LET COLUMN 1
-    ; 72
+    ; COLOUR 72
     IF A = 1
         IF KEY RIGHT
             MESSAGE 29
@@ -2361,9 +2366,9 @@ IF IMAGE = 28
             ENDIF
         ENDIF
     ENDIF
-    ; 67
+    ; SPRITEINK 67
     ADD 8 TO Y
-    ; 66
+    ; SPRITEINK 66
     SUBTRACT 8 FROM Y
     IF A = 0
         ANIMATE
@@ -2385,7 +2390,7 @@ IF IMAGE = 13
             ENDGAME
         ENDIF
     ENDIF
-    ; 0
+    ; SPRITEINK 0
 ENDIF
 IF IMAGE > 2
     IF IMAGE <= 4
@@ -2403,10 +2408,10 @@ IF IMAGE > 2
         ENDIF
         IF SCREEN <> 13
             ADD 3 TO C
-            ; C
+            ; SPRITEINK C
             SUBTRACT 3 FROM C
         ENDIF
-        ; 3
+        BEEP 3
         ANIMATE
         IF P = 30
             KILL
@@ -2418,18 +2423,18 @@ IF IMAGE = 20
     DIVIDE X BY 8
     MULTIPLY X BY 8
     FALL
-    ; 3
+    BEEP 3
     IF SCREEN = 11
-        ; 67
+        ; SPRITEINK 67
         SUBTRACT 8 FROM Y
-        ; 69
+        ; SPRITEINK 69
         ADD 8 TO Y
     ELSE
-        ; 69
+        ; SPRITEINK 69
         SUBTRACT 8 FROM Y
-        ; 66
+        ; SPRITEINK 66
         ADD 8 TO X
-        ; 67
+        ; SPRITEINK 67
         SUBTRACT 8 FROM X
         ADD 8 TO Y
     ENDIF
@@ -2442,13 +2447,13 @@ IF IMAGE = 20
     ANIMATE
 ENDIF
 IF IMAGE = 18
-    ; 3
-    ; 66
+    BEEP 3
+    ; SPRITEINK 66
     SUBTRACT 8 FROM X
-    ; 5
+    ; SPRITEINK 5
     SUBTRACT 8 FROM Y
     ADD 8 TO X
-    ; 3
+    ; SPRITEINK 3
     ADD 8 TO Y
     FALL
     ANIMATE
@@ -2463,14 +2468,14 @@ IF IMAGE = 17
     DIVIDE X BY 8
     MULTIPLY X BY 8
     FALL
-    ; 3
+    BEEP 3
     IF CUSTOM
         SUBTRACT 8 FROM X
     ENDIF
-    ; 68
+    ; SPRITEINK 68
     SUBTRACT 8 FROM Y
     ADD 8 TO X
-    ; 67
+    ; SPRITEINK 67
     SUBTRACT 8 FROM X
     ADD 8 TO Y
     ANIMATE
@@ -2509,36 +2514,36 @@ EVENT MAINLOOP2
 
 
 EVENT INTROMENU
-; 0
-; 67
+; BORDER 0
+; COLOUR 67
 CLS
 LET LINE 15
 LET COLUMN 15
-; 71
+; COLOUR 71
 MESSAGE 11
 LET LINE 16
 LET COLUMN 14
-; 68
+; COLOUR 68
 MESSAGE 12
 LET LINE 14
 LET COLUMN 17
-; 67
+; COLOUR 67
 MESSAGE 9
 LET LINE 15
 LET COLUMN 17
-; 66
+; COLOUR 66
 MESSAGE 10
 LET LINE 17
 LET COLUMN 9
-; 6
+; COLOUR 6
 MESSAGE 13
 LET LINE 3
 LET COLUMN 10
-; 70
+; COLOUR 70
 MESSAGE 5
 LET LINE 7
 LET COLUMN 1
-; 68
+; COLOUR 68
 MESSAGE 6
 LET LINE 9
 LET COLUMN 3
@@ -2548,7 +2553,7 @@ LET COLUMN 3
 MESSAGE 8
 LET LINE 20
 LET COLUMN 0
-; 66
+; COLOUR 66
 MESSAGE 4
 WAITKEY
 
@@ -2559,14 +2564,14 @@ LET G 0
 LET F 0
 LET E 0
 LET LIVES 0
-; 71
-; 0
+; COLOUR 71
+; BORDER 0
 CLS
 
 
 EVENT RESTARTSCREEN
 IF SCREEN 19
-    ; 70
+    ; COLOUR 70
     LET LINE 0
     LET COLUMN 0
     MESSAGE 0
@@ -2575,7 +2580,7 @@ IF SCREEN 19
     MESSAGE 1
     LET LINE 23
     LET COLUMN 1
-    ; 66
+    ; COLOUR 66
     MESSAGE 2
     LET LINE 22
     LET COLUMN 19
@@ -2598,8 +2603,8 @@ LET I 0
 LET Q 0
 LET F 0
 LET A 0
-; 0
-; 71
+; BORDER 0
+; COLOUR 71
 IF SCREEN 19
 ELSE
     CLS
@@ -2610,7 +2615,7 @@ EVENT FELLTOOFAR
 
 
 EVENT KILLPLAYER
-; 0
+; SOUND 0
 ; FADE
 ADD 1 TO LIVES
 

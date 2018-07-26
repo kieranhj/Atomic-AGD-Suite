@@ -10,13 +10,10 @@ DEFINEMESSAGES
     "2 KEMPSTON"
     "3 SINCLAIR"
     "SEBASTIAN BRAUNERT & UWE GEIKEN"
-    "Conversion by Kees van Oss"
+    "Music:LaesQ & rnR T.A.D.7D9"
     "AGD by JONATHAN CAULDWELL"
-    "Greetings to all Atom users!!"
+    "MUSICIZER by DAVID SAPHIER"
     "LOADING SCREEN by ANDY GREEN"
-    "CONGRATULATIONS!!!!!
-"
-
 
 DEFINEFONT      0 0 0 0 0 0 0 0
                 0 48 48 48 48 0 48 0
@@ -640,11 +637,11 @@ DEFINEOBJECT    79 6 104 128
                 255 182 227 163 255 183 255 190 255 190 127 188 0 0 0 0
 
 
-MAP             WIDTH 11
+MAP             WIDTH 5
                 STARTSCREEN 0
-                255 255 255   7   3   5 255 255 255 255 255
-                255 255 255   6   2   4 255 255 255 255 255
-                255 255 255   0   1   8 255 255 255 255 255
+                255   7   3   5 255
+                255   6   2   4 255
+                255   0   1   8 255
 ENDMAP
 
 
@@ -653,69 +650,141 @@ EVENT PLAYER
 LET H = Y
 LET I = X
 DETECTOBJ
-IF OBJ = 6   
+IF OBJ = 6
+    LET S 1
+    LET T 1
+    ; ASM 205
+    ; ASM 216
+    ; ASM 123
+    LET M 32
     GET OBJ
     ADD 1 TO G
     LET LINE 23
     LET COLUMN 29
     DISPLAY G
-    let B 1
+    ; ASM 205
+    ; ASM 152
+    ; ASM 233
+    LET M 30
 ENDIF
 IF OBJ = 0
+    LET S 2
+    LET T 1
+    ; ASM 205
+    ; ASM 216
+    ; ASM 123
+    LET M 32
     GET OBJ
     ADD 1 TO G
     LET LINE 23
     LET COLUMN 29
     DISPLAY G
-    LET D 1
+    ; ASM 205
+    ; ASM 152
+    ; ASM 233
+    LET M 30
 ENDIF
 IF OBJ = 1
+    LET S 3
+    LET T 1
+    ; ASM 205
+    ; ASM 216
+    ; ASM 123
+    LET M 32
     GET OBJ
     ADD 1 TO G
     LET LINE 23
     LET COLUMN 29
     DISPLAY G
-    LET E 1
+    ; ASM 205
+    ; ASM 152
+    ; ASM 233
+    LET M 30
 ENDIF
-IF OBJ = 2   
+IF OBJ = 2
+    LET S 4
+    LET T 1
+    ; ASM 205
+    ; ASM 216
+    ; ASM 123
+    LET M 32
     GET OBJ
     ADD 1 TO G
     LET LINE 23
     LET COLUMN 29
     DISPLAY G
-    LET F 1
+    ; ASM 205
+    ; ASM 152
+    ; ASM 233
+    LET M 30
 ENDIF
 IF OBJ = 4
+    LET S 5
+    LET T 1
+    ; ASM 205
+    ; ASM 216
+    ; ASM 123
+    LET M 32
     GET OBJ
     ADD 1 TO G
     LET LINE 23
     LET COLUMN 29
     DISPLAY G
-    LET J 1
+    ; ASM 205
+    ; ASM 152
+    ; ASM 233
+    LET M 30
 ENDIF
 IF OBJ = 3
+    LET S 6
+    LET T 1
+    ; ASM 205
+    ; ASM 216
+    ; ASM 123
+    LET M 32
     GET OBJ
     ADD 1 TO G
     LET LINE 23
     LET COLUMN 29
     DISPLAY G
-    LET L 1
+    ; ASM 205
+    ; ASM 152
+    ; ASM 233
+    LET M 30
 ENDIF
 IF OBJ = 5
+    LET S 7
+    LET T 1
+    ; ASM 205
+    ; ASM 216
+    ; ASM 123
+    LET M 32
     GET OBJ
     ADD 1 TO G
     LET LINE 23
     LET COLUMN 29
     DISPLAY G
-    LET M 1
+    ; ASM 205
+    ; ASM 152
+    ; ASM 233
+    LET M 30
 ENDIF
 IF OBJ 7
+    LET S 8
+    LET T 1
+    ; ASM 205
+    ; ASM 216
+    ; ASM 123
+    LET M 32
     GET OBJ
     ADD 1 TO G
     LET LINE 23
     LET COLUMN 29
     DISPLAY G
-	LET N 1
+    ; ASM 205
+    ; ASM 152
+    ; ASM 233
+    LET M 30
 ENDIF
 IF OBJ 8
     ENDGAME
@@ -821,7 +890,7 @@ IF CUSTOM
     ELSE SETTINGA 0
     ENDIF
 ENDIF
-; 7
+; SPRITEINK 7
 IF SETTINGA 0
     IF CANGOLEFT
         SPRITELEFT
@@ -840,9 +909,9 @@ IF COLLISION 0
     KILL
 ENDIF
 IF IMAGE 7
-    ; 0
+    ; SPRITEINK 0
 ELSE
-    ; 4
+    ; SPRITEINK 4
 ENDIF
 
 
@@ -860,7 +929,7 @@ IF CUSTOM
     ELSE DIRECTION 2
     ENDIF
 ENDIF
-; 7
+; SPRITEINK 7
 IF 2 > DIRECTION
     IF X > I
         IF CANGOLEFT
@@ -979,7 +1048,7 @@ IF COLLISION 0
     LET OPT 1
     KILL
 ENDIF
-; 6
+; SPRITEINK 6
 
 
 EVENT SPRITETYPE6
@@ -1001,84 +1070,115 @@ ELSE
     ADD 1 TO A
 ENDIF
 IF SCREEN 3
-    IF B = 1
+    LET S 1
+    ; ASM 205
+    ; ASM 224
+    ; ASM 123
+    IF T = 1
         LET LINE 7
         LET COLUMN 22
-        PUTBLOCK 0
+        PUTBLOCK 31
         LET LINE 8
         LET COLUMN 22
-        PUTBLOCK 0
+        PUTBLOCK 32
     ENDIF
 ENDIF
 IF SCREEN 1
-    IF D = 1
+    LET S 2
+    ; ASM 205
+    ; ASM 224
+    ; ASM 123
+    IF T = 1
         LET LINE 1
         LET COLUMN 26
-        PUTBLOCK 0
+        PUTBLOCK 31
         LET LINE 2
         LET COLUMN 26
-        PUTBLOCK 0
+        PUTBLOCK 32
     ENDIF
 ENDIF
 IF SCREEN 2
-    IF E = 1
+    LET S 3
+    ; ASM 205
+    ; ASM 224
+    ; ASM 123
+    IF T = 1
         LET LINE 13
         LET COLUMN 21
-        PUTBLOCK 0
+        PUTBLOCK 31
         LET LINE 14
         LET COLUMN 21
-        PUTBLOCK 0
+        PUTBLOCK 32
     ENDIF
 ENDIF
 IF SCREEN 6
-    IF F = 1
+    LET S 4
+    ; ASM 205
+    ; ASM 224
+    ; ASM 123
+    IF T = 1
         LET LINE 10
         LET COLUMN 9
-        PUTBLOCK 0
+        PUTBLOCK 31
         LET LINE 11
         LET COLUMN 9
-        PUTBLOCK 0
+        PUTBLOCK 32
     ENDIF
 ENDIF
 IF SCREEN 4
-    IF J = 1
+    LET S 5
+    ; ASM 205
+    ; ASM 224
+    ; ASM 123
+    IF T = 1
         LET LINE 7
         LET COLUMN 15
-        PUTBLOCK 0
+        PUTBLOCK 31
         LET LINE 8
         LET COLUMN 15
-        PUTBLOCK 0
+        PUTBLOCK 32
     ENDIF
 ENDIF
 IF SCREEN 8
-    IF L = 1
+    LET S 6
+    ; ASM 205
+    ; ASM 224
+    ; ASM 123
+    IF T = 1
         LET LINE 19
         LET COLUMN 26
-        PUTBLOCK 0
+        PUTBLOCK 31
         LET LINE 20
         LET COLUMN 26
-        PUTBLOCK 0
+        PUTBLOCK 32
     ENDIF
 ENDIF
 IF SCREEN 5
-    IF M = 1
+    LET S 7
+    ; ASM 205
+    ; ASM 224
+    ; ASM 123
+    IF T = 1
         LET LINE 13
         LET COLUMN 27
-        PUTBLOCK 0
+        PUTBLOCK 31
         LET LINE 14
         LET COLUMN 27
-        PUTBLOCK 0
+        PUTBLOCK 32
     ENDIF
 ENDIF
 IF SCREEN 7
     LET S 8
-    IF N = 1
+    ; ASM 205
+    ; ASM 224
+    ; ASM 123
+    IF T = 1
         LET LINE 1
         LET COLUMN 7
-        PUTBLOCK 0
+        PUTBLOCK 31
         LET LINE 2
         LET COLUMN 7
-        PUTBLOCK 0
+        PUTBLOCK 32
     ENDIF
 ENDIF
 
@@ -1092,54 +1192,56 @@ ENDIF
 
 
 EVENT INTROMENU
-; 71
+; COLOUR 71
 CLS
+LET M 1
 LET LINE 1
 LET COLUMN 9
-; 66
+; COLOUR 66
 MESSAGE 3
 LET LINE 12
 LET COLUMN 1
-; 68
+; COLOUR 68
 MESSAGE 7
 LET LINE 4
 LET COLUMN 11
-; 70
+; COLOUR 70
 MESSAGE 4
 LET LINE 6
 LET COLUMN 11
-; 70
+; COLOUR 70
 MESSAGE 5
 LET LINE 8
 LET COLUMN 11
-; 70
+; COLOUR 70
 MESSAGE 6
-; 67
+; COLOUR 67
 LET LINE 16
 LET COLUMN 2
 MESSAGE 8
 LET LINE 18
 LET COLUMN 3
-; 71
+; COLOUR 71
 MESSAGE 9
 LET LINE 19
-LET COLUMN 1
-; 71
+LET COLUMN 3
+; COLOUR 71
 MESSAGE 10
 LET LINE 22
-LET COLUMN 2
-; 69
+LET COLUMN 4
+; COLOUR 69
 MESSAGE 11
 WAITKEY
 
 
 EVENT GAMEINIT
+LET M 3
 LET K 0
 LET G 0
 LET C 0
 LET LIVES 1
-; 0
-; 71
+; BORDER 0
+; COLOUR 71
 CLS
 LET A 0
 LET LINE 23
@@ -1154,14 +1256,46 @@ MESSAGE 2
 LET LINE 23
 LET COLUMN 29
 DISPLAY G
-LET B 0
-LET D 0
-LET E 0
-LET F 0
-LET J 0
-LET L 0
-LET M 0
-LET N 0
+LET S 1
+LET T 0
+; ASM 205
+; ASM 216
+; ASM 123
+LET S 2
+LET T 0
+; ASM 205
+; ASM 216
+; ASM 123
+LET S 3
+LET T 0
+; ASM 205
+; ASM 216
+; ASM 123
+LET S 4
+LET T 0
+; ASM 205
+; ASM 216
+; ASM 123
+LET S 5
+LET T 0
+; ASM 205
+; ASM 216
+; ASM 123
+LET S 6
+LET T 0
+; ASM 205
+; ASM 216
+; ASM 123
+LET S 7
+LET T 0
+; ASM 205
+; ASM 216
+; ASM 123
+LET S 8
+LET T 0
+; ASM 205
+; ASM 216
+; ASM 123
 
 
 EVENT RESTARTSCREEN
@@ -1171,37 +1305,93 @@ EVENT FELLTOOFAR
 
 
 EVENT KILLPLAYER
-
+IF OPT 1
+    LET M 32
+    ; ASM 243
+    ; ASM 1
+    ; ASM 253
+    ; ASM 127
+    ; ASM 62
+    ; ASM 20
+    ; ASM 237
+    ; ASM 121
+    ; ASM 197
+    ; ASM 205
+    ; ASM 0
+    ; ASM 192
+    ; ASM 193
+    ; ASM 62
+    ; ASM 16
+    ; ASM 237
+    ; ASM 121
+    ; ASM 251
+    LET M 30
+ELSE
+    ; ASM 205
+    ; ASM 198
+    ; ASM 247
+ENDIF
 SUBTRACT 1 FROM LIVES
 LET SCREEN 0
 LET LINE 23
 LET COLUMN 11
 DISPLAY LIVES
 IF LIVES 0
+    LET M 4
+    ; ASM 243
+    ; ASM 1
+    ; ASM 253
+    ; ASM 127
+    ; ASM 62
+    ; ASM 22
+    ; ASM 237
+    ; ASM 121
+    ; ASM 197
+    ; ASM 205
+    ; ASM 0
+    ; ASM 192
+    ; ASM 193
+    ; ASM 62
+    ; ASM 16
+    ; ASM 237
+    ; ASM 121
+    ; ASM 251
     WAITKEY
-    
-    ; 71
-    ; 0
+    LET M 1
+    ; COLOUR 71
+    ; BORDER 0
     CLS
 ENDIF
 
 
 EVENT LOSTGAME
-cls
-MESSAGE 1
 
-WAITKEY
 
 EVENT COMPLETEDGAME
 CLS
-let line 10
-let column 10
-message 11
-
+LET M 2
+; ASM 243
+; ASM 1
+; ASM 253
+; ASM 127
+; ASM 62
+; ASM 17
+; ASM 237
+; ASM 121
+; ASM 197
+; ASM 205
+; ASM 0
+; ASM 192
+; ASM 193
+; ASM 62
+; ASM 16
+; ASM 237
+; ASM 121
+; ASM 251
 WAITKEY
+LET M 31
+LET M 1
 
-
-EXIT
 
 EVENT NEWHIGHSCORE
 

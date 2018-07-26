@@ -1152,7 +1152,6 @@ IF KEY RIGHT
             IF KEY = 3
                 IF LADDERABOVE
                 ELSE
-            ANIMATE
                     SPRITERIGHT
                 ENDIF
             ELSE

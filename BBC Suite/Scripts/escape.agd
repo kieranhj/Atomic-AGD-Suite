@@ -2115,13 +2115,13 @@ ENDIF
 IF CUSTOM
     IF SCREEN = 12
         LET IMAGE = 7
-        IF KEY  0
+        IF KEY = 0
             SPRITERIGHT
             IF A = 0
                 ANIMBACK
             ENDIF
         ELSE
-            IF KEY  1
+            IF KEY = 1
                 SPRITELEFT
                 IF A = 0
                     ANIMATE
@@ -2133,13 +2133,13 @@ ENDIF
 IF CUSTOM
     IF SCREEN = 17
         LET IMAGE = 7
-        IF KEY  0
+        IF KEY = 0
             SPRITERIGHT
             IF A = 0
                 ANIMBACK
             ENDIF
         ELSE
-            IF KEY  1
+            IF KEY = 1
                 SPRITELEFT
                 IF A = 0
                     ANIMATE
@@ -2151,13 +2151,13 @@ ENDIF
 IF CUSTOM
     IF SCREEN = 25
         LET IMAGE = 7
-        IF KEY  0
+        IF KEY = 0
             SPRITERIGHT
             IF A = 0
                 ANIMBACK
             ENDIF
         ELSE
-            IF KEY  1
+            IF KEY = 1
                 SPRITELEFT
                 IF A = 0
                     ANIMATE

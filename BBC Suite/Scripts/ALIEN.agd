@@ -291,9 +291,9 @@ DEFINEOBJECT    56 255 8 8
                 8 32 0 0 1 0 8 32 0 0 0 0 0 0 0 0
 
 
-MAP             WIDTH 11
+MAP             WIDTH 3
                 STARTSCREEN 255
-                255 255 255 255   0 255 255 255 255 255 255
+                255   0 255
 ENDMAP
 
 
@@ -476,10 +476,10 @@ REPEAT 20
     ENDIF
     IF COLLISION 1
         IF KEY FIRE
-            SOUND 0
+            ; SOUND 0
             OTHER
             LET SETTINGA 1
-            SPRITEINK 2
+            ; SPRITEINK 2
             SUBTRACT 1 TO SETTINGB
             ENDSPRITE
             ADD S TO Y
@@ -496,7 +496,7 @@ REPEAT 20
         GET 2
         IF KEY FIRE
             PUT X Y C
-            SOUND 1
+            ; SOUND 1
         ENDIF
         LET Y A
         LET X B
@@ -508,21 +508,21 @@ LET B X
 
 
 EVENT SPRITETYPE1
-SPRITEINK 0
+; SPRITEINK 0
 LET IMAGE DIRECTION
 ADD 8 TO IMAGE
 IF C = 0
     ANIMATE
 ENDIF
 IF SETTINGB = 0
-    SOUND 2
+    ; SOUND 2
     EXPLODE 4
     REMOVE
     EXIT
 ENDIF
 IF SETTINGA = 1
     LET SETTINGA 0
-    SPRITEINK 0
+    ; SPRITEINK 0
     IF 2 > C
         EXIT
     ENDIF
@@ -719,12 +719,12 @@ EVENT INTROMENU
 
 EVENT GAMEINIT
 LET LIVES = 3
-COLOUR 71
-BORDER 0
+; COLOUR 71
+; BORDER 0
 CLS
 LET LINE = 0
 LET COLUMN = 12
-COLOUR 48
+; COLOUR 48
 MESSAGE 1
 LET LINE = 3
 LET COLUMN = 25
@@ -745,7 +745,7 @@ ENDIF
 
 
 EVENT KILLPLAYER
-SOUND 0
+; SOUND 0
 ; FADE
 SUBTRACT 1 FROM LIVES
 

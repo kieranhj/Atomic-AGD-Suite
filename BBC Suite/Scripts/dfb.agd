@@ -104,7 +104,6 @@ DEFINEFONT      0 0 0 0 0 0 0 0
                 0 60 120 0 0 0 0 0
                 124 198 187 227 227 187 198 124
 
-; block 0
 DEFINEBLOCK     EMPTYBLOCK
                 0 0 0 0 0 0 0 0
                 66
@@ -125,7 +124,6 @@ DEFINEBLOCK     EMPTYBLOCK
                 0 0 0 0 0 0 0 0
                 98
 
-; block 5
 DEFINEBLOCK     CUSTOMBLOCK
                 0 0 0 0 24 62 127 255
                 105
@@ -146,7 +144,6 @@ DEFINEBLOCK     CUSTOMBLOCK
                 0 129 231 255 255 255 255 255
                 105
 
-; block 10
 DEFINEBLOCK     CUSTOMBLOCK
                 0 129 131 195 195 231 247 255
                 105
@@ -167,7 +164,6 @@ DEFINEBLOCK     CUSTOMBLOCK
                 0 0 0 0 0 48 124 254
                 105
 
-; block 15
 DEFINEBLOCK     CUSTOMBLOCK
                 0 128 192 192 224 252 254 255
                 105
@@ -188,9 +184,8 @@ DEFINEBLOCK     CUSTOMBLOCK
                 0 0 0 0 0 0 0 0
                 81
 
-; block 20
 DEFINEBLOCK     CUSTOMBLOCK
-                0 0 0 0 0 0 0 0 
+                255 255 255 255 255 255 255 255
                 81
 
 DEFINEBLOCK     EMPTYBLOCK
@@ -209,7 +204,6 @@ DEFINEBLOCK     EMPTYBLOCK
                 255 85 0 0 0 0 0 0
                 65
 
-; block 25
 DEFINEBLOCK     EMPTYBLOCK
                 216 118 13 3 0 0 0 0
                 65
@@ -230,7 +224,6 @@ DEFINEBLOCK     EMPTYBLOCK
                 248 4 58 58 58 4 248 0
                 65
 
-; block 30
 DEFINEBLOCK     EMPTYBLOCK
                 224 80 56 20 14 5 3 1
                 65
@@ -251,7 +244,6 @@ DEFINEBLOCK     WALLBLOCK
                 213 34 0 0 0 0 0 0
                 102
 
-; block 35
 DEFINEBLOCK     WALLBLOCK
                 222 8 0 0 0 0 0 0
                 102
@@ -272,7 +264,6 @@ DEFINEBLOCK     CUSTOMBLOCK
                 128 236 208 228 155 246 248 192
                 108
 
-; block 40
 DEFINEBLOCK     CUSTOMBLOCK
                 1 3 7 11 1 31 47 1
                 108
@@ -293,7 +284,6 @@ DEFINEBLOCK     DEADLYBLOCK
                 254 254 124 124 56 56 16 16
                 71
 
-; block 45
 DEFINEBLOCK     DEADLYBLOCK
                 3 15 63 255 63 15 3 0
                 71
@@ -307,14 +297,13 @@ DEFINEBLOCK     DEADLYBLOCK
                 71
 
 DEFINEBLOCK     WALLBLOCK
-                255 255 255 255 255 255 255 255 
+                0 0 0 0 0 0 0 0
                 92
 
 DEFINEBLOCK     WALLBLOCK
                 0 0 0 0 0 0 0 0
                 99
 
-; block 50
 DEFINEBLOCK     WALLBLOCK
                 0 0 0 0 0 0 0 0
                 106
@@ -335,7 +324,6 @@ DEFINEBLOCK     WALLBLOCK
                 124 254 252 242 14 222 92 0
                 94
 
-; block 55
 DEFINEBLOCK     WALLBLOCK
                 124 190 206 230 224 238 92 0
                 94
@@ -356,7 +344,6 @@ DEFINEBLOCK     WALLBLOCK
                 0 0 0 0 0 0 0 0
                 92
 
-; block 60
 DEFINEBLOCK     WALLBLOCK
                 128 64 0 0 0 0 0 0
                 89
@@ -377,7 +364,6 @@ DEFINEBLOCK     WALLBLOCK
                 250 128 128 128 128 0 128 0
                 111
 
-; block 65
 DEFINEBLOCK     WALLBLOCK
                 1 1 1 1 1 1 1 1
                 105
@@ -398,7 +384,6 @@ DEFINEBLOCK     WALLBLOCK
                 238 204 170 0 238 204 170 0
                 77
 
-; block 70
 DEFINEBLOCK     WALLBLOCK
                 238 204 170 204 170 204 170 0
                 77
@@ -419,7 +404,6 @@ DEFINEBLOCK     WALLBLOCK
                 255 129 133 157 157 189 129 255
                 69
 
-; block 75
 DEFINEBLOCK     WALLBLOCK
                 255 129 161 185 185 189 129 255
                 69
@@ -440,7 +424,6 @@ DEFINEBLOCK     WALLBLOCK
                 126 126 0 60 60 0 0 0
                 93
 
-; block 80
 DEFINEBLOCK     WALLBLOCK
                 255 129 153 153 153 153 129 255
                 71
@@ -461,7 +444,6 @@ DEFINEBLOCK     WALLBLOCK
                 255 153 153 153 129 249 249 255
                 71
 
-; block 85
 DEFINEBLOCK     WALLBLOCK
                 255 129 159 129 249 249 129 255
                 71
@@ -482,7 +464,6 @@ DEFINEBLOCK     WALLBLOCK
                 255 129 153 153 129 249 249 255
                 71
 
-; block 90
 DEFINEBLOCK     EMPTYBLOCK
                 0 0 0 0 0 0 0 3
                 72
@@ -503,7 +484,6 @@ DEFINEBLOCK     WALLBLOCK
                 255 255 255 255 255 255 0 0
                 7
 
-; block 95
 DEFINEBLOCK     CUSTOMBLOCK
                 48 48 48 48 48 48 0 120
                 111
@@ -524,7 +504,6 @@ DEFINEBLOCK     WALLBLOCK
                 12 12 12 12 12 12 12 0
                 23
 
-; block 100
 DEFINEBLOCK     WALLBLOCK
                 12 12 12 12 12 12 12 12
                 23
@@ -545,7 +524,6 @@ DEFINEBLOCK     WALLBLOCK
                 0 254 8 8 8 8 8 0
                 7
 
-; block 105
 DEFINEBLOCK     WALLBLOCK
                 0 255 0 0 0 0 0 0
                 71
@@ -566,7 +544,6 @@ DEFINEBLOCK     WALLBLOCK
                 255 254 254 253 252 248 244 192
                 92
 
-; block 110
 DEFINEBLOCK     WALLBLOCK
                 255 124 178 8 0 0 0 0
                 92
@@ -587,7 +564,6 @@ DEFINEBLOCK     WALLBLOCK
                 52 32 80 0 0 0 0 0
                 92
 
-; block 115
 DEFINEBLOCK     WALLBLOCK
                 82 0 0 0 0 0 0 0
                 92
@@ -608,7 +584,6 @@ DEFINEBLOCK     EMPTYBLOCK
                 0 0 192 192 192 192 0 0
                 72
 
-; block 120
 DEFINEBLOCK     EMPTYBLOCK
                 192 192 192 220 220 192 192 192
                 72
@@ -629,7 +604,6 @@ DEFINEBLOCK     EMPTYBLOCK
                 192 194 199 222 220 192 192 192
                 72
 
-; block 125
 DEFINEBLOCK     EMPTYBLOCK
                 3 3 3 59 123 227 67 3
                 72
@@ -650,7 +624,6 @@ DEFINEBLOCK     PLATFORMBLOCK
                 14 74 245 181 21 21 10 14
                 22
 
-; block 130
 DEFINEBLOCK     EMPTYBLOCK
                 0 127 127 127 126 126 126 126
                 67
@@ -671,7 +644,6 @@ DEFINEBLOCK     EMPTYBLOCK
                 0 63 127 127 126 126 126 126
                 67
 
-; block 135
 DEFINEBLOCK     EMPTYBLOCK
                 126 126 127 127 63 0 0 0
                 66
@@ -692,7 +664,6 @@ DEFINEBLOCK     EMPTYBLOCK
                 0 254 254 254 0 0 254 254
                 67
 
-; block 140
 DEFINEBLOCK     EMPTYBLOCK
                 126 126 126 126 126 0 0 0
                 66
@@ -713,7 +684,6 @@ DEFINEBLOCK     EMPTYBLOCK
                 0 0 254 254 254 0 0 0
                 66
 
-; block 145
 DEFINEBLOCK     EMPTYBLOCK
                 255 255 255 1 1 1 1 1
                 72
@@ -734,7 +704,6 @@ DEFINEBLOCK     EMPTYBLOCK
                 0 63 127 127 126 126 127 63
                 67
 
-; block 150
 DEFINEBLOCK     EMPTYBLOCK
                 0 0 127 127 127 0 0 0
                 66
@@ -755,7 +724,6 @@ DEFINEBLOCK     EMPTYBLOCK
                 0 126 126 126 126 126 254 254
                 67
 
-; block 155
 DEFINEBLOCK     EMPTYBLOCK
                 0 0 127 127 127 0 0 0
                 66
@@ -776,7 +744,6 @@ DEFINEBLOCK     EMPTYBLOCK
                 0 0 0 0 0 0 0 127
                 72
 
-; block 160
 DEFINEBLOCK     EMPTYBLOCK
                 0 0 0 0 0 0 0 126
                 72
@@ -797,7 +764,6 @@ DEFINEBLOCK     EMPTYBLOCK
                 126 0 0 0 0 0 0 0
                 72
 
-; block 165
 DEFINEBLOCK     EMPTYBLOCK
                 0 254 254 254 0 0 252 254
                 67
@@ -818,7 +784,6 @@ DEFINEBLOCK     EMPTYBLOCK
                 0 0 0 0 0 0 0 0
                 71
 
-; block 170
 DEFINEBLOCK     WALLBLOCK
                 0 170 124 0 170 239 199 85
                 65
@@ -839,7 +804,6 @@ DEFINEBLOCK     EMPTYBLOCK
                 0 0 0 0 0 0 0 0
                 71
 
-; block 175
 DEFINEBLOCK     DEADLYBLOCK
                 18 64 1 32 136 1 64 4
                 127
@@ -860,7 +824,6 @@ DEFINEBLOCK     EMPTYBLOCK
                 0 0 0 0 0 24 60 126
                 71
 
-; block 180
 DEFINEBLOCK     WALLBLOCK
                 0 0 255 255 255 255 0 0
                 102
@@ -881,7 +844,6 @@ DEFINEBLOCK     WALLBLOCK
                 0 0 63 127 127 63 0 0
                 102
 
-; block 185
 DEFINEBLOCK     EMPTYBLOCK
                 243 60 0 0 0 0 0 0
                 80
@@ -902,7 +864,6 @@ DEFINEBLOCK     EMPTYBLOCK
                 126 126 255 255 255 0 0 0
                 66
 
-; block 190
 DEFINEBLOCK     WALLBLOCK
                 124 170 212 170 212 170 84 0
                 30
@@ -923,7 +884,6 @@ DEFINEBLOCK     WALLBLOCK
                 127 170 213 170 213 170 85 0
                 95
 
-; block 195
 DEFINEBLOCK     WALLBLOCK
                 252 170 84 170 84 170 84 0
                 95
@@ -944,7 +904,6 @@ DEFINEBLOCK     WALLBLOCK
                 244 0 232 208 232 208 0 244
                 65
 
-; block 200
 DEFINEBLOCK     DEADLYBLOCK
                 0 0 0 0 0 0 0 0
                 66
@@ -1833,15 +1792,40 @@ SPRITEPOSITION  5 15 16 16
 SPRITEPOSITION  5 15 16 184
 SPRITEPOSITION  5 15 160 8
 
+DEFINESCREEN      0 181   0   0   0   0   0   0   0   0   0 182   0   0   0 181   0   0   0   0 181   0   0   0   0   0   0   0 181   0   0   0
+                  0   0   0   0   0 181   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0 181   0   0   0   0   0   0   0
+                  0   0 181   0   0   0   0   0 183   0   0   0 181   0   0   0   0 182   0   0   0   0 183   0   0   0 183   0   0   0 183   0
+                  0 183   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0 181   0   0   0   0   0   0   0   0   0   0   0
+                  0   0   0   0 183   0 181   0   0 183   0   0   0 183   0   0 183   0 183   0   0   0   0   0 183   0   0   0   0 181   0   0
+                  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+                  0 183   0   0   0   0   0   0   0 181   0   0   0   0   0 181   0   0   0 181   0 183   0   0 183   0 181   0   0   0   0   0
+                  0   0   0   0   0   0   0   0 183   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+                  0   0   0   0 181   0   0   0   0   0   0   0   0   0 183   0   0   0   0   0   0 183   0   0   0   0   0   0   0   0   0 181
+                  0   0   0   0 183   0   0 181   0   0   0 181   0   0   0   0   0   0 181   0   0   0   0 181   0   0   0   0   0   0   0   0
+                  0   0 181   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0 181   0   0   0
+                  0   0   0   0   0   0 183   0   0   0 183   0   0   0   0   0 183   0   0   0   0 183   0   0   0   0 183   0   0   0   0   0
+                  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0 181
+                  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+                  1   1   1   1   1   1 158 158 158 157 157 157   1 157   1   1   1   1 157 158 159 158 157 158 157 157   1   1   1   1   1   1
+                  1   1   1   1   1 167 142 142 142 138 139 142 166 142 168   1   1 167 130 136 134 136 130 136 138 139 168   1   1   1   1   1
+                  1   1   1   1   1 167 143 189 151 131 144 143 144 143 144   1   1 167 143 137 135 137 140 140 143 141 168   1   1   1   1   1
+                  1   1   1   1   1   1 161 161 162 161 162 161 162 161 162   1   1   1 161 162 163 162 164 164 161 161   1   1   1   1   1   1
+                  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+                  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+                  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+                193 194 195 194 195 194 195 194 195 194 195 194 195 194 195 194 195 194 195 194 195 194 195 194 195 194 195 194 195 194 195 193
+                191 192 191 192 191 192 191 192 191 192 191 192 191 192 191 192 191 192 191 192 191 192 191 192 191 192 191 192 191 192 191 192
+SPRITEPOSITION  7 3 160 120
+
 DEFINEOBJECT    66 254 56 120
                 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
                 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
 
 
-MAP             WIDTH 11
+MAP             WIDTH 13
                 STARTSCREEN 0
-                  0   1   2   3   4   5   6   7   8   9  10
-                 11  12  13  14  15  16  17  18  19  20  21
+                255   0   1   2   3   4   5   6   7   8   9  10 255
+                255  11  12  13  14  15  16  17  18  19  20  21 255
 ENDMAP
 
 
@@ -1972,7 +1956,7 @@ REPEAT 3
             ELSE
                 IF SETTINGB > 160
                     SPAWN 8 6
-                    ; 4
+                    ; SOUND 4
                 ENDIF
                 LET SETTINGB = 132
             ENDIF
@@ -2004,13 +1988,13 @@ IF KEY FIRE
                     LET SETTINGB = 64
                     LET SETTINGA = 64
                     LET J = 1
-                    ; 5
+                    ; SOUND 5
                 ENDIF
                 IF I = 2
                     LET SETTINGB = 64
                     LET SETTINGA = 192
                     LET J = 1
-                    ; 5
+                    ; SOUND 5
                 ENDIF
             ENDIF
         ELSE
@@ -2018,7 +2002,7 @@ IF KEY FIRE
             LET SETTINGB = 64
             LET J = 1
             LET L = 65
-            ; 5
+            ; SOUND 5
         ENDIF
     ENDIF
 ELSE
@@ -2128,7 +2112,7 @@ IF Y <= 7
     LET Y = 8
 ENDIF
 IF Y > 190
-    ; 1
+    ; SOUND 1
     REMOVE
 ENDIF
 IF X <= 8
@@ -2141,7 +2125,7 @@ ENDIF
 
 EVENT SPRITETYPE1
 ANIMATE
-; 71
+; SPRITEINK 71
 
 
 EVENT SPRITETYPE2
@@ -2167,14 +2151,14 @@ IF FRAME = 0
             SUBTRACT RND FROM A
         ENDIF
         IF A <= G
-            ; 2
+            ; SPRITEINK 2
             IF A = G
-                ; 3
+                ; SPRITEINK 3
                 LET B = Y
                 LET C = X
             ENDIF
         ELSE
-            ; 7
+            ; SPRITEINK 7
         ENDIF
         IF X = 200
             LET X = 0
@@ -2236,7 +2220,7 @@ IF DIRECTION = 0
         IF A <= G
             LET SCREEN = A
         ELSE
-            ; 0
+            ; SOUND 0
         ENDIF
         LET DIRECTION = 8
     ENDIF
@@ -2250,7 +2234,7 @@ ADD 40 TO SETTINGB
 LET Y = SETTINGA
 LET X = SETTINGB
 IF DIRECTION = 10
-    ; 4
+    ; SOUND 4
 ENDIF
 
 
@@ -2277,12 +2261,12 @@ ELSE
     LET FRAME = 0
 ENDIF
 IF FRAME = 0
-    ; 7
+    ; SPRITEINK 7
     SUBTRACT 8 FROM Y
-    ; 2
+    ; SPRITEINK 2
     ADD 8 TO Y
 ELSE
-    ; 2
+    ; SPRITEINK 2
 ENDIF
 
 
@@ -2293,7 +2277,7 @@ IF DIRECTION > 0
         LET A = 108
         SUBTRACT DIRECTION FROM A
         IF A = 0
-            ; 2
+            ; SPRITEINK 2
             LET COLUMN = X
             LET LINE = Y
             REMOVE
@@ -2307,11 +2291,11 @@ IF DIRECTION > 0
             PUTBLOCK 0
         ELSE
             IF DIRECTION > 94
-                ; A
+                ; SPRITEINK A
             ELSE
                 GETRANDOM 2
                 ADD 5 TO RND
-                ; RND
+                ; SPRITEINK RND
             ENDIF
         ENDIF
     ENDIF
@@ -2372,7 +2356,7 @@ IF DIRECTION <= 4
                 ELSE
                     LET DIRECTION = 3
                 ENDIF
-                ; 5
+                ; SOUND 5
             ENDIF
         ENDIF
         IF DIRECTION 2
@@ -2384,7 +2368,7 @@ IF DIRECTION <= 4
                 ELSE
                     LET DIRECTION = 4
                 ENDIF
-                ; 5
+                ; SOUND 5
             ENDIF
         ENDIF
         IF DIRECTION 3
@@ -2396,7 +2380,7 @@ IF DIRECTION <= 4
                 ELSE
                     LET DIRECTION = 1
                 ENDIF
-                ; 5
+                ; SOUND 5
             ENDIF
         ENDIF
         IF DIRECTION 4
@@ -2408,7 +2392,7 @@ IF DIRECTION <= 4
                 ELSE
                     LET DIRECTION = 2
                 ENDIF
-                ; 5
+                ; SOUND 5
             ENDIF
         ENDIF
     ENDREPEAT
@@ -2444,11 +2428,11 @@ IF COLLISION 0
     ENDIF
     IF A <= 13
         IF B <= 13
-            ; 0
-            ; 2
+            ; SOUND 0
+            ; SPRITEINK 2
             OTHER
             REMOVE
-            ; 2
+            ; COLOUR 2
             REPEAT 6
                 SPAWN 8 14
             ENDREPEAT
@@ -2469,7 +2453,7 @@ IF IMAGE = 4
     ANIMATE
     IF FRAME = 4
         SPAWN 0 0
-        ; 121
+        ; COLOUR 121
         LET LINE = Y
         LET COLUMN = X
         DIVIDE LINE BY 8
@@ -2504,37 +2488,37 @@ IF IMAGE = 5
     IF COLLISION 0
         REMOVE
     ENDIF
-    ; 67
+    ; SPRITEINK 67
     EXIT
 ENDIF
 IF COLLISION 0
-    ; 6
+    ; SPRITEINK 6
     LET A = 0
     REPEAT 128
         ADD 2 TO A
         IF A = 0
-            ; 6
+            ; SOUND 6
         ENDIF
         IF A = 32
-            ; 7
+            ; SOUND 7
         ENDIF
         IF A = 64
-            ; 6
+            ; SOUND 6
         ENDIF
         IF A = 96
-            ; 8
+            ; SOUND 8
         ENDIF
         IF A = 128
-            ; 6
+            ; SOUND 6
         ENDIF
         IF A = 160
-            ; 7
+            ; SOUND 7
         ENDIF
         IF A = 192
-            ; 10
+            ; SOUND 10
         ENDIF
         IF A = 224
-            ; 8
+            ; SOUND 8
         ENDIF
         DELAY 1
     ENDREPEAT
@@ -2551,7 +2535,7 @@ IF COLLISION 0
 ELSE
     LET FRAME = 0
 ENDIF
-; 6
+; SPRITEINK 6
 
 
 EVENT SPRITETYPE7
@@ -2562,7 +2546,7 @@ IF IMAGE 3
             SPAWN 7 2
         ENDREPEAT
     ENDIF
-    ; 70
+    ; SPRITEINK 70
 ELSE
     SPRITEUP
     SPRITEUP
@@ -2575,7 +2559,7 @@ ELSE
     ENDIF
     IF Y <= 100
         GETRANDOM 50
-        ; RND
+        ; SPRITEINK RND
         IF Y <= 2
             LET RND = 1
         ENDIF
@@ -2589,7 +2573,7 @@ ELSE
                 GETRANDOM 200
                 ADD 20 TO RND
                 LET X = RND
-                ; 5
+                ; SOUND 5
                 LET FRAME = 0
             ENDIF
         ENDIF
@@ -2652,7 +2636,7 @@ IF IMAGE 14
         ELSE
             IF CUSTOM
             ELSE
-                ; 2
+                ; SPRITEINK 2
             ENDIF
             REMOVE
         ENDIF
@@ -2669,12 +2653,12 @@ ELSE
         IF CUSTOM
         ELSE
             SPRITEDOWN
-            ; 2
+            ; SPRITEINK 2
         ENDIF
         REMOVE
     ENDIF
     IF FRAME = 1
-        ; 3
+        ; SOUND 3
     ENDIF
 ENDIF
 
@@ -2692,8 +2676,8 @@ EVENT MAINLOOP2
 
 
 EVENT INTROMENU
-; 71
-; 0
+; COLOUR 71
+; BORDER 0
 CLS
 LET COLUMN = 0
 LET LINE = 1
@@ -2704,8 +2688,8 @@ CLS
 
 EVENT GAMEINIT
 LET LIVES = 3
-; 71
-; 0
+; COLOUR 71
+; BORDER 0
 CLS
 LET G = 1
 DELAY 50
@@ -2721,7 +2705,7 @@ IF SCREEN 0
 ENDIF
 LET COLUMN = 0
 LET LINE = 0
-; 79
+; COLOUR 79
 MESSAGE 3
 
 
@@ -2729,7 +2713,7 @@ EVENT FELLTOOFAR
 
 
 EVENT KILLPLAYER
-; 0
+; SOUND 0
 
 
 EVENT LOSTGAME

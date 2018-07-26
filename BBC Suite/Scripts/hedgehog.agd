@@ -2270,7 +2270,7 @@ IF SCREEN = 0
         BEEP 10
         ; FADE
         CLS
-        TICKER 99 2
+        TICKER 0
         LET SCREEN = 0
         RESTART
     ENDIF
@@ -2300,7 +2300,7 @@ IF SCREEN = 38
     BEEP 10
     ; FADE
     CLS
-    TICKER 99 2
+    TICKER 0
     LET SCREEN = 0
     RESTART
 ENDIF

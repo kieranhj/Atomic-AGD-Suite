@@ -161,7 +161,7 @@ DEFINEBLOCK     EMPTYBLOCK
                 1 31 48 31 25 25 25 31
                 113
 
-DEFINEBLOCK     0                113
+DEFINEBLOCK     WATERBLOCK
                 0 0 0 0 0 0 0 0
                 15
 

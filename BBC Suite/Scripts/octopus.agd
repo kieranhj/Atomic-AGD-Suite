@@ -16,10 +16,10 @@ DEFINEMESSAGES
     "_ @ @"
     "TOTAL SCORE:"
     "&"
-    "''''''''"""
+    "'''''''''"
     "'''''''''"
     "'"
-    """"
+    "'"
     "EXIT....O"
     "+"
     "SCORE:"
@@ -40,7 +40,7 @@ DEFINEMESSAGES
     "CONGRATULATIONS!"
     "I LOVE THESE KIDS==="
     "<"
-    "      ''''""        ""''''"
+    "      '''''        '''''"
     "actopuses"
 
 DEFINEFONT      0 0 0 0 0 0 0 0
@@ -1274,10 +1274,10 @@ DEFINEOBJECT    77 254 56 120
                 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
 
 
-MAP             WIDTH 11
+MAP             WIDTH 13
                 STARTSCREEN 13
-                  0   1   2   3   4   5   6   7   8   9  10
-                 11  12  13 255 255 255 255 255 255 255 255
+                255   0   1   2   3   4   5   6   7   8   9  10 255
+                255  11  12  13 255 255 255 255 255 255 255 255 255
 ENDMAP
 
 
@@ -1287,61 +1287,61 @@ IF SCREEN = 5
     IF Y = 40
         LET LINE 5
         LET COLUMN 15
-        COLOUR 67
+        ; COLOUR 67
         MESSAGE 28
     ENDIF
     IF Y = 64
         LET LINE 8
         LET COLUMN 8
-        COLOUR 67
+        ; COLOUR 67
         MESSAGE 28
     ENDIF
     IF Y = 72
         LET LINE 8
         LET COLUMN 8
-        COLOUR 67
+        ; COLOUR 67
         MESSAGE 29
     ENDIF
     IF Y = 48
         LET LINE 5
         LET COLUMN 15
-        COLOUR 67
+        ; COLOUR 67
         MESSAGE 29
     ENDIF
     IF Y = 72
         LET LINE 9
         LET COLUMN 21
-        COLOUR 67
+        ; COLOUR 67
         MESSAGE 28
     ENDIF
     IF Y = 80
         LET LINE 9
         LET COLUMN 21
-        COLOUR 67
+        ; COLOUR 67
         MESSAGE 29
     ENDIF
     IF Y = 104
         LET LINE 13
         LET COLUMN 11
-        COLOUR 67
+        ; COLOUR 67
         MESSAGE 28
     ENDIF
     IF Y = 112
         LET LINE 13
         LET COLUMN 11
-        COLOUR 67
+        ; COLOUR 67
         MESSAGE 29
     ENDIF
     IF Y = 112
         LET LINE 14
         LET COLUMN 20
-        COLOUR 67
+        ; COLOUR 67
         MESSAGE 28
     ENDIF
     IF Y = 120
         LET LINE 14
         LET COLUMN 20
-        COLOUR 67
+        ; COLOUR 67
         MESSAGE 29
     ENDIF
 ENDIF
@@ -1349,7 +1349,7 @@ IF CUSTOM
     TRAIL 1
     BEEP 220
 ELSE
-    SPRITEINK 77
+    ; SPRITEINK 77
 ENDIF
 IF SCREEN <= 10
     IF COLLISION 4
@@ -1515,7 +1515,7 @@ EVENT SPRITETYPE1
 IF M <= 15
     LET IMAGE 8
     LET FRAME 0
-    SPRITEINK 66
+    ; SPRITEINK 66
 ENDIF
 IF COLLISION 0
     LET N 1
@@ -1524,12 +1524,12 @@ IF COLLISION 0
 ELSE
     LET N 0
     IF COLLISION 3
-        SPRITEINK 66
+        ; SPRITEINK 66
         BEEP 150
         LET M 0
     ELSE
         IF M > 15
-            SPRITEINK 64
+            ; SPRITEINK 64
             IF L <= X
                 LET IMAGE 6
             ELSE
@@ -1557,7 +1557,7 @@ ENDIF
 
 
 EVENT SPRITETYPE2
-SPRITEINK 71
+; SPRITEINK 71
 IF Y = I
     IF X > L
         LET SETTINGA 0
@@ -1600,7 +1600,7 @@ ENDIF
 IF SETTINGB = 4
     IF COLLISION 3
         BEEP 40
-        BORDER FRAME
+        ; BORDER FRAME
     ELSE
         BEEP 3
     ENDIF
@@ -1621,16 +1621,16 @@ IF SETTINGB = 4
 ENDIF
 IF COLLISION 3
     IF FRAME = 0
-        SPRITEINK 70
+        ; SPRITEINK 70
     ELSE
-        SPRITEINK 71
+        ; SPRITEINK 71
     ENDIF
 ELSE
     IF Y = I
         IF FRAME = 1
-            SPRITEINK 69
+            ; SPRITEINK 69
         ELSE
-            SPRITEINK 67
+            ; SPRITEINK 67
         ENDIF
     ENDIF
 ENDIF
@@ -1646,15 +1646,15 @@ IF SCREEN = 13
     ENDIF
 ENDIF
 IF COLLISION 2
-    BORDER SETTINGA
+    ; BORDER SETTINGA
     TRAIL 5
 ENDIF
 IF Y > 152
     TRAIL 5
-    SPRITEINK 70
-    BORDER SETTINGA
+    ; SPRITEINK 70
+    ; BORDER SETTINGA
     IF SETTINGA = 4
-        SPRITEINK 69
+        ; SPRITEINK 69
         BEEP 40
     ENDIF
 ENDIF
@@ -1666,7 +1666,7 @@ IF CUSTOM
     SCORE 250
     BEEP 80
     ADD 1 TO S
-    COLOUR 0
+    ; COLOUR 0
     CLS
     DELAY 25
     LET O 0
@@ -1683,9 +1683,9 @@ ELSE
                 LET LINE 23
                 LET COLUMN 12
                 IF SETTINGA <= 1
-                    COLOUR 0
+                    ; COLOUR 0
                 ELSE
-                    COLOUR 68
+                    ; COLOUR 68
                 ENDIF
                 MESSAGE 1
             ENDIF
@@ -1699,7 +1699,7 @@ ELSE
         IF SCREEN <> 13
             LET LINE 23
             LET COLUMN 13
-            COLOUR 69
+            ; COLOUR 69
             SHOWSCORE
         ENDIF
         IF Y > 152
@@ -1720,32 +1720,32 @@ ELSE
         LET O 50
     ENDIF
     IF O = 50
-        BORDER 0
+        ; BORDER 0
         LET H 2
         LET IMAGE 1
         LET Y 40
         LET X 24
     ENDIF
     IF LIVES <= 0
-        COLOUR 0
+        ; COLOUR 0
         CLS
         BEEP 60
         LET Y 48
         LET X 124
-        SPRITEINK 70
+        ; SPRITEINK 70
         SPAWN 3 17
         SPAWNED
         LET LINE 10
         LET COLUMN 12
-        COLOUR 65
+        ; COLOUR 65
         MESSAGE 0
         LET LINE 12
         LET COLUMN 10
-        COLOUR 68
+        ; COLOUR 68
         MESSAGE 20
         LET LINE 12
         LET COLUMN 17
-        COLOUR 71
+        ; COLOUR 71
         SHOWSCORE
         DELAY 50
         WAITKEY
@@ -1774,26 +1774,26 @@ ELSE
         ; ASM 35
         ; ASM 16
         ; ASM 251
-        COLOUR 0
+        ; COLOUR 0
         CLS
         LET SCREEN 0
         RESTART
     ENDIF
     IF O > 50
         IF O <= 99
-            SPRITEINK O
+            ; SPRITEINK O
         ENDIF
     ENDIF
     IF SCREEN = 13
         IF M = 5
             LET LINE 19
             LET COLUMN 2
-            COLOUR 0
+            ; COLOUR 0
             MESSAGE 22
         ENDIF
         LET O 100
         IF X > 210
-            COLOUR 0
+            ; COLOUR 0
             CLS
             DELAY 50
             LET SCREEN 0
@@ -1905,7 +1905,7 @@ ELSE
         ENDIF
         IF CUSTOM
         ELSE
-            SPRITEINK 78
+            ; SPRITEINK 78
         ENDIF
     ENDIF
 ENDIF
@@ -2004,14 +2004,14 @@ ENDIF
 EVENT SPRITETYPE6
 IF SCREEN = 0
     IF Q = 5
-        SPRITEINK 70
+        ; SPRITEINK 70
     ELSE
         REMOVE
     ENDIF
 ENDIF
 IF SCREEN <= 10
     IF SCREEN > 0
-        SPRITEINK 68
+        ; SPRITEINK 68
     ENDIF
 ENDIF
 ADD 1 TO SETTINGA
@@ -2022,20 +2022,20 @@ ENDIF
 IF SCREEN = 12
     LET LINE 12
     LET COLUMN 9
-    COLOUR SETTINGA
+    ; COLOUR SETTINGA
     MESSAGE 32
-    SPRITEINK 70
+    ; SPRITEINK 70
     LET LINE 14
     LET COLUMN 9
-    COLOUR 68
+    ; COLOUR 68
     MESSAGE 20
     LET LINE 14
     LET COLUMN 16
-    COLOUR 70
+    ; COLOUR 70
     DISPLAY S
     LET LINE 14
     LET COLUMN 18
-    COLOUR 71
+    ; COLOUR 71
     MESSAGE 21
     IF FRAME = 0
         BEEP 25
@@ -2043,7 +2043,7 @@ IF SCREEN = 12
     ENDIF
     IF O = 90
         IF S = 3
-            COLOUR 0
+            ; COLOUR 0
             CLS
             DELAY 100
             LET SCREEN = 11
@@ -2070,37 +2070,37 @@ IF SCREEN = 11
     IF Y = 80
         LET S 3
     ENDIF
-    SPRITEINK 70
+    ; SPRITEINK 70
     IF O = 1
         LET LINE 0
         LET COLUMN 0
-        COLOUR 71
+        ; COLOUR 71
         MESSAGE 33
         LET LINE 8
         LET COLUMN 8
-        COLOUR 69
+        ; COLOUR 69
         MESSAGE 35
         LET LINE 12
         LET COLUMN 2
-        COLOUR 69
+        ; COLOUR 69
         MESSAGE 34
         LET LINE 17
         LET COLUMN 6
-        COLOUR 68
+        ; COLOUR 68
         MESSAGE 12
         LET LINE 17
         LET COLUMN 19
-        COLOUR 71
+        ; COLOUR 71
         SHOWSCORE
         LET LINE 19
         LET COLUMN 11
-        COLOUR 66
+        ; COLOUR 66
         MESSAGE 0
     ENDIF
     IF O = 100
         LET LINE 22
         LET COLUMN 11
-        COLOUR SETTINGA
+        ; COLOUR SETTINGA
         MESSAGE 18
         IF KEY LEFT
             BEEP 45
@@ -2130,7 +2130,7 @@ IF SCREEN = 11
             ; ASM 35
             ; ASM 16
             ; ASM 251
-            COLOUR 0
+            ; COLOUR 0
             CLS
             DELAY 120
             LET SCREEN 13
@@ -2142,7 +2142,7 @@ ENDIF
 
 EVENT SPRITETYPE7
 IF SCREEN = 13
-    SPRITEINK 71
+    ; SPRITEINK 71
     IF M > 7
         IF Y <= 168
             ADD 4 TO X
@@ -2185,7 +2185,7 @@ ELSE
             LET FRAME 0
         ELSE
             LET FRAME 1
-            SPRITEINK SETTINGA
+            ; SPRITEINK SETTINGA
         ENDIF
     ELSE
         LET FRAME 1
@@ -2196,7 +2196,7 @@ ELSE
         BEEP 40
         LET LINE 23
         LET COLUMN 13
-        COLOUR 70
+        ; COLOUR 70
         SHOWSCORE
         SCORE 250
         SCORE 250
@@ -2208,9 +2208,9 @@ ENDIF
 
 EVENT SPRITETYPE8
 IF SCREEN = 0
-    SPRITEINK 69
+    ; SPRITEINK 69
 ELSE
-    SPRITEINK 68
+    ; SPRITEINK 68
 ENDIF
 ADD 1 TO SETTINGA
 IF SETTINGA > 4
@@ -2220,11 +2220,11 @@ ENDIF
 IF O = 51
     LET LINE 8
     LET COLUMN 12
-    COLOUR 71
+    ; COLOUR 71
     MESSAGE 27
     LET LINE 10
     LET COLUMN 11
-    COLOUR 69
+    ; COLOUR 69
     MESSAGE 3
     LET LINE 12
     LET COLUMN 11
@@ -2242,21 +2242,21 @@ IF O <= 55
         LET Y 72
         LET LINE 10
         LET COLUMN 11
-        COLOUR 67
+        ; COLOUR 67
         MESSAGE 3
     ELSE
         IF KEY FIRE2
             LET Y 88
             LET LINE 12
             LET COLUMN 11
-            COLOUR 67
+            ; COLOUR 67
             MESSAGE 4
         ELSE
             IF KEY FIRE3
                 LET Y 106
                 LET LINE 14
                 LET COLUMN 11
-                COLOUR 67
+                ; COLOUR 67
                 MESSAGE 5
             ENDIF
         ENDIF
@@ -2268,30 +2268,30 @@ ELSE
             IF Y = 88
                 LET LINE 10
                 LET COLUMN 11
-                COLOUR 69
+                ; COLOUR 69
                 MESSAGE 30
             ELSE
                 IF Y = 106
                     LET LINE 10
                     LET COLUMN 11
-                    COLOUR 69
+                    ; COLOUR 69
                     MESSAGE 31
                 ELSE
                     IF Y = 72
                         LET LINE 10
                         LET COLUMN 11
-                        COLOUR 69
+                        ; COLOUR 69
                         MESSAGE 23
                     ENDIF
                 ENDIF
             ENDIF
             LET LINE 8
             LET COLUMN 11
-            COLOUR 71
+            ; COLOUR 71
             MESSAGE 26
             LET LINE 12
             LET COLUMN 11
-            COLOUR 69
+            ; COLOUR 69
             MESSAGE 24
             LET LINE 14
             LET COLUMN 11
@@ -2305,7 +2305,7 @@ ELSE
                 BEEP 200
                 LET Q 1
                 LET O 99
-                COLOUR 0
+                ; COLOUR 0
                 CLS
                 LET Y 76
                 LET X 120
@@ -2314,7 +2314,7 @@ ELSE
                 BEEP 200
                 LET Q 0
                 LET O 99
-                COLOUR 0
+                ; COLOUR 0
                 CLS
                 LET Y 76
                 LET X 120
@@ -2323,7 +2323,7 @@ ELSE
                 BEEP 200
                 LET Q 2
                 LET O 99
-                COLOUR 0
+                ; COLOUR 0
                 CLS
                 LET Y 76
                 LET X 120
@@ -2332,11 +2332,11 @@ ELSE
             IF O = 100
                 LET LINE 9
                 LET COLUMN 14
-                COLOUR 5
+                ; COLOUR 5
                 MESSAGE 37
                 LET LINE 8
                 LET COLUMN 7
-                COLOUR 69
+                ; COLOUR 69
                 MESSAGE 36
                 DELAY 110
                 LET SCREEN 1
@@ -2397,12 +2397,12 @@ IF SCREEN = 1
     IF O = 50
         LET LINE 0
         LET COLUMN 13
-        COLOUR 70
+        ; COLOUR 70
         MESSAGE 2
         LET LINE 1
         REPEAT 23
             LET COLUMN 0
-            COLOUR 65
+            ; COLOUR 65
             MESSAGE 13
         ENDREPEAT
         LET LINE 1
@@ -2723,11 +2723,11 @@ IF SCREEN = 1
     LET O 49
     LET LINE 23
     LET COLUMN 1
-    COLOUR 1
+    ; COLOUR 1
     MESSAGE 38
     LET LINE 0
     LET COLUMN 12
-    COLOUR 70
+    ; COLOUR 70
     MESSAGE 39
 ENDIF
 
@@ -2987,7 +2987,7 @@ ANIMATE
 
 
 ANIMATE
-COLOUR
+; COLOUR
 
 SHOWSCORE
 MESSAGE

@@ -1173,7 +1173,7 @@ Current file: game.asm
 00106D  1               
 00106D  1               	.include "game.inc"
 00106D  1               
-00106D  2               .include "dodgy.inc" 
+00106D  2               .include "DODGY.inc" 
 00106D  2               
 00106D  3               ; Game engine code --------------------------------------------------------------
 00106D  3               
@@ -6506,7 +6506,7 @@ Current file: game.asm
 0022A4  3               WINDOWTOP = 1
 0022A4  3               WINDOWLFT = 1
 0022A4  3               WINDOWHGT = 22
-0022A4  3               WINDOWWID = 30 ;
+0022A4  3               WINDOWWID = 30 ;面面面面面面面面面面面面
 0022A4  3               MAPWID = 3
 0022A4  3  FF FF FF             .byte 255,255,255
 0022A7  3               mapdat:
@@ -7318,9 +7318,9 @@ Current file: game.asm
 002DFE  3  00 00 00 00  
 002E02  3  7C C6 BB E3          .byte 124,198,187,227,227,187,198,124
 002E06  3  E3 BB C6 7C  
-002E0A  3  35 15 93 22  keys:   .byte 53,21,147,34,144,4,20,33,17,1,146
-002E0E  3  90 04 14 21  
-002E12  3  11 01 92     
+002E0A  3  42 61 68 48  keys:   .byte 66,97,104,72,98,16,55,48,49,17,18
+002E0E  3  62 10 37 30  
+002E12  3  31 11 12     
 002E15  3               
 002E15  1               end_asm:
 002E15  1               

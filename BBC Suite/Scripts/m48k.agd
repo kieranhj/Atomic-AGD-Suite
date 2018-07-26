@@ -1894,9 +1894,9 @@ DEFINEOBJECT    71 1 72 56
                 145 137 137 137 137 137 137 137 137 137 137 137 0 0 0 0
 
 
-MAP             WIDTH 11
+MAP             WIDTH 13
                 STARTSCREEN 0
-                  0   1   2   3   4   5   6   7   8   9  10
+                255   0   1   2   3   4   5   6   7   8   9  10 255
 ENDMAP
 
 
@@ -1934,7 +1934,7 @@ ELSE
     LET LINE 23
     LET COLUMN 24
     DISPLAY C
-    ; 120
+    BEEP 120
     IF OBJ = 0
         NEXTLEVEL
     ENDIF
@@ -1968,7 +1968,7 @@ IF KEY RIGHT
         IF A = 0
             ANIMATE
             IF FRAME = 3
-                ; 8
+                BEEP 8
             ENDIF
         ENDIF
         SPRITERIGHT
@@ -1983,7 +1983,7 @@ IF KEY LEFT
         IF A = 0
             ANIMATE
             IF FRAME = 3
-                ; 8
+                BEEP 8
             ENDIF
         ENDIF
         SPRITELEFT
@@ -1991,19 +1991,19 @@ IF KEY LEFT
 ENDIF
 IF KEY FIRE
     JUMP 7
-    ; 60
+    BEEP 60
 ENDIF
 IF KEY UP
     IF G = 1
         IF L = 0
             LASER DIRECTION
             LET L 5
-            ; 40
+            BEEP 40
         ENDIF
     ENDIF
 ENDIF
 IF CANGODOWN
-    ;
+    BEEP
     LET B Y
     FALL
 ENDIF
@@ -2021,7 +2021,7 @@ IF IMAGE 8
         REMOVE
     ENDIF
 ENDIF
-; 7
+; SPRITEINK 7
 IF SETTINGA 0
     IF CANGOUP
         IF IMAGE 0
@@ -2040,15 +2040,15 @@ ELSE
     ENDIF
 ENDIF
 IF SCREEN 1
-    ; 2
+    ; SPRITEINK 2
 ENDIF
 IF SCREEN 8
     IF IMAGE 27
-        ; 2
+        ; SPRITEINK 2
     ENDIF
 ENDIF
 IF SCREEN 5
-    ; 2
+    ; SPRITEINK 2
 ENDIF
 ANIMATE
 IF COLLISION 0
@@ -2119,7 +2119,7 @@ ENDIF
 EVENT SPRITETYPE3
 IF COLLISION 0
     REMOVE
-    ; 120
+    BEEP 120
     ADD 1 TO C
     LET LINE 23
     LET COLUMN 24
@@ -2131,7 +2131,7 @@ EVENT SPRITETYPE4
 IF COLLISION 10
     LET I 0
     GETRANDOM 120
-    ; 40
+    BEEP 40
     EXPLODE 8
     REMOVE
 ENDIF
@@ -2180,7 +2180,7 @@ EVENT SPRITETYPE5
 IF COLLISION 10
     LET I 0
     GETRANDOM 50
-    ; 40
+    BEEP 40
     EXPLODE 8
     REMOVE
 ENDIF
@@ -2227,17 +2227,17 @@ EVENT SPRITETYPE6
 
 
 EVENT SPRITETYPE7
-; 7
+; SPRITEINK 7
 IF SCREEN = 0
     IF CANGODOWN
         IF A = 0
             ANIMATE
             SPRITEDOWN
-            ; 5
+            ; SPRITEINK 5
         ENDIF
     ELSE
         REMOVE
-        ; 50
+        BEEP 50
         GETRANDOM 120
         LET X RND
         ADD 80 TO X
@@ -2271,9 +2271,9 @@ ELSE
         KILL
     ENDIF
     IF SCREEN = 0
-        ; 5
+        ; SPRITEINK 5
     ELSE
-        ; 6
+        ; SPRITEINK 6
     ENDIF
 ENDIF        ; warning - missing ENDIF?
 
@@ -2466,8 +2466,8 @@ EVENT GAMEINIT
 LET O 0
 LET C 0
 LET LIVES 42
-; 0
-; 71
+; BORDER 0
+; COLOUR 71
 CLS
 LET A 0
 LET LINE 23
@@ -2476,11 +2476,11 @@ MESSAGE 1
 LET LINE 23
 LET COLUMN 8
 DISPLAY LIVES
-; 66
+; COLOUR 66
 LET LINE 23
 LET COLUMN 11
 MESSAGE 6
-; 71
+; COLOUR 71
 LET LINE 23
 LET COLUMN 18
 MESSAGE 2
@@ -2502,8 +2502,8 @@ IF SCREEN = 6
     ; ASM 40
     ; ASM 235
 ENDIF
-; 0
-; 71
+; BORDER 0
+; COLOUR 71
 LET J 0
 LET LINE 23
 LET COLUMN 11
@@ -2516,11 +2516,11 @@ IF LIVES <= 9
     LET COLUMN 9
     PUTBLOCK 197
 ENDIF
-; 66
+; COLOUR 66
 LET LINE 23
 LET COLUMN 11
 MESSAGE 6
-; 71
+; COLOUR 71
 LET LINE 23
 LET
 LET COLUMN 24
@@ -2534,7 +2534,7 @@ EVENT KILLPLAYER
 LET C = 0
 LET OPT 17
 LET J 0
-; 50
+BEEP 50
 ; FADE
 SUBTRACT 1 FROM LIVES
 LET LINE 23
@@ -2543,11 +2543,11 @@ DISPLAY LIVES
 IF LIVES 0
     LET LINE 10
     LET COLUMN 12
-    ; 84
+    ; COLOUR 84
     MESSAGE 0
     WAITKEY
-    ; 71
-    ; 0
+    ; COLOUR 71
+    ; BORDER 0
     CLS
 ENDIF
 
@@ -2559,14 +2559,14 @@ EVENT COMPLETEDGAME
 ; ASM
 ; ASM
 ; ASM
-; 100
+BEEP 100
 LET LINE 20
 LET COLUMN 5
-; 84
+; COLOUR 84
 MESSAGE 5
 WAITKEY
-; 71
-; 0
+; COLOUR 71
+; BORDER 0
 CLS
 
 

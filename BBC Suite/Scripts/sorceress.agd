@@ -3,10 +3,10 @@ DEFINEWINDOW    0 0 22 28
 
 DEFINEMESSAGES
     "'I HAVE KIDNAPPED YOUR"
-    "LOVE, SORCERESS...'"
+    "LOVE, SORCERESS...'"
     "'I WILL TAKE HER LIFE*"
     "- AND THEN YOURS!'*"
-    "  NO! NO! NOOOOO!  "
+    "'NO! NO! NOOOOO!'"
     "THE SORCERESS IS DEFEATED."
     "SHE AND HER LOVE WILL"
     "SPEND ETERNITY AS THE"
@@ -1110,12 +1110,12 @@ DEFINEOBJECT    71 255 0 0
                 1 136 0 96 1 224 1 224 1 240 3 240 3 248 5 84
 
 
-MAP             WIDTH 11
+MAP             WIDTH 7
                 STARTSCREEN 0
-                255 255   2   1   0   7   8 255 255 255 255
-                255 255   3   6  15  12   9 255 255 255 255
-                255 255   4   5  14  13  10 255 255 255 255
-                255 255 255 255 255  16  11 255 255 255 255
+                255   2   1   0   7   8 255
+                255   3   6  15  12   9 255
+                255   4   5  14  13  10 255
+                255 255 255 255  16  11 255
 ENDMAP
 
 
@@ -1133,7 +1133,7 @@ IF G = 13
     LET G 14
     LET LINE 5
     LET COLUMN 4
-    COLOUR 71
+    ; COLOUR 71
     MESSAGE 12
     DELAY 50
     EXIT
@@ -1156,9 +1156,9 @@ IF G = 1
     ENDIF
 ENDIF
 IF D = 0
-    SPRITEINK 71
+    ; SPRITEINK 71
 ELSE
-    SPRITEINK 69
+    ; SPRITEINK 69
     IF A = 1
         BEEP 250
     ENDIF
@@ -1176,7 +1176,7 @@ ENDIF
 IF 18 > OBJ
     LET H 6
     LET L 1
-    COLOUR 66
+    ; COLOUR 66
     REPEAT 5
         LET LINE L
         LET COLUMN 29
@@ -1187,7 +1187,7 @@ IF 18 > OBJ
         MESSAGE 14
         ADD 2 TO L
     ENDREPEAT
-    COLOUR 71
+    ; COLOUR 71
     LET L 70
     REPEAT 6
         BEEP L
@@ -1293,7 +1293,7 @@ LET P X
 
 
 EVENT SPRITETYPE1
-SPRITEINK 71
+; SPRITEINK 71
 LET DIRECTION B
 IF DIRECTION = 0
     LET DIRECTION 1
@@ -1364,22 +1364,22 @@ ANIMATE
 
 EVENT SPRITETYPE2
 IF SCREEN = 14
-    SPRITEINK 66
+    ; SPRITEINK 66
 ELSE
-    SPRITEINK 7
+    ; SPRITEINK 7
 ENDIF
 IF SETTINGA = 255
     LET SETTINGA 0
 ENDIF
 IF COLLISION 0
     IF SETTINGA = 0
-        BORDER 2
+        ; BORDER 2
         IF D = 0
             LET D 30
         ENDIF
     ENDIF
 ELSE
-    BORDER 0
+    ; BORDER 0
 ENDIF
 IF SETTINGB > 0
     SUBTRACT 1 TO SETTINGB
@@ -1649,9 +1649,9 @@ ENDIF
 
 EVENT SPRITETYPE3
 IF SETTINGB = 1
-    SPRITEINK 70
+    ; SPRITEINK 70
 ELSE
-    SPRITEINK 71
+    ; SPRITEINK 71
 ENDIF
 IF SETTINGA = 255
     LET SETTINGA 0
@@ -1688,13 +1688,13 @@ IF A = 1
 ENDIF
 IF COLLISION 0
     IF SETTINGB = 0
-        BORDER 2
+        ; BORDER 2
         IF D = 0
             LET D 30
         ENDIF
     ENDIF
 ELSE
-    BORDER 0
+    ; BORDER 0
 ENDIF
 IF COLLISION 1
     OTHER
@@ -1703,7 +1703,7 @@ IF COLLISION 1
     ENDSPRITE
     LET SETTINGA 35
     LET SETTINGB 1
-    SPRITEINK 70
+    ; SPRITEINK 70
 ENDIF
 IF SETTINGA > 0
     SUBTRACT 1 TO SETTINGA
@@ -1839,7 +1839,7 @@ ENDIF
 
 
 EVENT SPRITETYPE4
-SPRITEINK 4
+; SPRITEINK 4
 IF SETTINGA = 255
     LET SETTINGA 0
 ENDIF
@@ -1848,13 +1848,13 @@ IF SETTINGB = 255
 ENDIF
 IF COLLISION 0
     IF SETTINGA = 0
-        BORDER 2
+        ; BORDER 2
         IF D = 0
             LET D 30
         ENDIF
     ENDIF
 ELSE
-    BORDER 0
+    ; BORDER 0
 ENDIF
 IF COLLISION 1
     LET SETTINGA 1
@@ -1887,7 +1887,7 @@ IF SETTINGA = 1
     ENDIF
     IF SETTINGB = 27
         LET Y 200
-        SPRITEINK 4
+        ; SPRITEINK 4
     ENDIF
     IF SETTINGB = 8
         LET FRAME 3
@@ -2013,21 +2013,21 @@ IF SETTINGA = 1
                 LET X 152
             ENDIF
         ENDIF
-        SPRITEINK 4
+        ; SPRITEINK 4
     ENDIF
     IF SETTINGB = 6
         LET FRAME 2
-        SPRITEINK 4
+        ; SPRITEINK 4
         BEEP 20
     ENDIF
     IF SETTINGB = 4
         LET FRAME 1
-        SPRITEINK 4
+        ; SPRITEINK 4
         BEEP 15
     ENDIF
     IF SETTINGB = 2
         LET FRAME 0
-        SPRITEINK 4
+        ; SPRITEINK 4
         BEEP 10
     ENDIF
     IF SETTINGB = 1
@@ -2190,22 +2190,22 @@ ENDIF
 IF X > 200
     LET DIRECTION 3
 ENDIF
-SPRITEINK 4
+; SPRITEINK 4
 
 
 EVENT SPRITETYPE5
 IF SETTINGB > 0
-    SPRITEINK 66
+    ; SPRITEINK 66
 ELSE
-    SPRITEINK 69
+    ; SPRITEINK 69
 ENDIF
 IF COLLISION 0
-    BORDER 2
+    ; BORDER 2
     IF D = 0
         LET D 30
     ENDIF
 ELSE
-    BORDER 0
+    ; BORDER 0
 ENDIF
 IF COLLISION 1
     OTHER
@@ -2447,12 +2447,12 @@ IF SETTINGA = 255
     LET SETTINGA 0
 ENDIF
 IF COLLISION 0
-    BORDER 2
+    ; BORDER 2
     IF D = 0
         LET D 30
     ENDIF
 ELSE
-    BORDER 0
+    ; BORDER 0
 ENDIF
 IF COLLISION 1
     OTHER
@@ -2514,7 +2514,7 @@ IF G = 9
     ENDIF
     SUBTRACT 1 TO N
     IF N = 1
-        SPRITEINK 7
+        ; SPRITEINK 7
         LET SETTINGB X
         GETRANDOM 7
         IF RND 0
@@ -2653,11 +2653,11 @@ IF G = 1
     LET COLUMN 4
     GETRANDOM 7
     ADD 65 TO RND
-    COLOUR RND
+    ; COLOUR RND
     MESSAGE 11
 ENDIF
 IF G = 2
-    COLOUR 7
+    ; COLOUR 7
     LET LINE 17
     LET COLUMN 3
     MESSAGE 10
@@ -2688,7 +2688,7 @@ IF G = 2
     LET LINE 12
     LET COLUMN 3
     MESSAGE 10
-;    REMOVE
+    REMOVE
     LET Y 8
     LET X 104
     LET G 3
@@ -2731,7 +2731,7 @@ ENDIF
 EVENT MAINLOOP2
 IF D = 30
     SUBTRACT 1 TO H
-    COLOUR 7
+    ; COLOUR 7
     IF H = 5
         LET LINE 1
         LET COLUMN 29
@@ -2772,7 +2772,7 @@ IF D = 30
         LET COLUMN 29
         MESSAGE 16
     ENDIF
-    COLOUR 71
+    ; COLOUR 71
 ENDIF
 IF D > 0
     SUBTRACT 1 TO D
@@ -2787,8 +2787,8 @@ EVENT INTROMENU
 
 EVENT GAMEINIT
 LET LIVES = 1
-COLOUR 71
-BORDER 0
+; COLOUR 71
+; BORDER 0
 CLS
 LET A 0
 LET B 0
@@ -2809,26 +2809,26 @@ LET L 0
 LET O Y
 LET P X
 LET S 255
-BORDER 0
+; BORDER 0
 IF SCREEN <> 17
     LET LINE 0
     LET COLUMN 29
-    COLOUR 70
+    ; COLOUR 70
     MESSAGE 19
     LET LINE 0
     LET COLUMN 30
-    COLOUR 6
+    ; COLOUR 6
     MESSAGE 20
     LET LINE 1
     LET COLUMN 29
     IF H = 6
-        COLOUR 66
+        ; COLOUR 66
         MESSAGE 13
         LET LINE 2
         LET COLUMN 29
         MESSAGE 14
     ELSE
-        COLOUR 7
+        ; COLOUR 7
         MESSAGE 15
         LET LINE 2
         LET COLUMN 29
@@ -2836,22 +2836,22 @@ IF SCREEN <> 17
     ENDIF
     LET LINE 3
     LET COLUMN 29
-    COLOUR 70
+    ; COLOUR 70
     MESSAGE 17
     LET LINE 3
     LET COLUMN 30
-    COLOUR 6
+    ; COLOUR 6
     MESSAGE 18
     LET LINE 4
     LET COLUMN 29
     IF H > 4
-        COLOUR 66
+        ; COLOUR 66
         MESSAGE 13
         LET LINE 5
         LET COLUMN 29
         MESSAGE 14
     ELSE
-        COLOUR 7
+        ; COLOUR 7
         MESSAGE 15
         LET LINE 5
         LET COLUMN 29
@@ -2859,7 +2859,7 @@ IF SCREEN <> 17
     ENDIF
     LET LINE 6
     LET COLUMN 29
-    COLOUR 70
+    ; COLOUR 70
     MESSAGE 17
     LET LINE 6
     LET COLUMN 30
@@ -2867,13 +2867,13 @@ IF SCREEN <> 17
     LET LINE 7
     LET COLUMN 29
     IF H > 3
-        COLOUR 66
+        ; COLOUR 66
         MESSAGE 13
         LET LINE 8
         LET COLUMN 29
         MESSAGE 14
     ELSE
-        COLOUR 7
+        ; COLOUR 7
         MESSAGE 15
         LET LINE 8
         LET COLUMN 29
@@ -2881,22 +2881,22 @@ IF SCREEN <> 17
     ENDIF
     LET LINE 9
     LET COLUMN 29
-    COLOUR 70
+    ; COLOUR 70
     MESSAGE 17
     LET LINE 9
     LET COLUMN 30
-    COLOUR 6
+    ; COLOUR 6
     MESSAGE 18
     LET LINE 10
     LET COLUMN 29
     IF H > 2
-        COLOUR 66
+        ; COLOUR 66
         MESSAGE 13
         LET LINE 11
         LET COLUMN 29
         MESSAGE 14
     ELSE
-        COLOUR 7
+        ; COLOUR 7
         MESSAGE 15
         LET LINE 11
         LET COLUMN 29
@@ -2904,22 +2904,22 @@ IF SCREEN <> 17
     ENDIF
     LET LINE 12
     LET COLUMN 29
-    COLOUR 70
+    ; COLOUR 70
     MESSAGE 17
     LET LINE 12
     LET COLUMN 30
-    COLOUR 6
+    ; COLOUR 6
     MESSAGE 18
     LET LINE 13
     LET COLUMN 29
     IF H > 1
-        COLOUR 66
+        ; COLOUR 66
         MESSAGE 13
         LET LINE 14
         LET COLUMN 29
         MESSAGE 14
     ELSE
-        COLOUR 7
+        ; COLOUR 7
         MESSAGE 15
         LET LINE 14
         LET COLUMN 29
@@ -2927,16 +2927,16 @@ IF SCREEN <> 17
     ENDIF
     LET LINE 15
     LET COLUMN 29
-    COLOUR 70
+    ; COLOUR 70
     MESSAGE 17
     LET LINE 15
     LET COLUMN 30
-    COLOUR 6
+    ; COLOUR 6
     MESSAGE 18
     LET LINE 16
     LET COLUMN 29
     IF H > 0
-        COLOUR 66
+        ; COLOUR 66
         MESSAGE 13
         LET LINE 17
         LET COLUMN 29
@@ -2944,26 +2944,26 @@ IF SCREEN <> 17
     ENDIF
     LET LINE 18
     LET COLUMN 29
-    COLOUR 70
+    ; COLOUR 70
     MESSAGE 17
     LET LINE 18
     LET COLUMN 30
-    COLOUR 6
+    ; COLOUR 6
     MESSAGE 18
     LET L 19
     REPEAT 3
         LET LINE L
         LET COLUMN 29
-        COLOUR 70
+        ; COLOUR 70
         MESSAGE 21
         LET LINE L
         LET COLUMN 30
-        COLOUR 6
+        ; COLOUR 6
         MESSAGE 22
         ADD 1 TO L
     ENDREPEAT
 ENDIF
-COLOUR 71
+; COLOUR 71
 
 
 EVENT FELLTOOFAR
@@ -2977,12 +2977,12 @@ EVENT LOSTGAME
 IF LIVES = 0
     LET SCREEN 17
     CLS
-    BORDER 0
+    ; BORDER 0
     RESTART
     IF TYPE 0
         REMOVE
     ENDIF
-    COLOUR 66
+    ; COLOUR 66
     LET LINE 8
     LET COLUMN 3
     MESSAGE 5
@@ -2995,7 +2995,7 @@ IF LIVES = 0
     LET LINE 14
     LET COLUMN 4
     MESSAGE 8
-    COLOUR 7
+    ; COLOUR 7
     LET L 120
     REPEAT 20
         BEEP L

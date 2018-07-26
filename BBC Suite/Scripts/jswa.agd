@@ -246,19 +246,19 @@ DEFINEOBJECT    71 254 56 120
                 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
 
 
-MAP             WIDTH 11
+MAP             WIDTH 3
                 STARTSCREEN 255
-                255 255 255 255   0 255 255 255 255 255 255
+                255   0 255
 ENDMAP
 
 
 
 EVENT PLAYER
-SPRITEINK 7
+; SPRITEINK 7
 LET K = 0
-;IF COLLISION 10
-;    LET K = 1
-;ENDIF
+IF COLLISION 10
+    LET K = 1
+ENDIF
 IF COLLISION 3
     LET K = 1
 ENDIF
@@ -266,8 +266,8 @@ IF K = 1
     IF SETTINGA = 0
         IF E = 0
             EXPLODE 8
-            SOUND 0
-;            STOPFALL
+            ; SOUND 0
+            STOPFALL
             SUBTRACT 1 FROM S
             IF S > 0
                 LET LINE 23
@@ -293,9 +293,9 @@ IF K = 1
     ELSE
         IF F = 0
             EXPLODE 8
-            SOUND 0
+            ; SOUND 0
             SUBTRACT 1 FROM T
-;            STOPFALL
+            STOPFALL
             IF T > 0
                 LET LINE 23
                 LET COLUMN 27
@@ -435,7 +435,7 @@ IF 200 > Y
     ENDIF
     IF L = 1
         IF SETTINGB = 0
-            SOUND 1
+            ; SOUND 1
             ADD 1 TO DIRECTION
             LASER DIRECTION
             SUBTRACT 1 FROM DIRECTION
@@ -451,13 +451,13 @@ IF SETTINGA = 0
     IF E > 0
         GETRANDOM 6
         ADD 1 TO RND
-        SPRITEINK RND
+        ; SPRITEINK RND
     ENDIF
 ELSE
     IF F > 0
         GETRANDOM 6
         ADD 1 TO RND
-        SPRITEINK RND
+        ; SPRITEINK RND
     ENDIF
 ENDIF
 
@@ -470,7 +470,7 @@ EVENT SPRITETYPE2
 
 EVENT SPRITETYPE3
 IF IMAGE = 6
-    SPRITEINK 7
+    ; SPRITEINK 7
 ENDIF
 IF C = 0
     IF DIRECTION = 0
@@ -500,7 +500,7 @@ IF DIRECTION = 1
     ENDIF
 ENDIF
 IF IMAGE = 6
-    SPRITEINK 4
+    ; SPRITEINK 4
 ENDIF
 
 
@@ -575,7 +575,7 @@ ENDIF
 
 
 EVENT KILLPLAYER
-SOUND 0
+; SOUND 0
 ; FADE
 SUBTRACT 1 FROM LIVES
 

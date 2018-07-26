@@ -429,8 +429,7 @@ SPRITEPOSITION  2 2 72 136
 DEFINESCREEN     19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19
                  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19
                  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19
-                 
-19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19
+                 19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19  19
                  19  19   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0  39  35  35  34  35  32   0  19  19
                  19  19   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0  39  40  39  34  25  21  28  43  19  19
                  19  19   0   0   0   0   0   0  48   0   0   0  48   0   0   0   0   0   0  31  40  20  22  32  33  33  20  32  19  19
@@ -496,9 +495,9 @@ DEFINEOBJECT    71 254 56 120
                 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
 
 
-MAP             WIDTH 11
+MAP             WIDTH 3
                 STARTSCREEN 255
-                255 255 255 255   0 255 255 255 255 255 255
+                255   0 255
 ENDMAP
 
 
@@ -552,7 +551,7 @@ IF KEY LEFT
 ENDIF
 IF KEY FIRE
     IF F = 0
-        LASER 1
+        LASER DIRECTION
         LET F = 1
     ENDIF
 ELSE
@@ -736,12 +735,12 @@ EVENT INTROMENU
 
 EVENT GAMEINIT
 LET LIVES = 3
-COLOUR 71
-BORDER 0
+; COLOUR 71
+; BORDER 0
 CLS
 LET LINE = 0
 LET COLUMN = 12
-COLOUR 48
+; COLOUR 48
 MESSAGE 1
 LET LINE = 3
 LET COLUMN = 25
@@ -761,7 +760,7 @@ ENDIF
 
 
 EVENT KILLPLAYER
-SOUND 0
+; SOUND 0
 ; FADE
 SUBTRACT 1 FROM LIVES
 

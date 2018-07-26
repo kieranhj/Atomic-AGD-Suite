@@ -210,7 +210,7 @@ DEFINEBLOCK     DEADLYBLOCK
                 96 249 255 191 251 255 239 255
                 69
 
-DEFINEBLOCK     COLLECTABLE
+DEFINEBLOCK     `ùÿ¿ûÿïÿ                69
                 8 0 0 0 0 64 2 0
                 70
 
@@ -446,7 +446,7 @@ DEFINEBLOCK     EMPTYBLOCK
                 0 0 198 41 16 169 70 0
                 68
 
-DEFINEBLOCK     COLLECTABLE
+DEFINEBLOCK     
                 130 0 16 0 1 8 0 64
                 70
 
@@ -486,7 +486,7 @@ DEFINEBLOCK     WATERBLOCK
                 0 0 64 2 0 0 4 0
                 111
 
-DEFINEBLOCK     COLLECTABLE
+DEFINEBLOCK     
                 2 0 64 8 20 8 0 16
                 6
 
@@ -578,7 +578,7 @@ DEFINEBLOCK     EMPTYBLOCK
                 72 130 20 65 8 162 8 82
                 68
 
-DEFINEBLOCK     COLLECTABLE
+DEFINEBLOCK     H‚A¢R                68
                 0 0 0 16 0 0 0 0
                 69
 
@@ -718,7 +718,7 @@ DEFINEBLOCK     EMPTYBLOCK
                 102 255 255 255 126 60 24 0
                 66
 
-DEFINEBLOCK     COLLECTABLE
+DEFINEBLOCK     fÿÿÿ~<
                 0 60 74 191 70 44 24 0
                 71
 
@@ -2445,5 +2445,3 @@ DELAY 100
 
 EVENT NEWHIGHSCORE
 
-
-EVENT COLLECTBLOCK

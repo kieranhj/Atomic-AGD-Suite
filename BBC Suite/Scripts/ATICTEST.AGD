@@ -616,16 +616,16 @@ DEFINEOBJECT    71 0 0 0
                 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
 
 
-MAP             WIDTH 11
+MAP             WIDTH 4
                 STARTSCREEN 0
-                255 255 255 255   0   1 255 255 255 255 255
-                255 255 255 255   3   2 255 255 255 255 255
+                255   0   1 255
+                255   3   2 255
 ENDMAP
 
 
 
 EVENT PLAYER
-SPRITEINK 7
+; SPRITEINK 7
 LET A Y
 LET B X
 IF KEY RIGHT
@@ -686,7 +686,7 @@ ENDIF
 
 
 EVENT SPRITETYPE1
-SPRITEINK 7
+; SPRITEINK 7
 IF Y = 200
     IF KEY FIRE
         IF F = 0
@@ -777,7 +777,7 @@ ENDIF
 
 
 EVENT SPRITETYPE2
-SPRITEINK 7
+; SPRITEINK 7
 IF C = 2
     ANIMATE
 ENDIF
@@ -806,11 +806,11 @@ ELSE
         ADD 1 TO RND
         IF IMAGE = 5
             SUBTRACT 1 TO SETTINGB
-            SPRITEINK RND
+            ; SPRITEINK RND
         ENDIF
         IF IMAGE = 6
             SUBTRACT 1 TO SETTINGB
-            SPRITEINK RND
+            ; SPRITEINK RND
         ENDIF
     ENDIF
     IF SETTINGB = 1
@@ -836,7 +836,7 @@ ELSE
                 EXIT
             ENDIF
             SUBTRACT 4 TO IMAGE
-            SPRITEINK IMAGE
+            ; SPRITEINK IMAGE
             ADD 4 TO IMAGE
         ENDIF
     ENDIF
@@ -935,8 +935,8 @@ EVENT INTROMENU
 EVENT GAMEINIT
 LET F 0
 LET LIVES = 3
-COLOUR 72
-BORDER 2
+; COLOUR 72
+; BORDER 2
 CLS
 
 
@@ -950,7 +950,7 @@ ENDIF
 
 
 EVENT KILLPLAYER
-SOUND 0
+; SOUND 0
 ; FADE
 SUBTRACT 1 FROM LIVES
 

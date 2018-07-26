@@ -778,10 +778,10 @@ DEFINEOBJECT    71 11 72 192
                 5 160 2 64 1 128 1 128 3 192 2 64 2 64 2 64
 
 
-MAP             WIDTH 11
+MAP             WIDTH 13
                 STARTSCREEN 0
-                  0   1   2   3   4   5   6   7   8   9  10
-                 11 255 255 255 255 255 255 255 255 255 255
+                255   0   1   2   3   4   5   6   7   8   9  10 255
+                255  11 255 255 255 255 255 255 255 255 255 255 255
 ENDMAP
 
 
@@ -804,13 +804,13 @@ DETECTOBJ
 IF OBJ = 255
 ELSE
     GET OBJ
-    ; 2
+    ; SOUND 2
     LET K = 44
     REPEAT 200
-        ; 3
-        ; 1
-        ; 7
-        ; K
+        ; BORDER 3
+        ; BORDER 1
+        ; BORDER 7
+        BEEP K
         SUBTRACT 1 FROM K
     ENDREPEAT
     SCORE 100
@@ -826,7 +826,7 @@ IF KEY UP
         ELSE
             SPRITEUP
             TRAIL
-            ; 0
+            ; SOUND 0
         ENDIF
     ENDIF
 ELSE
@@ -863,22 +863,22 @@ ENDIF
 IF CUSTOM
     LET K = 100
     REPEAT 200
-        ; K
+        BEEP K
         ADD 5 TO K
-        ; 2
-        ; 3
-        ; 4
-        ; 5
-        ; 6
-        ; 1
-        ; 7
+        ; BORDER 2
+        ; BORDER 3
+        ; BORDER 4
+        ; BORDER 5
+        ; BORDER 6
+        ; BORDER 1
+        ; BORDER 7
     ENDREPEAT
-    ; 2
+    ; SOUND 2
     REPEAT C
         SCORE 1
-        ; 5
-        ; 2
-        ; 15
+        ; BORDER 5
+        ; BORDER 2
+        BEEP 15
         LET LINE = 1
         LET COLUMN = 25
         SHOWSCORE
@@ -910,10 +910,10 @@ ENDIF
 EVENT SPRITETYPE2
 IF SETTINGA = 0
     IF CANGOLEFT
-        ; 7
+        ; SPRITEINK 7
         SPRITELEFT
         ANIMBACK
-        ; 2
+        ; SPRITEINK 2
         IF X = 32
             LET SETTINGA = 1
         ENDIF
@@ -922,10 +922,10 @@ IF SETTINGA = 0
     ENDIF
 ELSE
     IF CANGORIGHT
-        ; 7
+        ; SPRITEINK 7
         SPRITERIGHT
         ANIMATE
-        ; 2
+        ; SPRITEINK 2
         IF X = 196
             LET SETTINGA = 0
         ENDIF
@@ -941,10 +941,10 @@ ENDIF
 EVENT SPRITETYPE3
 IF SETTINGA = 0
     IF CANGOLEFT
-        ; 7
+        ; SPRITEINK 7
         SPRITELEFT
         ANIMBACK
-        ; 5
+        ; SPRITEINK 5
         IF X = 64
             LET SETTINGA = 1
         ENDIF
@@ -953,10 +953,10 @@ IF SETTINGA = 0
     ENDIF
 ELSE
     IF CANGORIGHT
-        ; 7
+        ; SPRITEINK 7
         SPRITERIGHT
         ANIMATE
-        ; 5
+        ; SPRITEINK 5
         IF X = 160
             LET SETTINGA = 0
         ENDIF
@@ -1187,20 +1187,20 @@ ENDIF
 
 EVENT INTROMENU
 CLS
-; 0
-; 1
+; COLOUR 0
+; BORDER 1
 LET LINE = 23
 LET COLUMN = 0
 MESSAGE 14
-; 13
+; COLOUR 13
 LET LINE = 3
 LET COLUMN = 0
 MESSAGE 12
-; 12
+; COLOUR 12
 LET LINE = 6
 LET COLUMN = 0
 MESSAGE 13
-; 14
+; COLOUR 14
 LET LINE = 10
 LET COLUMN = 5
 MESSAGE 4
@@ -1219,11 +1219,11 @@ MESSAGE 8
 LET LINE = 17
 LET COLUMN = 5
 MESSAGE 9
-; 15
+; COLOUR 15
 LET LINE = 21
 LET COLUMN = 0
 MESSAGE 10
-; 10
+; COLOUR 10
 LET LINE = 1
 LET COLUMN = 9
 MESSAGE 11
@@ -1237,7 +1237,7 @@ LET C = 60
 LET M = 0
 LET A = 0
 LET LIVES = 5
-; 0
+; BORDER 0
 CLS
 LET LINE = 0
 LET COLUMN = 1
@@ -1258,7 +1258,7 @@ LET COLUMN = 31
 PUTBLOCK 40
 LET LINE = 1
 LET COLUMN = 1
-; 14
+; COLOUR 14
 MESSAGE 0
 LET LINE = 1
 LET COLUMN = 25
@@ -1283,12 +1283,12 @@ EVENT FELLTOOFAR
 EVENT KILLPLAYER
 LET K = 10
 REPEAT 200
-    ; K
+    BEEP K
     ADD 5 TO K
-    ; 2
-    ; 5
+    ; BORDER 2
+    ; BORDER 5
 ENDREPEAT
-; 1
+; SOUND 1
 DELAY 30
 SUBTRACT 1 FROM LIVES
 IF LIVES = 0
@@ -1297,26 +1297,26 @@ IF LIVES = 0
     REPEAT 5
         PUTBLOCK 30
     ENDREPEAT
-    ; 1
+    ; COLOUR 1
     LET K = 250
     REPEAT 200
-        ; K
+        BEEP K
         SUBTRACT 5 FROM K
-        ; 6
-        ; 7
+        ; BORDER 6
+        ; BORDER 7
     ENDREPEAT
-    ; 2
+    ; COLOUR 2
     LET LINE = 10
     LET COLUMN = 8
     MESSAGE 1
     LET LINE = 10
     LET COLUMN = 17
     SHOWSCORE
-    ; 7
+    ; COLOUR 7
     LET LINE = 8
     LET COLUMN = 11
     MESSAGE 15
-    ; 6
+    ; COLOUR 6
     LET LINE = 23
     LET COLUMN = 2
     MESSAGE 16
@@ -1331,22 +1331,22 @@ CLS
 EVENT COMPLETEDGAME
 DELAY 50
 CLS
-; 5
-; 2
+; BORDER 5
+; COLOUR 2
 LET K = 250
 REPEAT 200
-    ; K
+    BEEP K
     SUBTRACT 1 FROM K
-    ; 4
-    ; 6
-    ; 7
+    ; BORDER 4
+    ; BORDER 6
+    ; BORDER 7
 ENDREPEAT
 REPEAT 200
-    ; K
+    BEEP K
     ADD 1 TO K
-    ; 7
-    ; 6
-    ; 7
+    ; BORDER 7
+    ; BORDER 6
+    ; BORDER 7
 ENDREPEAT
 LET LINE = 10
 LET COLUMN = 8
@@ -1354,15 +1354,15 @@ MESSAGE 1
 LET LINE = 10
 LET COLUMN = 17
 SHOWSCORE
-; 7
+; COLOUR 7
 LET LINE = 8
 LET COLUMN = 11
 MESSAGE 15
-; 6
+; COLOUR 6
 LET LINE = 23
 LET COLUMN = 2
 MESSAGE 16
-; 3
+; COLOUR 3
 LET LINE = 14
 LET COLUMN = 0
 MESSAGE 17

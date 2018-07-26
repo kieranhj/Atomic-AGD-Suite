@@ -183,9 +183,9 @@ DEFINEOBJECT    87 0 8 8
                 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
 
 
-MAP             WIDTH 11
+MAP             WIDTH 3
                 STARTSCREEN 255
-                255 255 255 255   0 255 255 255 255 255 255
+                255   0 255
 ENDMAP
 
 
@@ -297,7 +297,7 @@ EVENT INTROMENU
 
 
 EVENT GAMEINIT
-COLOUR 7
+; COLOUR 7
 CLS
 
 
@@ -312,7 +312,7 @@ ENDIF
 
 
 EVENT KILLPLAYER
-SOUND 0
+; SOUND 0
 ; FADE
 SUBTRACT 1 FROM LIVES
 

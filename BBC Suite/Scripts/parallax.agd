@@ -165,9 +165,12 @@ DEFINEOBJECT    71 254 56 120
                 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
 
 
-MAP             WIDTH 11
+MAP             WIDTH 7
                 STARTSCREEN 1
-                  1 255 255 255 255 255 255 255 255 255 255
+                255   1 255 255 255 255 255
+                255 255 255 255 255 255 255
+                255 255 255 255 255 255 255
+                255 255 255 255 255   0 255
 ENDMAP
 
 
@@ -276,6 +279,8 @@ LET LINE 21
 LET COLUMN 2
 DISPLAY P
 LET DIRECTION O
+; warning - ENDIF without IF?
+ENDIF
 
 
 EVENT SPRITETYPE1
@@ -420,7 +425,7 @@ ENDIF
 
 
 EVENT KILLPLAYER
-SOUND 0
+; SOUND 0
 ; FADE
 SUBTRACT 1 FROM LIVES
 

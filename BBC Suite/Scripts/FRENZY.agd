@@ -1046,11 +1046,11 @@ DEFINEOBJECT    70 255 40 128
                 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
 
 
-MAP             WIDTH 11
+MAP             WIDTH 10
                 STARTSCREEN 0
-                255 255  16  17 255 255 255 255 255 255 255
-                255 255 255 255   0   1   2   3   4 255 255
-                255 255 255   5   6   7   8   9  10  11 255
+                255  16  17 255 255 255 255 255 255 255
+                255 255 255   0   1   2   3   4 255 255
+                255 255   5   6   7   8   9  10  11 255
 ENDMAP
 
 
@@ -1074,7 +1074,7 @@ LET H X
 IF SCREEN <= 9
     LET LINE 0
     LET COLUMN 3
-    ; 67
+    ; COLOUR 67
     MESSAGE 11
 ENDIF
 IF SCREEN = 11
@@ -1090,8 +1090,8 @@ IF SCREEN <= 8
 ENDIF
 IF C = 0
     IF SCREEN <= 8
-        ; 0
-        ; 70
+        ; BORDER 0
+        ; COLOUR 70
         CLS
         LET LINE 10
         LET COLUMN 12
@@ -1099,7 +1099,7 @@ IF C = 0
         DELAY 50
         LET LINE 12
         LET COLUMN 10
-        ; 70
+        ; COLOUR 70
         MESSAGE 9
         IF E <= 25
             MULTIPLY E BY 10
@@ -1109,24 +1109,24 @@ IF C = 0
         SCORE E
         LET LINE 12
         LET COLUMN 21
-        ; 71
+        ; COLOUR 71
         DISPLAY E
-        ; 0
+        ; SOUND 0
         DELAY 50
         LET LINE 14
         LET COLUMN 8
-        ; 70
+        ; COLOUR 70
         MESSAGE 10
         LET LINE 14
         LET COLUMN 20
-        ; 71
+        ; COLOUR 71
         SHOWSCORE
-        ; 0
+        ; SOUND 0
         DELAY 50
         IF SCREEN = 8
             LET LINE 16
             LET COLUMN 0
-            ; 66
+            ; COLOUR 66
             MESSAGE 21
         ENDIF
         WAITKEY
@@ -1140,7 +1140,7 @@ IF E = 0
     REMOVE
     LET LINE 10
     LET COLUMN 10
-    ; 70
+    ; COLOUR 70
     MESSAGE 5
     LET D 1
     SPAWN 8 1
@@ -1148,13 +1148,13 @@ ENDIF
 IF SCREEN <= 9
     LET LINE 0
     LET COLUMN 22
-    ; 71
+    ; COLOUR 71
     DISPLAY E
     LET LINE 0
 ENDIF
 IF E <= 9
     LET COLUMN 23
-    ; 0
+    ; COLOUR 0
     MESSAGE 6
 ENDIF
 IF Y > 160
@@ -1187,7 +1187,7 @@ ENDIF
 IF SCREEN <= 8
     LET LINE 0
     LET COLUMN 28
-    ; 71
+    ; COLOUR 71
     DISPLAY C
 ENDIF
 IF SCREEN <= 9
@@ -1197,25 +1197,25 @@ IF SCREEN <= 9
 ENDIF
 IF DEADLY
     JUMP 7
-    ; 10
+    BEEP 10
 ENDIF
 IF CUSTOM
 ELSE
     IF Y > 24
         SUBTRACT 8 FROM Y
-        ; 70
+        ; SPRITEINK 70
         ADD 8 TO Y
     ENDIF
-    ; 67
+    ; SPRITEINK 67
     ADD 8 TO Y
-    ; 68
+    ; SPRITEINK 68
     ADD 8 TO Y
-    ; 70
+    ; SPRITEINK 70
     SUBTRACT 16 FROM Y
 ENDIF
 IF CANGODOWN
     FALL
-    ; 100
+    BEEP 100
 ENDIF
 IF KEY RIGHT
     IF CANGORIGHT
@@ -1266,7 +1266,7 @@ ENDIF
 IF KEY FIRE
     IF CANGODOWN
     ELSE
-        ; 4
+        BEEP 4
         IF A = 0
             ANIMATE
         ENDIF
@@ -1276,7 +1276,7 @@ IF KEY FIRE
         IF DIRECTION = 0
             LET IMAGE 2
             ADD 8 TO X
-            ; 70
+            ; SPRITEINK 70
             SUBTRACT 8 FROM X
             ADD 1 TO X
             REPEAT 3
@@ -1333,9 +1333,9 @@ IF IMAGE = 4
     ELSE
         IF Y > 160
         ELSE
-            ; 68
+            ; SPRITEINK 68
             SUBTRACT 8 FROM Y
-            ; 70
+            ; SPRITEINK 70
             ADD 8 TO Y
         ENDIF
     ENDIF
@@ -1345,11 +1345,11 @@ IF IMAGE = 4
         SPAWN 8 7
     ENDIF
     IF CUSTOM
-        ; 200
+        BEEP 200
         GETRANDOM 160
         IF RND <= Y
             LET B RND
-            ; 6
+            ; SPRITEINK 6
             SUBTRACT B FROM Y
             IF X > 100
                 SUBTRACT 4 FROM X
@@ -1373,7 +1373,7 @@ IF IMAGE = 4
     ENDIF
     IF CANGODOWN
         FALL
-        ; Y
+        BEEP Y
     ENDIF
     IF A = 0
         ANIMATE
@@ -1421,7 +1421,7 @@ IF Y > 160
 ENDIF
 IF CANGODOWN
     FALL
-    ; Y
+    BEEP Y
 ENDIF
 IF DEADLY
     IF Y > G
@@ -1437,9 +1437,9 @@ IF COLLISION 0
     LET D 1
     SPAWN 1 5
 ENDIF
-; 70
+; SPRITEINK 70
 SUBTRACT 8 FROM X
-; 68
+; SPRITEINK 68
 ADD 8 TO X
 IF SETTINGA = 1
     IF CANGOLEFT
@@ -1474,26 +1474,26 @@ IF IMAGE = 26
             SCORE 250
         ENDIF
     ENDIF
-    ; 68
+    ; SPRITEINK 68
     ADD 8 TO X
-    ; 70
+    ; SPRITEINK 70
     SUBTRACT 8 FROM X
 ENDIF
 ; warning - ENDIF without IF?
 ENDIF
 IF IMAGE = 25
     FALL
-    ; 68
+    ; SPRITEINK 68
     SUBTRACT 8 FROM Y
-    ; 67
+    ; SPRITEINK 67
     ADD 8 TO Y
     LET LINE 0
     LET COLUMN 6
-    ; 70
+    ; COLOUR 70
     MESSAGE 8
     LET LINE 0
     LET COLUMN 21
-    ; 71
+    ; COLOUR 71
     SHOWSCORE
     IF A = 0
         JUMP 7
@@ -1527,28 +1527,28 @@ ELSE
     ENDIF
 ENDIF
 IF IMAGE = 8
-    ; 67
+    ; SPRITEINK 67
     ADD 8 TO Y
-    ; 70
+    ; SPRITEINK 70
     SUBTRACT 8 FROM Y
     IF COLLISION 0
         REMOVE
-        ; 200
+        BEEP 200
         ADD 1 TO LIVES
         LET LINE 0
         LET COLUMN 5
-        ; 70
+        ; COLOUR 70
         DISPLAY LIVES
     ENDIF
 ENDIF
 IF IMAGE = 6
-    ; 69
+    ; SPRITEINK 69
     SUBTRACT 8 FROM X
-    ; 68
+    ; SPRITEINK 68
     ADD 8 TO X
     IF COLLISION 0
         REMOVE
-        ; 100
+        BEEP 100
         ADD 50 TO E
     ENDIF
 ENDIF
@@ -1716,7 +1716,7 @@ IF SCREEN = 9
     IF IMAGE > 19
         IF IMAGE <= 21
             ADD 16 TO Y
-            ; 3
+            ; SPRITEINK 3
             SUBTRACT 16 FROM Y
         ENDIF
     ENDIF
@@ -1726,16 +1726,16 @@ IF F = 0
 ENDIF
 IF IMAGE > 22
     IF IMAGE <= 24
-        ; 3
+        ; SPRITEINK 3
     ENDIF
 ENDIF
 IF IMAGE <= 21
-    ; 68
+    ; SPRITEINK 68
 ENDIF
 ; warning - ENDIF without IF?
 ENDIF
 IF IMAGE = 18
-    ; 70
+    ; SPRITEINK 70
 ENDIF
 IF SCREEN = 10
     IF CANGODOWN
@@ -1746,13 +1746,13 @@ IF SCREEN = 10
         IF COLLISION 0
             OTHER
             REMOVE
-            ; 100
+            BEEP 100
             DELAY 30 SCREEN 16
             LET LIVES 1
         ELSE
             DELAY 10
             REMOVE
-            ; 0
+            ; SOUND 0
             SPAWN 3 26
         ENDIF
     ENDIF
@@ -1766,18 +1766,18 @@ ENDIF
 IF IMAGE = 15
     IF E = 41 SCREEN 0
     ENDIF
-    ; 68
+    ; SPRITEINK 68
     SUBTRACT 8 FROM Y
-    ; 67
+    ; SPRITEINK 67
     ADD 8 TO Y
     IF KEY FIRE SCREEN 0
-        ; 50
+        BEEP 50
     ENDIF
 ENDIF
 IF IMAGE = 11
-    ; 70
+    ; SPRITEINK 70
     SUBTRACT 8 FROM Y
-    ; 68
+    ; SPRITEINK 68
     IF Y <= 80
         REMOVE
         IF SCREEN <> 17
@@ -1799,9 +1799,9 @@ IF IMAGE = 11
     ENDIF
 ENDIF
 IF IMAGE = 7
-    ; 70
+    ; SPRITEINK 70
     SUBTRACT 8 FROM Y
-    ; 68
+    ; SPRITEINK 68
     IF Y <= 80
         REMOVE
         IF SCREEN <> 17
@@ -1837,17 +1837,17 @@ IF SCREEN > 0
             IF X <= 8
                 LET X 9
             ENDIF
-            ; 4
+            BEEP 4
             IF IMAGE = 1
-                ; 69
+                ; SPRITEINK 69
             ELSE
-                ; 71
+                ; SPRITEINK 71
             ENDIF
             SUBTRACT 8 FROM X
             IF IMAGE = 1
-                ; 71
+                ; SPRITEINK 71
             ELSE
-                ; 69
+                ; SPRITEINK 69
             ENDIF
             ADD 8 TO X
             ANIMATE
@@ -1859,17 +1859,17 @@ IF SCREEN > 0
             ENDIF
             LET LINE 23
             LET COLUMN 1
-            ; 70
+            ; COLOUR 70
             MESSAGE 2
         ENDIF
     ENDIF
 ENDIF
 IF IMAGE = 5
-    ; 68
+    ; SPRITEINK 68
     SUBTRACT 8 FROM Y
-    ; 67
+    ; SPRITEINK 67
     SUBTRACT 8 FROM Y
-    ; 70
+    ; SPRITEINK 70
     ADD 16 TO Y
     FALL
     IF COLLISION 2
@@ -1877,10 +1877,10 @@ IF IMAGE = 5
     ENDIF
     IF Y <= 152
         ADD 8 TO Y
-        ; Y
+        BEEP Y
     ELSE
         ANIMATE
-        ; 4
+        BEEP 4
         IF D = 0
             IF LIVES > 1
                 KILL
@@ -1894,25 +1894,25 @@ IF IMAGE = 3
     IF E = 49
         LET IMAGE 15
     ENDIF
-    ; 68
+    ; SPRITEINK 68
     SUBTRACT 8 FROM Y
-    ; 67
+    ; SPRITEINK 67
     ADD 8 TO Y
     LET LINE 3
     LET COLUMN 1
-    ; 70
+    ; COLOUR 70
     MESSAGE 18
     LET LINE 5
     LET COLUMN 5
-    ; 68
+    ; COLOUR 68
     MESSAGE 19
     LET LINE 7
-    ; 66
+    ; COLOUR 66
     LET COLUMN 5
     MESSAGE 20
     LET LINE 9
     LET COLUMN 8
-    ; 65
+    ; COLOUR 65
     MESSAGE 17
 ENDIF
 IF SCREEN = 0
@@ -1920,11 +1920,11 @@ IF SCREEN = 0
         IF E = 44 SCREEN 17
         ENDIF
         IF KEY FIRE
-            ; 50
+            BEEP 50
             NEXTLEVEL
             LET LINE 23
             LET COLUMN 0
-            ; 68
+            ; COLOUR 68
             MESSAGE 4
             WAITKEY
         ENDIF
@@ -1979,8 +1979,8 @@ LET I 0
 LET E 250
 LET C 0
 LET LIVES = 5
-; 71
-; 0
+; COLOUR 71
+; BORDER 0
 CLS
 
 
@@ -1990,17 +1990,17 @@ LET L 0
 LET M 0
 LET I 0
 LET E 50
-; 0
-; 70
+; BORDER 0
+; COLOUR 70
 CLS
 IF SCREEN = 17
     LET LINE 23
     LET COLUMN 1
-    ; 70
+    ; COLOUR 70
     MESSAGE 2
 ENDIF
 IF SCREEN = 16
-    ; 70
+    ; COLOUR 70
     LET LINE 23
     LET COLUMN 5
     MESSAGE 8
@@ -2011,48 +2011,48 @@ ENDIF
 IF SCREEN = 0
     LET LINE 0
     LET COLUMN 0
-    ; 68
+    ; COLOUR 68
     MESSAGE 0
     LET LINE 23
     LET COLUMN 3
-    ; 70
+    ; COLOUR 70
     MESSAGE 3
 ENDIF
 IF SCREEN > 0
     IF SCREEN <= 9
         LET LINE 0
         LET COLUMN 9
-        ; 66
+        ; COLOUR 66
         MESSAGE 15
         LET LINE 0
         LET COLUMN 20
-        ; 68
+        ; COLOUR 68
         MESSAGE 14
         LET LINE 0
         LET COLUMN 21
-        ; 69
+        ; COLOUR 69
         MESSAGE 16
         LET LINE 0
         LET COLUMN 3
-        ; 67
+        ; COLOUR 67
         MESSAGE 11
         IF SCREEN <= 8
             LET LINE 0
             LET COLUMN 26
-            ; 68
+            ; COLOUR 68
             MESSAGE 12
             LET LINE 0
             LET COLUMN 27
-            ; 70
+            ; COLOUR 70
             MESSAGE 13
         ENDIF
         LET LINE 23
         LET COLUMN 1
-        ; 70
+        ; COLOUR 70
         MESSAGE 2
         LET LINE 0
         LET COLUMN 5
-        ; 71
+        ; COLOUR 71
         DISPLAY LIVES
     ENDIF
 ENDIF
@@ -2064,7 +2064,7 @@ EVENT FELLTOOFAR
 EVENT KILLPLAYER
 LET E 50
 LET C 0
-; 0
+; SOUND 0
 ; FADE
 SUBTRACT 1 FROM LIVES
 
