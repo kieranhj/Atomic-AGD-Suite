@@ -3260,8 +3260,7 @@ getcol:
 :
     jsr gtblk               ; get block.
 
-; _BEEB TEMP
-;   jsr evnt20              ; collected block event.
+    jsr evnt20              ; collected block event.
     jmp getcol              ; repeat until none left.
 
 ; Get collectable block.
