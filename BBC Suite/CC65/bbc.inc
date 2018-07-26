@@ -2,6 +2,33 @@
 ; BBC Platform Specific functions
 ;----------------------------------------------------------------------
 
+;--------------------------------------------------------
+; Keys
+;
+; Out: joyval=x65FUDLR (bit cleared if key pressed)
+;             ||||||||
+;             |||||||+> Right    KEY 0  - X
+;             ||||||+-> Left     KEY 1  - Z
+;             |||||+--> Down     KEY 2  - .
+;             ||||+---> Up       KEY 3  - ;
+;             |||+----> Fire1    KEY 4  - SPC
+;             ||+-----> Fire2    KEY 5  - Q
+;             |+------> Fire3    KEY 6  - P
+;             +-------> Not used
+;
+;                       Option1  KEY 7  - 1
+;                       Option2  KEY 8  - 2
+;                       Option3  KEY 9  - 3
+;                       Option4  KEY 10 - 4
+;--------------------------------------------------------
+
+;              X   Z   .   ;  SPC  Q   P
+;keys:   .byte $42,$61,$68,$48,$62,$10,$37       ; Keys defined by game designer.
+;        .byte $30,$31,$11,$12                   ; menu options.
+
+jkeys:  .byte $42,$61,$68,$48,$62,$10,$37       ; Keys defined by game designer.
+        .byte $30,$31,$11,$12                   ; menu options.
+
 ;----------------------------------------------------
 ; Wait for keypress.
 ;----------------------------------------------------
