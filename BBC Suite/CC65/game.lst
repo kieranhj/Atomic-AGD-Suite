@@ -7052,12 +7052,12 @@ Current file: game.asm
 002719  3  85 rr                sta charx
 00271B  3  A9 35                lda #53
 00271D  3  20 ED 1A             jsr dmsg
-002720  3  A9 7B                lda #123
+002720  3  A9 83                lda #131
 002722  3  85 rr                sta varl
 002724  3  A5 rr                lda varl
-002726  3  4A                   lsr a
+002726  3  0A                   asl a
 002727  3  2A                   rol a
-002728  3  25 01                and 1
+002728  3  29 01                and #1
 00272A  3  85 rr                sta varl
 00272C  3  A5 rr                lda varl
 00272E  3  20 34 1F             jsr disply
@@ -7065,16 +7065,16 @@ Current file: game.asm
 002733  3  85 rr                sta chary
 002735  3  A9 12                lda #18
 002737  3  85 rr                sta charx
-002739  3  A9 00                lda #0
+002739  3  A9 01                lda #1
 00273B  3  C5 rr                cmp varl
 00273D  3  F0 03                beq *+5
 00273F  3  4C 4A 27             jmp k02262
 002742  3  A9 36                lda #54
 002744  3  20 ED 1A             jsr dmsg
-002747  3  4C 4F 27             jmp k02270
+002747  3  4C 4F 27             jmp k02271
 00274A  3  A9 37        k02262: lda #55
 00274C  3  20 ED 1A             jsr dmsg
-00274F  3  20 67 0E     k02270: jsr prskey
+00274F  3  20 67 0E     k02271: jsr prskey
 002752  3  60                   rts
 002753  3               evnt11:
 002753  3  60                   rts
@@ -7207,7 +7207,7 @@ Current file: game.asm
 0028B7  3  4F CB                .byte "O",203
 0028B9  3  4E 4F 54 20          .byte "NOT O",203
 0028BD  3  4F CB        
-0028BF  3  31 32 33 20          .byte "123 /128 =",160
+0028BF  3  31 33 31 20          .byte "131 /128 =",160
 0028C3  3  2F 31 32 38  
 0028C7  3  20 3D A0     
 0028CA  3  4F CB                .byte "O",203
