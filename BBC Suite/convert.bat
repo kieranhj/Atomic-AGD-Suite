@@ -5,6 +5,7 @@ rem Covert ZX snapshot to AGD file
  if errorlevel 1 goto error
  cd convert
  convert %1
+ echo EVENT COLLECTBLOCK >> %1.agd
  copy %1.agd ..\scripts
  del %1.sna
  del %1.agd

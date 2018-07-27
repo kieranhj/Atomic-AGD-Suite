@@ -38,5 +38,5 @@ reset_rom():done
 atom_reset():done
 file_exists(C:/Users/kconnell/OneDrive/BEEB/Repos/Atomic-AGD-Suite/Atom Suite/Atomulator/mmc/MENU)
 get_fileinfo_special()
-size=21400, attr=0
+size=8512, attr=0
 gfxmode changed at PC=03D4 from 00 to 0F

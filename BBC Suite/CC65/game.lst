@@ -226,7 +226,7 @@ Current file: game.asm
 000E00  1               
 000E00  1               start_asm:
 000E00  1               
-000E00  1  4C 15 32     	jmp relocate + load_address - asm_code
+000E00  1  4C A2 30     	jmp relocate + load_address - asm_code
 000E03  1               
 000E03  1               boot_game:
 000E03  1               
@@ -927,11 +927,11 @@ Current file: game.asm
 000F39  2  A2 00        	ldx #0			; pixel height.
 000F3B  2  A0 00        	ldy #0
 000F3D  2               sprit1:
-000F3D  2  BD E4 2A     	lda objdta,x		; fetch first byte.
+000F3D  2  BD 71 29     	lda objdta,x		; fetch first byte.
 000F40  2  8D 78 0F     	sta spr
 000F43  2  E8           	inx
 000F44  2               sprit2:
-000F44  2  BD E4 2A     	lda objdta,x
+000F44  2  BD 71 29     	lda objdta,x
 000F47  2  8D 79 0F     	sta spr+1
 000F4A  2               
 000F4A  2  A9 00        	lda #0
@@ -1173,7 +1173,7 @@ Current file: game.asm
 00106D  1               
 00106D  1               	.include "game.inc"
 00106D  1               
-00106D  2               .include "DODGY.inc" 
+00106D  2               .include "testdiv.inc" 
 00106D  2               
 00106D  3               ; Game engine code --------------------------------------------------------------
 00106D  3               
@@ -1258,9 +1258,9 @@ Current file: game.asm
 00106D  3               ; If a font is required...
 00106D  3               ;--------------------------------------------------------------
 00106D  3               
-00106D  3  A9 0A        	lda #<(FONT-256)	; address of font.
+00106D  3  A9 97        	lda #<(FONT-256)	; address of font.
 00106F  3  85 rr        	sta FontPtr
-001071  3  A9 2A        	lda #>(FONT-256)
+001071  3  A9 28        	lda #>(FONT-256)
 001073  3  85 rr        	sta FontPtr+1
 001075  3               
 001075  3  20 63 11     	jsr game	 		; start the game.
@@ -1284,7 +1284,7 @@ Current file: game.asm
 001082  3               
 001082  3               ; Make sure pointers are arranged in the same order as the data itself.
 001082  3               
-001082  3  6E 2A        frmptr:	.word frmlst         ; sprite frames.
+001082  3  5C 29        frmptr:	.word frmlst         ; sprite frames.
 001084  3               
 001084  3               ; Assorted game routines which can go in contended memory.
 001084  3               
@@ -1758,9 +1758,9 @@ Current file: game.asm
 001091  3               ;-------------------------------------------------------------
 001091  3               
 001091  3               iniob:
-001091  3  A9 E4        	lda #<objdta 		; objects table.
+001091  3  A9 71        	lda #<objdta 		; objects table.
 001093  3  85 rr        	sta z80_x
-001095  3  A9 2A        	lda #>objdta
+001095  3  A9 29        	lda #>objdta
 001097  3  85 rr        	sta z80_i
 001099  3               
 001099  3  AE 7D 10     	ldx numob 		; number of objects in the game.
@@ -2854,7 +2854,7 @@ Current file: game.asm
 001183  3               	jsr inishr 		; initialise particle engine.
 001183  3               .endif
 001183  3               evintr:
-001183  3  20 66 25     	jsr evnt12 		; call intro/menu event.
+001183  3  20 54 27     	jsr evnt12 		; call intro/menu event.
 001186  3               
 001186  3  A9 02        	lda #WALL 		; write default property.
 001188  3  A2 00        	ldx #0
@@ -2883,7 +2883,7 @@ Current file: game.asm
 0011AD  3  A9 22        	lda #>ssprit
 0011AF  3  85 rr        	sta z80_i
 0011B1  3               evini:
-0011B1  3  20 67 25     	jsr evnt13 		; initialisation.
+0011B1  3  20 58 27     	jsr evnt13 		; initialisation.
 0011B4  3               
 0011B4  3               ; Two restarts.
 0011B4  3               ; First restart - clear all sprites and initialise everything.
@@ -2952,7 +2952,7 @@ Current file: game.asm
 001216  3  A9 22        	lda #>(ssprit)
 001218  3  85 rr        	sta z80_i
 00121A  3               evlp1:
-00121A  3  20 74 24     	jsr evnt10 		; called once per main loop.
+00121A  3  20 B8 22     	jsr evnt10 		; called once per main loop.
 00121D  3  20 AF 1C     	jsr pspr 		; process sprites.
 001220  3               
 001220  3               ; Main loop events.
@@ -2962,7 +2962,7 @@ Current file: game.asm
 001224  3  A9 22        	lda #>ssprit
 001226  3  85 rr        	sta z80_i
 001228  3               evlp2:
-001228  3  20 65 25     	jsr evnt11 		; called once per main loop.
+001228  3  20 53 27     	jsr evnt11 		; called once per main loop.
 00122B  3               bsortx:
 00122B  3  20 25 1C     	jsr bsort 		; sort sprites.
 00122E  3               
@@ -2996,13 +2996,13 @@ Current file: game.asm
 001251  3  A5 rr        	lda scno 			; current screen.
 001253  3  18           	clc
 001254  3  69 01        	adc #1				; next screen.
-001256  3  CD DE 2A     	cmp numsc			; total number of screens.
+001256  3  CD 6B 29     	cmp numsc			; total number of screens.
 001259  3  B0 05        	bcs evwon			; yes, game finished.
 00125B  3  85 rr        	sta scno			; set new level number.
 00125D  3  4C B4 11     	jmp rstrt			; restart, clearing all aliens.
 001260  3               
 001260  3               evwon:
-001260  3  20 D7 25     	jsr evnt18		 	; game completed.
+001260  3  20 5D 27     	jsr evnt18		 	; game completed.
 001263  3  4C 77 12     	jmp tidyup			; tidy up and return to BASIC/calling routine.
 001266  3               
 001266  3               ;----------------------------------------------------------
@@ -3013,13 +3013,13 @@ Current file: game.asm
 001266  3  A9 00        	lda #0				; zeroise accumulator.
 001268  3  85 rr        	sta deadf			; reset dead flag.
 00126A  3               evdie:
-00126A  3  20 A6 25     	jsr evnt16 			; death subroutine.
+00126A  3  20 5B 27     	jsr evnt16 			; death subroutine.
 00126D  3  A5 rr        	lda numlif			; number of lives.
 00126F  3  F0 03        	beq :+
 001271  3  4C B4 11     	jmp rstrt 			; restart game.
 001274  3               :
 001274  3               evfail:
-001274  3  20 AE 25     	jsr evnt17 			; failure event.
+001274  3  20 5C 27     	jsr evnt17 			; failure event.
 001277  3               
 001277  3               ;----------------------------------------------------------
 001277  3               ; Tidy things up
@@ -3049,7 +3049,7 @@ Current file: game.asm
 001299  3  88           	dey
 00129A  3  10 F7        	bpl tidyu3 			; copy score to high score.
 00129C  3               evnewh:
-00129C  3  20 D8 25     	jsr evnt19			; new high score event.
+00129C  3  20 5E 27     	jsr evnt19			; new high score event.
 00129F  3  4C 88 12     	jmp tidyu0			; tidy up.
 0012A2  3               
 0012A2  3               ;--------------------------------------------------
@@ -3062,7 +3062,7 @@ Current file: game.asm
 0012A6  3  A9 22        	lda #>ssprit
 0012A8  3  85 rr        	sta z80_i
 0012AA  3               evrs:
-0012AA  3  4C 68 25     	jmp evnt14	 		; call restart event.
+0012AA  3  4C 59 27     	jmp evnt14	 		; call restart event.
 0012AD  3               
 0012AD  3               ;------------------------------------------------------------------
 0012AD  3               ; Copy number passed in a to string position bc, right-justified.
@@ -3238,9 +3238,9 @@ Current file: game.asm
 001352  3               ;---------------------------------------------------
 001352  3               
 001352  3               shwob:
-001352  3  A9 E4        	lda #<objdta 			; objects table.
+001352  3  A9 71        	lda #<objdta 			; objects table.
 001354  3  85 rr        	sta z80_l
-001356  3  A9 2A        	lda #>objdta
+001356  3  A9 29        	lda #>objdta
 001358  3  85 rr        	sta z80_h
 00135A  3               
 00135A  3  AD 7D 10     	lda numob 			; number of objects in the game.
@@ -3363,9 +3363,9 @@ Current file: game.asm
 0013DF  3               
 0013DF  3               findob:
 0013DF  3  48           	pha			; save object number
-0013E0  3  A9 E4        	lda #<objdta 		; objects.
+0013E0  3  A9 71        	lda #<objdta 		; objects.
 0013E2  3  85 rr        	sta z80_l
-0013E4  3  A9 2A        	lda #>objdta
+0013E4  3  A9 29        	lda #>objdta
 0013E6  3  85 rr        	sta z80_h
 0013E8  3  68           	pla			; retreive object number
 0013E9  3  F0 0F        	beq fndob1 		; is it zero? yes, skip loop.
@@ -3421,9 +3421,9 @@ Current file: game.asm
 001420  3               ;-----------------------------------------------
 001420  3               
 001420  3               skobj:
-001420  3  A9 E4        	lda #<objdta 		; pointer to objects.
+001420  3  A9 71        	lda #<objdta 		; pointer to objects.
 001422  3  85 rr        	sta z80_l
-001424  3  A9 2A        	lda #>objdta
+001424  3  A9 29        	lda #>objdta
 001426  3  85 rr        	sta z80_h
 001428  3               
 001428  3  AD 7D 10     	lda numob 		; number of objects in game.
@@ -3574,7 +3574,7 @@ Current file: game.asm
 0014FB  3  A5 rr        	lda spptr+1
 0014FD  3  85 rr        	sta z80_i
 0014FF  3               evis1:
-0014FF  3  20 73 24     	jsr evnt09 			; call sprite initialisation event.
+0014FF  3  20 B7 22     	jsr evnt09 			; call sprite initialisation event.
 001502  3               
 001502  3  A5 rr        	lda spptr 			; address of new sprite.
 001504  3  85 rr        	sta z80_x
@@ -3928,7 +3928,7 @@ Current file: game.asm
 0016C9  3               pattr:
 0016C9  3  85 rr        	sta z80_b		; store cell in b register for now.
 0016CB  3  AA           	tax
-0016CC  3  BD 6C 26     	lda bprop,x 		; block properties.
+0016CC  3  BD DB 28     	lda bprop,x 		; block properties.
 0016CF  3  85 rr        	sta z80_c
 0016D1  3  C9 08        	cmp #COLECT
 0016D3  3  D0 05        	bne :+
@@ -3955,10 +3955,10 @@ Current file: game.asm
 0016F5  3  26 rr        	rol z80_d
 0016F7  3  18           	clc
 0016F8  3  A5 rr        	lda z80_e
-0016FA  3  69 5C        	adc #<chgfx 		; address of graphics.
+0016FA  3  69 D3        	adc #<chgfx 		; address of graphics.
 0016FC  3  85 rr        	sta tileaddr
 0016FE  3  A5 rr        	lda z80_d
-001700  3  69 26        	adc #>chgfx
+001700  3  69 28        	adc #>chgfx
 001702  3  85 rr        	sta tileaddr+1
 001704  3  20 6E 16     	jsr gprad 		; get screen address.
 001707  3  A2 07        	ldx #7			; number of pixel rows to write.
@@ -4015,9 +4015,9 @@ Current file: game.asm
 00173C  3  A6 rr        	ldx scno 		; screen number.
 00173E  3  A0 00        	ldy #0
 001740  3               groomx:
-001740  3  A9 74        	lda #<scdat 		; pointer to screens.
+001740  3  A9 60        	lda #<scdat 		; pointer to screens.
 001742  3  85 rr        	sta z80_l
-001744  3  A9 2A        	lda #>scdat
+001744  3  A9 29        	lda #>scdat
 001746  3  85 rr        	sta z80_h
 001748  3               groom1:
 001748  3  E0 00        	cpx #0			; is it the first one?
@@ -4025,18 +4025,18 @@ Current file: game.asm
 00174C  3               
 00174C  3  18           	clc
 00174D  3  A5 rr        	lda z80_l
-00174F  3  79 74 2A     	adc scdat,y 		; low byte of screen size.
+00174F  3  79 60 29     	adc scdat,y 		; low byte of screen size.
 001752  3  85 rr        	sta z80_l
 001754  3  C8           	iny			; point to high byte.
 001755  3  A5 rr        	lda z80_h
-001757  3  79 74 2A     	adc scdat,y 		; high byte of screen size.
+001757  3  79 60 29     	adc scdat,y 		; high byte of screen size.
 00175A  3  85 rr        	sta z80_h
 00175C  3  C8           	iny			; next address.
 00175D  3               
 00175D  3  CA           	dex 			; one less iteration.
 00175E  3  4C 48 17     	jmp groom1 		; loop until we reach the end.
 001761  3               groom0:
-001761  3  AD DE 2A     	lda numsc 		; add displacement.
+001761  3  AD 6B 29     	lda numsc 		; add displacement.
 001764  3  0A           	asl a
 001765  3  18           	clc			; add double displacement to address.
 001766  3  65 rr        	adc z80_l
@@ -4440,7 +4440,7 @@ Current file: game.asm
 001919  3               :
 001919  3  20 22 19         jsr gtblk               ; get block.
 00191C  3               
-00191C  3  20 F5 25         jsr evnt20              ; collected block event.
+00191C  3  20 5F 27         jsr evnt20              ; collected block event.
 00191F  3  4C 0D 19         jmp getcol              ; repeat until none left.
 001922  3               
 001922  3               ; Get collectable block.
@@ -4481,10 +4481,10 @@ Current file: game.asm
 00195C  3  26 rr        	rol z80_d
 00195E  3  18           	clc
 00195F  3  A5 rr        	lda z80_e
-001961  3  69 5C        	adc #<chgfx 		; address of graphics.
+001961  3  69 D3        	adc #<chgfx 		; address of graphics.
 001963  3  85 rr        	sta tileaddr
 001965  3  A5 rr        	lda z80_d
-001967  3  69 26        	adc #>chgfx
+001967  3  69 28        	adc #>chgfx
 001969  3  85 rr        	sta tileaddr+1
 00196B  3  20 6E 16     	jsr gprad 		; get screen address.
 00196E  3  A2 07        	ldx #7			; number of pixel rows to write.
@@ -4761,7 +4761,7 @@ Current file: game.asm
 001AC7  3               
 001AC7  3  A0 06        	ldy #6	 		; address of last key.
 001AC9  3               joyke0:
-001AC9  3  B9 0A 2E     	lda keys,y 		; get key from table.
+001AC9  3  B9 97 2C     	lda keys,y 		; get key from table.
 001ACC  3  20 7A 0E     	jsr ktest		; being pressed?
 001ACF  3  26 rr        	rol z80_e 		; rotate into reading.
 001AD1  3               
@@ -4798,9 +4798,9 @@ Current file: game.asm
 001AED  3               
 001AED  3               dmsg:
 001AED  3  AA           	tax
-001AEE  3  A9 F7        	lda #<msgdat		; pointer to messages.
+001AEE  3  A9 61        	lda #<msgdat		; pointer to messages.
 001AF0  3  85 rr        	sta z80_l
-001AF2  3  A9 25        	lda #>msgdat
+001AF2  3  A9 27        	lda #>msgdat
 001AF4  3  85 rr        	sta z80_h
 001AF6  3  20 0C 1C     	jsr getwrd		; get message number.
 001AF9  3               dmsg3:
@@ -5221,14 +5221,14 @@ Current file: game.asm
 001D1F  3               ; Address of each sprite type's routine.
 001D1F  3               
 001D1F  3  AE 22        evtyp0:	.word evnt00
-001D21  3  39 23        evtyp1:	.word evnt01
-001D23  3  6C 24        evtyp2:	.word evnt02
-001D25  3  6D 24        evtyp3:	.word evnt03
-001D27  3  6E 24        evtyp4:	.word evnt04
-001D29  3  6F 24        evtyp5:	.word evnt05
-001D2B  3  70 24        evtyp6:	.word evnt06
-001D2D  3  71 24        evtyp7:	.word evnt07
-001D2F  3  72 24        evtyp8:	.word evnt08
+001D21  3  AF 22        evtyp1:	.word evnt01
+001D23  3  B0 22        evtyp2:	.word evnt02
+001D25  3  B1 22        evtyp3:	.word evnt03
+001D27  3  B2 22        evtyp4:	.word evnt04
+001D29  3  B3 22        evtyp5:	.word evnt05
+001D2B  3  B4 22        evtyp6:	.word evnt06
+001D2D  3  B5 22        evtyp7:	.word evnt07
+001D2F  3  B6 22        evtyp8:	.word evnt08
 001D31  3               
 001D31  3               ;--------------------------------------------------------------
 001D31  3               ; Display sprites.
@@ -5417,10 +5417,10 @@ Current file: game.asm
 001E25  3               
 001E25  3  18           	clc 			; address of play sprites.
 001E26  3  A5 rr        	lda z80_e
-001E28  3  69 6E        	adc #<sprgfx
+001E28  3  69 DC        	adc #<sprgfx
 001E2A  3  85 rr        	sta z80_e
 001E2C  3  A5 rr        	lda z80_d
-001E2E  3  69 26        	adc #>sprgfx
+001E2E  3  69 28        	adc #>sprgfx
 001E30  3  85 rr        	sta z80_d
 001E32  3               
 001E32  3  A5 rr        	lda dispx 		; y coordinate.
@@ -5843,7 +5843,7 @@ Current file: game.asm
 002044  3  F0 01        	beq :+				; yes, fallen too far.
 002046  3  60           	rts
 002047  3               :
-002047  3  4C A5 25     	jmp evnt15			; EVENT FELLTOOFAR
+002047  3  4C 5A 27     	jmp evnt15			; EVENT FELLTOOFAR
 00204A  3               
 00204A  3               ;------------------------------------------------
 00204A  3               ; Initiate fall check.
@@ -5947,9 +5947,9 @@ Current file: game.asm
 0020C2  3               ;----------------------------------------------------
 0020C2  3               
 0020C2  3               sprlst:
-0020C2  3  A9 DF        	lda #<nmedat 			; list of enemy sprites.
+0020C2  3  A9 6C        	lda #<nmedat 			; list of enemy sprites.
 0020C4  3  85 rr        	sta z80_l
-0020C6  3  A9 2A        	lda #>nmedat
+0020C6  3  A9 29        	lda #>nmedat
 0020C8  3  85 rr        	sta z80_h
 0020CA  3  A6 rr        	ldx scno 			; screen number.
 0020CC  3  D0 01        	bne sprls2 			; is it the first screen?
@@ -6232,7 +6232,7 @@ Current file: game.asm
 002234  3  A5 rr        	lda z80_l
 002236  3  48           	pha
 002237  3               
-002237  3  20 73 24     	jsr evnt09 				; perform event.
+002237  3  20 B7 22     	jsr evnt09 				; perform event.
 00223A  3               
 00223A  3  68           	pla
 00223B  3  85 rr        	sta z80_l
@@ -6515,840 +6515,965 @@ Current file: game.asm
 0022AD  3  01           stmap:  .byte 1
 0022AE  3               
 0022AE  3               evnt00:
-0022AE  3  A9 00                lda #0
-0022B0  3  85 rr                sta varm
-0022B2  3  A5 rr                lda joyval
-0022B4  3  29 08                and #8
-0022B6  3  F0 03                beq :+
-0022B8  3  4C D0 22             jmp a00071
-0022BB  3               :
-0022BB  3  A9 01                lda #1
-0022BD  3  85 rr                sta varm
-0022BF  3  20 18 18             jsr cangu
-0022C2  3  F0 03                beq :+
-0022C4  3  4C D0 22             jmp a00071
-0022C7  3               :
-0022C7  3  A0 08                ldy #8
-0022C9  3  B1 rr                lda (z80_ix),y
-0022CB  3  38                   sec
-0022CC  3  E9 02                sbc #2
-0022CE  3  91 rr                sta (z80_ix),y
-0022D0  3  A5 rr        a00071: lda joyval
-0022D2  3  29 04                and #4
-0022D4  3  F0 03                beq :+
-0022D6  3  4C EE 22             jmp a00132
-0022D9  3               :
-0022D9  3  A9 01                lda #1
-0022DB  3  85 rr                sta varm
-0022DD  3  20 4D 18             jsr cangd
-0022E0  3  F0 03                beq :+
-0022E2  3  4C EE 22             jmp a00132
-0022E5  3               :
-0022E5  3  A0 08                ldy #8
-0022E7  3  B1 rr                lda (z80_ix),y
-0022E9  3  18                   clc
-0022EA  3  69 02                adc #2
-0022EC  3  91 rr                sta (z80_ix),y
-0022EE  3  A5 rr        a00132: lda joyval
-0022F0  3  29 02                and #2
-0022F2  3  F0 03                beq :+
-0022F4  3  4C 0C 23             jmp a00193
-0022F7  3               :
-0022F7  3  A9 01                lda #1
-0022F9  3  85 rr                sta varm
-0022FB  3  20 82 18             jsr cangl
-0022FE  3  F0 03                beq :+
-002300  3  4C 0C 23             jmp a00193
-002303  3               :
-002303  3  A0 09                ldy #9
-002305  3  B1 rr                lda (z80_ix),y
-002307  3  38                   sec
-002308  3  E9 02                sbc #2
-00230A  3  91 rr                sta (z80_ix),y
-00230C  3  A5 rr        a00193: lda joyval
-00230E  3  29 01                and #1
-002310  3  F0 03                beq :+
-002312  3  4C 2A 23             jmp a00254
-002315  3               :
-002315  3  A9 01                lda #1
-002317  3  85 rr                sta varm
-002319  3  20 94 18             jsr cangr
-00231C  3  F0 03                beq :+
-00231E  3  4C 2A 23             jmp a00254
-002321  3               :
-002321  3  A0 09                ldy #9
-002323  3  B1 rr                lda (z80_ix),y
-002325  3  18                   clc
-002326  3  69 02                adc #2
-002328  3  91 rr                sta (z80_ix),y
-00232A  3  A9 00        a00254: lda #0
-00232C  3  C5 rr                cmp varm
-00232E  3  90 03                bcc *+5
-002330  3  4C 38 23             jmp a00279
-002333  3  A9 00                lda #0
-002335  3  20 59 1E             jsr animsp
-002338  3               a00279: ; SPRITEINK command
-002338  3  60                   rts
-002339  3               evnt01:
-002339  3  A9 00                lda #0
-00233B  3  A0 0A                ldy #10
-00233D  3  D1 rr                cmp (z80_ix),y
-00233F  3  F0 03                beq *+5
-002341  3  4C 67 23             jmp b00094
-002344  3  20 18 18             jsr cangu
-002347  3  F0 03                beq :+
-002349  3  4C 58 23             jmp b00064
-00234C  3               :
-00234C  3  A0 08                ldy #8
-00234E  3  B1 rr                lda (z80_ix),y
-002350  3  38                   sec
-002351  3  E9 02                sbc #2
-002353  3  91 rr                sta (z80_ix),y
-002355  3  4C 64 23             jmp b00090
-002358  3  A9 05        b00064: lda #5
-00235A  3  0A                   asl a
-00235B  3  8D DD 0E             sta sndtyp
-00235E  3  A9 01                lda #1
-002360  3  A0 0A                ldy #10
-002362  3  91 rr                sta (z80_ix),y
-002364  3  4C 87 23     b00090: jmp b00160
-002367  3  20 4D 18     b00094: jsr cangd
-00236A  3  F0 03                beq :+
-00236C  3  4C 7B 23             jmp b00135
-00236F  3               :
-00236F  3  A0 08                ldy #8
-002371  3  B1 rr                lda (z80_ix),y
-002373  3  18                   clc
-002374  3  69 02                adc #2
-002376  3  91 rr                sta (z80_ix),y
-002378  3  4C 87 23             jmp b00160
-00237B  3  A9 05        b00135: lda #5
-00237D  3  0A                   asl a
-00237E  3  8D DD 0E             sta sndtyp
-002381  3  A9 00                lda #0
-002383  3  A0 0A                ldy #10
-002385  3  91 rr                sta (z80_ix),y
-002387  3  A9 00        b00160: lda #0
-002389  3  A0 0E                ldy #14
-00238B  3  D1 rr                cmp (z80_ix),y
-00238D  3  90 03                bcc *+5
-00238F  3  4C D4 23             jmp b00317
-002392  3  A9 00                lda #0
-002394  3  A0 0A                ldy #10
-002396  3  D1 rr                cmp (z80_ix),y
-002398  3  F0 03                beq *+5
-00239A  3  4C BA 23             jmp b00263
-00239D  3  20 18 18             jsr cangu
-0023A0  3  F0 03                beq :+
-0023A2  3  4C B1 23             jmp b00245
-0023A5  3               :
-0023A5  3  A0 08                ldy #8
-0023A7  3  B1 rr                lda (z80_ix),y
-0023A9  3  38                   sec
-0023AA  3  E9 02                sbc #2
-0023AC  3  91 rr                sta (z80_ix),y
-0023AE  3  4C B7 23             jmp b00258
-0023B1  3  A9 01        b00245: lda #1
-0023B3  3  A0 0A                ldy #10
-0023B5  3  91 rr                sta (z80_ix),y
-0023B7  3  4C D4 23     b00258: jmp b00317
-0023BA  3  20 4D 18     b00263: jsr cangd
-0023BD  3  F0 03                beq :+
-0023BF  3  4C CE 23             jmp b00303
-0023C2  3               :
-0023C2  3  A0 08                ldy #8
-0023C4  3  B1 rr                lda (z80_ix),y
-0023C6  3  18                   clc
-0023C7  3  69 02                adc #2
-0023C9  3  91 rr                sta (z80_ix),y
-0023CB  3  4C D4 23             jmp b00317
-0023CE  3  A9 00        b00303: lda #0
-0023D0  3  A0 0A                ldy #10
-0023D2  3  91 rr                sta (z80_ix),y
-0023D4  3  A9 00        b00317: lda #0
-0023D6  3  A0 0B                ldy #11
-0023D8  3  D1 rr                cmp (z80_ix),y
-0023DA  3  F0 03                beq *+5
-0023DC  3  4C 18 24             jmp b00455
-0023DF  3  20 82 18             jsr cangl
-0023E2  3  F0 03                beq :+
-0023E4  3  4C F3 23             jmp b00379
-0023E7  3               :
-0023E7  3  A0 09                ldy #9
-0023E9  3  B1 rr                lda (z80_ix),y
-0023EB  3  38                   sec
-0023EC  3  E9 02                sbc #2
-0023EE  3  91 rr                sta (z80_ix),y
-0023F0  3  4C 15 24             jmp b00450
-0023F3  3  A9 05        b00379: lda #5
-0023F5  3  0A                   asl a
-0023F6  3  8D DD 0E             sta sndtyp
-0023F9  3  A9 01                lda #1
-0023FB  3  A0 0B                ldy #11
-0023FD  3  91 rr                sta (z80_ix),y
-0023FF  3  A9 02                lda #2
-002401  3  85 rr                sta z80_d
-002403  3  20 A4 1A             jsr random
-002406  3  85 rr                sta z80_h
-002408  3  20 0D 13             jsr imul
-00240B  3  A5 rr                lda z80_h
-00240D  3  85 rr                sta varrnd
-00240F  3  A5 rr                lda varrnd
-002411  3  A0 0E                ldy #14
-002413  3  91 rr                sta (z80_ix),y
-002415  3  4C 4E 24     b00450: jmp b00566
-002418  3  20 94 18     b00455: jsr cangr
-00241B  3  F0 03                beq :+
-00241D  3  4C 2C 24             jmp b00495
-002420  3               :
-002420  3  A0 09                ldy #9
-002422  3  B1 rr                lda (z80_ix),y
-002424  3  18                   clc
-002425  3  69 02                adc #2
-002427  3  91 rr                sta (z80_ix),y
-002429  3  4C 4E 24             jmp b00566
-00242C  3  A9 05        b00495: lda #5
-00242E  3  0A                   asl a
-00242F  3  8D DD 0E             sta sndtyp
-002432  3  A9 00                lda #0
-002434  3  A0 0B                ldy #11
-002436  3  91 rr                sta (z80_ix),y
-002438  3  A9 02                lda #2
-00243A  3  85 rr                sta z80_d
-00243C  3  20 A4 1A             jsr random
-00243F  3  85 rr                sta z80_h
-002441  3  20 0D 13             jsr imul
-002444  3  A5 rr                lda z80_h
-002446  3  85 rr                sta varrnd
-002448  3  A5 rr                lda varrnd
-00244A  3  A0 0E                ldy #14
-00244C  3  91 rr                sta (z80_ix),y
-00244E  3               b00566: ; SPRITEINK command
-00244E  3  A0 0C                ldy #12
-002450  3  B1 rr                lda (z80_ix),y
-002452  3  A0 0E                ldy #14
-002454  3  91 rr                sta (z80_ix),y
-002456  3  A9 00                lda #0
-002458  3  20 59 1E             jsr animsp
-00245B  3  A9 00                lda #0
-00245D  3  85 rr                sta z80_b
-00245F  3  20 A4 1E             jsr sktyp
-002462  3  B0 03                bcs :+
-002464  3  4C 6B 24             jmp b00631
-002467  3               :
-002467  3  A9 01                lda #1
-002469  3  85 rr                sta deadf
-00246B  3  60           b00631: rts
-00246C  3               evnt02:
-00246C  3  60                   rts
-00246D  3               evnt03:
-00246D  3  60                   rts
-00246E  3               evnt04:
-00246E  3  60                   rts
-00246F  3               evnt05:
-00246F  3  60                   rts
-002470  3               evnt06:
-002470  3  60                   rts
-002471  3               evnt07:
-002471  3  60                   rts
-002472  3               evnt08:
-002472  3  60                   rts
-002473  3               evnt09:
-002473  3  60                   rts
-002474  3               evnt10:
-002474  3  A5 rr                lda vara
-002476  3  18                   clc
-002477  3  69 01                adc #1
-002479  3  85 rr                sta vara
-00247B  3  A9 0A                lda #10
-00247D  3  C5 rr                cmp vara
-00247F  3  90 03                bcc *+5
-002481  3  4C 53 25             jmp k00475
-002484  3  A9 0A                lda #<10
-002486  3  85 rr                sta z80_l
-002488  3  A9 00                lda #>10
-00248A  3  85 rr                sta z80_h
-00248C  3  20 95 15             jsr addsc
-00248F  3  A9 0A                lda #10
-002491  3  85 rr                sta z80_c
-002493  3  A5 rr                lda vara
-002495  3  38                   sec
-002496  3  E5 rr                sbc z80_c
-002498  3  85 rr                sta vara
-00249A  3  A9 00                lda #0
-00249C  3  85 rr                sta chary
-00249E  3  A9 0A                lda #10
-0024A0  3  85 rr                sta charx
-0024A2  3                       ; COLOUR command
-0024A2  3  20 49 15             jsr dscor
-0024A5  3  A9 0B                lda #11
-0024A7  3  C5 rr                cmp vare
-0024A9  3  90 02                bcc *+4
-0024AB  3  D0 03                bne *+5
-0024AD  3  4C B7 24             jmp k00144
-0024B0  3  A5 rr                lda varb
-0024B2  3  18                   clc
-0024B3  3  69 01                adc #1
-0024B5  3  85 rr                sta varb
-0024B7  3  A9 6E        k00144: lda #110
-0024B9  3  C5 rr                cmp varb
-0024BB  3  90 03                bcc *+5
-0024BD  3  4C 53 25             jmp k00475
-0024C0  3  A9 01                lda #1
-0024C2  3  85 rr                sta z80_c
-0024C4  3  A9 01                lda #1
-0024C6  3  85 rr                sta z80_b
-0024C8  3  20 79 14             jsr spawn
-0024CB  3  A5 rr                lda spptr
-0024CD  3  85 rr                sta z80_x
-0024CF  3  A5 rr                lda spptr+1
-0024D1  3  85 rr                sta z80_i
-0024D3  3  20 5A 25             jsr read10
-0024D6  3  A0 0C                ldy #12
-0024D8  3  91 rr                sta (z80_ix),y
-0024DA  3  A9 80                lda #128
-0024DC  3  85 rr                sta z80_d
-0024DE  3  20 A4 1A             jsr random
-0024E1  3  85 rr                sta z80_h
-0024E3  3  20 0D 13             jsr imul
-0024E6  3  A5 rr                lda z80_h
-0024E8  3  85 rr                sta varrnd
-0024EA  3  A5 rr                lda varrnd
-0024EC  3  A0 09                ldy #9
-0024EE  3  91 rr                sta (z80_ix),y
-0024F0  3  A9 10                lda #16
-0024F2  3  85 rr                sta z80_c
-0024F4  3  A0 09                ldy #9
-0024F6  3  B1 rr                lda (z80_ix),y
-0024F8  3  18                   clc
-0024F9  3  65 rr                adc z80_c
-0024FB  3  A0 09                ldy #9
-0024FD  3  91 rr                sta (z80_ix),y
-0024FF  3  A9 80                lda #128
-002501  3  85 rr                sta z80_d
-002503  3  20 A4 1A             jsr random
-002506  3  85 rr                sta z80_h
-002508  3  20 0D 13             jsr imul
-00250B  3  A5 rr                lda z80_h
-00250D  3  85 rr                sta varrnd
-00250F  3  A5 rr                lda varrnd
-002511  3  A0 08                ldy #8
-002513  3  91 rr                sta (z80_ix),y
-002515  3  A9 20                lda #32
-002517  3  85 rr                sta z80_c
-002519  3  A0 08                ldy #8
-00251B  3  B1 rr                lda (z80_ix),y
-00251D  3  18                   clc
-00251E  3  65 rr                adc z80_c
-002520  3  A0 08                ldy #8
-002522  3  91 rr                sta (z80_ix),y
-002524  3  A9 00                lda #0
-002526  3  85 rr                sta z80_b
-002528  3  20 A4 1E             jsr sktyp
-00252B  3  B0 03                bcs :+
-00252D  3  4C 39 25             jmp k00417
-002530  3               :
-002530  3  A9 FF                lda #255
-002532  3  A0 05                ldy #5
-002534  3  91 rr                sta (z80_ix),y
-002536  3  4C 4B 25             jmp k00457
-002539  3  A9 14        k00417: lda #20
-00253B  3  85 rr                sta z80_c
-00253D  3  A5 rr                lda varb
-00253F  3  38                   sec
-002540  3  E5 rr                sbc z80_c
-002542  3  85 rr                sta varb
-002544  3  A5 rr                lda vare
-002546  3  18                   clc
-002547  3  69 01                adc #1
-002549  3  85 rr                sta vare
-00254B  3  A5 rr        k00457: lda ogptr
-00254D  3  85 rr                sta z80_x
-00254F  3  A5 rr                lda ogptr+1
-002551  3  85 rr                sta z80_i
-002553  3  60           k00475: rts
-002554  3  00           rptr10: .byte 0
-002555  3  42 45 46 43  rdat10: .byte 66,69,70,67,68
-002559  3  44           
-00255A  3  AC 54 25     read10: ldy rptr10
-00255D  3  EE 54 25             inc rptr10
-002560  3  B9 55 25             lda rdat10,y
-002563  3  60                   rts
-002564  3  60                   rts
-002565  3               evnt11:
-002565  3  60                   rts
-002566  3               evnt12:
-002566  3  60                   rts
-002567  3               evnt13:
-002567  3  60                   rts
-002568  3               evnt14:
-002568  3                       ; BORDER command
-002568  3  20 04 11             jsr cls
-00256B  3  A9 00                lda #0
-00256D  3  85 rr                sta prtmod
-00256F  3                       ; COLOUR command
-00256F  3  A9 00                lda #0
-002571  3  85 rr                sta chary
-002573  3  A9 04                lda #4
-002575  3  85 rr                sta charx
-002577  3  A9 06                lda #6
-002579  3  20 ED 1A             jsr dmsg
-00257C  3  20 49 15             jsr dscor
-00257F  3  A9 07                lda #7
-002581  3  20 ED 1A             jsr dmsg
-002584  3  20 3E 15             jsr dhisc
-002587  3  A9 17                lda #23
-002589  3  85 rr                sta chary
-00258B  3  A9 0A                lda #10
-00258D  3  85 rr                sta charx
-00258F  3  A9 08                lda #8
-002591  3  20 ED 1A             jsr dmsg
-002594  3  A9 01                lda #1
-002596  3  85 rr                sta numlif
-002598  3  A9 00                lda #0
-00259A  3  85 rr                sta vare
-00259C  3  A9 00                lda #0
-00259E  3  85 rr                sta vara
-0025A0  3  A9 69                lda #105
-0025A2  3  85 rr                sta varb
-0025A4  3  60                   rts
-0025A5  3               evnt15:
-0025A5  3  60                   rts
-0025A6  3               evnt16:
-0025A6  3  A5 rr                lda numlif
-0025A8  3  38                   sec
-0025A9  3  E9 01                sbc #1
-0025AB  3  85 rr                sta numlif
-0025AD  3  60                   rts
-0025AE  3               evnt17:
-0025AE  3  A9 01                lda #1
-0025B0  3  85 rr                sta prtmod
-0025B2  3  A9 08                lda #8
-0025B4  3  85 rr                sta chary
-0025B6  3  A9 0D                lda #13
-0025B8  3  85 rr                sta charx
-0025BA  3                       ; COLOUR command
-0025BA  3  A9 09                lda #9
-0025BC  3  20 ED 1A             jsr dmsg
-0025BF  3  A9 02                lda #2
-0025C1  3  85 rr                sta z80_c
-0025C3  3  A5 rr                lda chary
-0025C5  3  18                   clc
-0025C6  3  65 rr                adc z80_c
-0025C8  3  85 rr                sta chary
-0025CA  3  A9 0D                lda #13
-0025CC  3  85 rr                sta charx
-0025CE  3                       ; COLOUR command
-0025CE  3  A9 0A                lda #10
-0025D0  3  20 ED 1A             jsr dmsg
-0025D3  3  20 67 0E             jsr prskey
-0025D6  3  60                   rts
-0025D7  3               evnt18:
-0025D7  3  60                   rts
-0025D8  3               evnt19:
-0025D8  3                       ; COLOUR command
-0025D8  3  A9 0E                lda #14
-0025DA  3  85 rr                sta chary
-0025DC  3  A9 08                lda #8
-0025DE  3  85 rr                sta charx
-0025E0  3  A9 0B                lda #11
-0025E2  3  20 ED 1A             jsr dmsg
-0025E5  3  A9 00                lda #0
-0025E7  3  85 rr                sta prtmod
-0025E9  3  A9 00                lda #0
-0025EB  3  85 rr                sta chary
-0025ED  3  A9 17                lda #23
-0025EF  3  85 rr                sta charx
-0025F1  3  20 3E 15             jsr dhisc
-0025F4  3  60                   rts
-0025F5  3               evnt20:
-0025F5  3  60                   rts
-0025F6  3  60           ptcusr: rts
-0025F7  3               msgdat:
-0025F7  3  53 43 4F 52          .byte "SCOR",197
-0025FB  3  C5           
-0025FC  3  20 20 48 49          .byte "  HIG",200
-002600  3  47 C8        
-002602  3  44 4F 44 47          .byte "DODGY GEEZ",197
-002606  3  59 20 47 45  
-00260A  3  45 5A C5     
-00260D  3  20 47 41 4D          .byte " GAM",197
-002611  3  C5           
-002612  3  20 4F 56 45          .byte " OVE",210
-002616  3  D2           
-002617  3  20 4E 45 57          .byte " NEW HIGH SCOR",197
-00261B  3  20 48 49 47  
-00261F  3  48 20 53 43  
-002626  3  53 43 4F 52          .byte "SCORE",160
-00262A  3  45 A0        
-00262C  3  20 20 48 49          .byte "  HIGH",160
-002630  3  47 48 A0     
-002633  3  44 4F 44 47          .byte "DODGY GEEZE",210
-002637  3  59 20 47 45  
-00263B  3  45 5A 45 D2  
-00263F  3  20 47 41 4D          .byte " GAME",160
-002643  3  45 A0        
-002645  3  20 4F 56 45          .byte " OVER",160
-002649  3  52 A0        
-00264B  3  20 4E 45 57          .byte " NEW HIGH SCORE",160
-00264F  3  20 48 49 47  
-002653  3  48 20 53 43  
-00265B  3               nummsg:
-00265B  3  0C                   .byte 12
-00265C  3               chgfx:
-00265C  3  FF FF FF FF          .byte 255,255,255,255,255,255,255,255
-002660  3  FF FF FF FF  
-002664  3  01 01 01 FF          .byte 1,1,1,255,16,16,16,255
-002668  3  10 10 10 FF  
-00266C  3               bprop:
-00266C  3  00                   .byte 0
-00266D  3  02                   .byte 2
-00266E  3               sprgfx:
-00266E  3  11 88 73 CE          .byte 17,136,115,206,55,236,21,168,42,80,125,180,107,222,236,54,206,119,143,243,135,241,13,185,28,28,24,56,12,126,126,0
-002672  3  37 EC 15 A8  
-002676  3  2A 50 7D B4  
-00268E  3  04 62 9C F3          .byte 4,98,156,243,13,251,5,106,10,148,31,109,154,247,187,13,243,157,227,252,97,252,67,110,7,7,6,14,131,31,31,128
-002692  3  0D FB 05 6A  
-002696  3  0A 94 1F 6D  
-0026AE  3  81 18 E7 3C          .byte 129,24,231,60,195,126,129,90,2,165,71,219,230,189,110,195,124,231,56,255,24,127,144,219,193,193,129,131,224,199,7,224
-0026B2  3  C3 7E 81 5A  
-0026B6  3  02 A5 47 DB  
-0026CE  3  20 46 39 CF          .byte 32,70,57,207,176,223,160,86,64,169,209,246,121,175,219,176,223,57,206,63,198,31,228,54,112,112,224,96,248,49,1,248
-0026D2  3  B0 DF A0 56  
-0026D6  3  40 A9 D1 F6  
-0026EE  3  11 88 73 CE          .byte 17,136,115,206,55,236,21,168,10,84,45,190,123,214,108,55,238,115,223,241,187,225,185,176,12,56,126,24,0,48,0,126
-0026F2  3  37 EC 15 A8  
-0026F6  3  0A 54 2D BE  
-00270E  3  04 62 9C F3          .byte 4,98,156,243,13,251,5,106,2,149,139,111,158,245,219,13,251,156,119,252,110,248,46,108,3,14,31,134,0,12,128,31
-002712  3  0D FB 05 6A  
-002716  3  02 95 8B 6F  
-00272E  3  81 18 E7 3C          .byte 129,24,231,60,195,126,129,90,64,165,226,219,103,189,118,195,62,231,29,255,27,190,11,155,128,195,135,225,0,3,224,7
-002732  3  C3 7E 81 5A  
-002736  3  40 A5 E2 DB  
-00274E  3  20 46 39 CF          .byte 32,70,57,207,176,223,160,86,80,41,248,182,89,239,221,176,207,185,199,127,134,239,194,230,224,48,97,248,192,0,248,1
-002752  3  B0 DF A0 56  
-002756  3  50 29 F8 B6  
-00276E  3  11 88 73 CE          .byte 17,136,115,206,55,236,21,168,10,84,45,190,123,214,108,55,238,115,207,241,143,225,157,176,56,56,28,24,126,48,0,126
-002772  3  37 EC 15 A8  
-002776  3  0A 54 2D BE  
-00278E  3  04 62 9C F3          .byte 4,98,156,243,13,251,5,106,2,149,139,111,158,245,219,13,251,156,115,252,99,248,39,108,14,14,7,6,31,140,128,31
-002792  3  0D FB 05 6A  
-002796  3  02 95 8B 6F  
-0027AE  3  81 18 E7 3C          .byte 129,24,231,60,195,126,129,90,64,165,226,219,103,189,118,195,62,231,28,255,24,254,9,219,131,131,129,193,7,227,224,7
-0027B2  3  C3 7E 81 5A  
-0027B6  3  40 A5 E2 DB  
-0027CE  3  20 46 39 CF          .byte 32,70,57,207,176,223,160,86,80,41,248,182,89,239,221,176,207,185,199,63,134,63,194,118,224,224,96,112,193,248,248,1
-0027D2  3  B0 DF A0 56  
-0027D6  3  50 29 F8 B6  
-0027EE  3  11 88 73 CE          .byte 17,136,115,206,55,236,21,168,42,80,125,180,107,222,236,54,206,119,143,251,135,221,13,157,28,48,24,126,12,0,126,0
-0027F2  3  37 EC 15 A8  
-0027F6  3  2A 50 7D B4  
-00280E  3  04 62 9C F3          .byte 4,98,156,243,13,251,5,106,10,148,31,109,154,247,187,13,243,157,227,254,97,247,67,103,7,12,134,31,3,0,31,128
-002812  3  0D FB 05 6A  
-002816  3  0A 94 1F 6D  
-00282E  3  81 18 E7 3C          .byte 129,24,231,60,195,126,129,90,2,165,71,219,230,189,110,195,124,231,184,255,216,125,208,217,1,195,225,135,0,192,7,224
-002832  3  C3 7E 81 5A  
-002836  3  02 A5 47 DB  
-00284E  3  20 46 39 CF          .byte 32,70,57,207,176,223,160,86,64,169,209,246,121,175,219,176,223,57,238,63,118,31,116,54,192,112,248,97,0,48,1,248
-002852  3  B0 DF A0 56  
-002856  3  40 A9 D1 F6  
-00286E  3  3C 1C 7C 1E          .byte 60,28,124,30,254,63,254,63,255,127,63,255,15,252,7,240,15,224,63,240,255,252,254,255,252,127,252,127,120,62,56,60
-002872  3  FE 3F FE 3F  
-002876  3  FF 7F 3F FF  
-00288E  3  0F 07 9F 07          .byte 15,7,159,7,255,143,255,143,255,223,207,255,3,255,1,252,3,248,15,252,63,255,255,191,255,31,255,31,158,15,14,15
-002892  3  FF 8F FF 8F  
-002896  3  FF DF CF FF  
-0028AE  3  C3 C1 E7 C1          .byte 195,193,231,193,255,227,255,227,255,247,243,255,192,255,0,127,0,254,3,255,207,255,255,239,255,199,255,199,231,131,195,131
-0028B2  3  FF E3 FF E3  
-0028B6  3  FF F7 F3 FF  
-0028CE  3  70 F0 79 F0          .byte 112,240,121,240,255,248,255,248,255,253,252,255,240,63,192,31,128,63,192,255,243,255,255,251,255,241,255,241,249,224,240,224
-0028D2  3  FF F8 FF F8  
-0028D6  3  FF FD FC FF  
-0028EE  3  00 FC 60 FE          .byte 0,252,96,254,240,254,248,252,252,248,255,240,255,224,255,224,7,255,7,255,15,255,31,63,63,31,127,15,127,6,63,0
-0028F2  3  F0 FE F8 FC  
-0028F6  3  FC F8 FF F0  
-00290E  3  00 3F 98 3F          .byte 0,63,152,63,188,63,62,63,63,62,63,252,63,248,63,248,193,255,193,255,195,255,199,207,207,199,223,195,159,193,15,192
-002912  3  BC 3F 3E 3F  
-002916  3  3F 3E 3F FC  
-00292E  3  C0 0F E6 0F          .byte 192,15,230,15,239,15,207,143,143,207,15,255,15,254,15,254,240,127,240,127,240,255,241,243,243,241,247,240,103,240,3,240
-002932  3  EF 0F CF 8F  
-002936  3  8F CF 0F FF  
-00294E  3  F0 03 F9 83          .byte 240,3,249,131,251,195,243,227,227,243,195,255,131,255,131,255,252,31,252,31,252,63,252,124,124,252,61,252,25,252,0,252
-002952  3  FB C3 F3 E3  
-002956  3  E3 F3 C3 FF  
-00296E  3  3C 1C 7C 1E          .byte 60,28,124,30,254,63,254,63,255,127,63,255,15,252,7,240,15,224,63,240,255,252,254,255,252,127,252,127,120,62,56,60
-002972  3  FE 3F FE 3F  
-002976  3  FF 7F 3F FF  
-00298E  3  0F 07 9F 07          .byte 15,7,159,7,255,143,255,143,255,223,207,255,3,255,1,252,3,248,15,252,63,255,255,191,255,31,255,31,158,15,14,15
-002992  3  FF 8F FF 8F  
-002996  3  FF DF CF FF  
-0029AE  3  C3 C1 E7 C1          .byte 195,193,231,193,255,227,255,227,255,247,243,255,192,255,0,127,0,254,3,255,207,255,255,239,255,199,255,199,231,131,195,131
-0029B2  3  FF E3 FF E3  
-0029B6  3  FF F7 F3 FF  
-0029CE  3  70 F0 79 F0          .byte 112,240,121,240,255,248,255,248,255,253,252,255,240,63,192,31,128,63,192,255,243,255,255,251,255,241,255,241,249,224,240,224
-0029D2  3  FF F8 FF F8  
-0029D6  3  FF FD FC FF  
-0029EE  3  3F 00 7F 06          .byte 63,0,127,6,127,15,63,31,31,63,15,255,7,255,7,255,255,224,255,224,255,240,252,248,248,252,240,254,96,254,0,252
-0029F2  3  7F 0F 3F 1F  
-0029F6  3  1F 3F 0F FF  
-002A0E  3  0F C0 9F C1          .byte 15,192,159,193,223,195,207,199,199,207,195,255,193,255,193,255,63,248,63,248,63,252,63,62,62,63,188,63,152,63,0,63
-002A12  3  DF C3 CF C7  
-002A16  3  C7 CF C3 FF  
-002A2E  3  03 F0 67 F0          .byte 3,240,103,240,247,240,243,241,241,243,240,255,240,127,240,127,15,254,15,254,15,255,143,207,207,143,239,15,230,15,192,15
-002A32  3  F7 F0 F3 F1  
-002A36  3  F1 F3 F0 FF  
-002A4E  3  00 FC 19 FC          .byte 0,252,25,252,61,252,124,252,252,124,252,63,252,31,252,31,131,255,131,255,195,255,227,243,243,227,251,195,249,131,240,3
-002A52  3  3D FC 7C FC  
-002A56  3  FC 7C FC 3F  
-002A6E  3               frmlst:
-002A6E  3  00 04                .byte 0,4
-002A70  3  04 04 08 00          .byte 4,4,8,0
-002A74  3               scdat:
-002A74  3  68 00                .word 104
-002A76  3  FF 01 1F FF          .byte 255,1,31,255,0,28,1,1,255,0,28,1,1,255,0,28,1,1,255,0,28,1,1,255,0,28,1,1,255,0,28,1,1
-002A7A  3  00 1C 01 01  
-002A7E  3  FF 00 1C 01  
-002A97  3  FF 00 1C 01          .byte 255,0,28,1,1,255,0,28,1,1,255,0,28,1,1,255,0,28,1,1,255,0,28,1,1,255,0,28,1,1,255,0,28
-002A9B  3  01 FF 00 1C  
-002A9F  3  01 01 FF 00  
-002AB8  3  01 01 FF 00          .byte 1,1,255,0,28,1,1,255,0,28,1,1,255,0,28,1,1,255,0,28,1,1,255,0,28,1,1,255,0,28,1,1,255,0,28
-002ABC  3  1C 01 01 FF  
-002AC0  3  00 1C 01 01  
-002ADB  3  FF 01 1F             .byte 255,1,31
-002ADE  3               numsc:
-002ADE  3  01                   .byte 1
-002ADF  3               nmedat:
-002ADF  3  00 00 58 80          .byte 0,0,88,128,255
-002AE3  3  FF           
-002AE4  3               NUMOBJ = 1
-002AE4  3               objdta:
-002AE4  3  00 00 7F FE          .byte 0,0,127,254,64,2,64,2,64,2,64,2,64,2,64,2,64,2,64,2,64,2,64,2,64,2,64,2,127,254,0,0,255,80,24,255,80,24
-002AE8  3  40 02 40 02  
-002AEC  3  40 02 40 02  
-002B0A  3               font:
-002B0A  3  00 00 00 00          .byte 0,0,0,0,0,0,0,0
-002B0E  3  00 00 00 00  
-002B12  3  00 30 30 30          .byte 0,48,48,48,48,0,48,0
-002B16  3  30 00 30 00  
-002B1A  3  00 6C 6C 00          .byte 0,108,108,0,0,0,0,0
-002B1E  3  00 00 00 00  
-002B22  3  00 6C FE 6C          .byte 0,108,254,108,108,254,108,0
-002B26  3  6C FE 6C 00  
-002B2A  3  00 18 7E 78          .byte 0,24,126,120,126,30,126,24
-002B2E  3  7E 1E 7E 18  
-002B32  3  00 E6 EC 18          .byte 0,230,236,24,48,110,206,0
-002B36  3  30 6E CE 00  
-002B3A  3  00 30 78 30          .byte 0,48,120,48,126,204,126,0
-002B3E  3  7E CC 7E 00  
-002B42  3  00 18 30 00          .byte 0,24,48,0,0,0,0,0
-002B46  3  00 00 00 00  
-002B4A  3  00 0C 18 18          .byte 0,12,24,24,24,24,12,0
-002B4E  3  18 18 0C 00  
-002B52  3  00 60 30 30          .byte 0,96,48,48,48,48,96,0
-002B56  3  30 30 60 00  
-002B5A  3  00 00 3C 18          .byte 0,0,60,24,126,24,60,0
-002B5E  3  7E 18 3C 00  
-002B62  3  00 00 18 18          .byte 0,0,24,24,126,24,24,0
-002B66  3  7E 18 18 00  
-002B6A  3  00 00 00 00          .byte 0,0,0,0,0,24,24,48
-002B6E  3  00 18 18 30  
-002B72  3  00 00 00 00          .byte 0,0,0,0,126,0,0,0
-002B76  3  7E 00 00 00  
-002B7A  3  00 00 00 00          .byte 0,0,0,0,0,56,56,0
-002B7E  3  00 38 38 00  
-002B82  3  00 00 06 0C          .byte 0,0,6,12,24,48,96,0
-002B86  3  18 30 60 00  
-002B8A  3  00 7C CE DE          .byte 0,124,206,222,246,230,124,0
-002B8E  3  F6 E6 7C 00  
-002B92  3  00 38 78 18          .byte 0,56,120,24,24,24,126,0
-002B96  3  18 18 7E 00  
-002B9A  3  00 7C C6 06          .byte 0,124,198,6,124,192,254,0
-002B9E  3  7C C0 FE 00  
-002BA2  3  00 7C C6 1C          .byte 0,124,198,28,6,198,124,0
-002BA6  3  06 C6 7C 00  
-002BAA  3  00 18 38 78          .byte 0,24,56,120,216,254,24,0
-002BAE  3  D8 FE 18 00  
-002BB2  3  00 FE C0 FC          .byte 0,254,192,252,6,198,124,0
-002BB6  3  06 C6 7C 00  
-002BBA  3  00 7C C0 FC          .byte 0,124,192,252,198,198,124,0
-002BBE  3  C6 C6 7C 00  
-002BC2  3  00 FE 06 0C          .byte 0,254,6,12,24,48,48,0
-002BC6  3  18 30 30 00  
-002BCA  3  00 7C C6 7C          .byte 0,124,198,124,198,198,124,0
-002BCE  3  C6 C6 7C 00  
-002BD2  3  00 7C C6 C6          .byte 0,124,198,198,126,6,124,0
-002BD6  3  7E 06 7C 00  
-002BDA  3  00 00 00 30          .byte 0,0,0,48,0,0,48,0
-002BDE  3  00 00 30 00  
-002BE2  3  00 00 30 00          .byte 0,0,48,0,0,48,48,96
-002BE6  3  00 30 30 60  
-002BEA  3  00 00 0C 18          .byte 0,0,12,24,48,24,12,0
-002BEE  3  30 18 0C 00  
-002BF2  3  00 00 00 7E          .byte 0,0,0,126,0,126,0,0
-002BF6  3  00 7E 00 00  
-002BFA  3  00 00 30 18          .byte 0,0,48,24,12,24,48,0
-002BFE  3  0C 18 30 00  
-002C02  3  00 7C C6 0C          .byte 0,124,198,12,24,0,24,0
-002C06  3  18 00 18 00  
-002C0A  3  00 7C DE FE          .byte 0,124,222,254,254,192,124,0
-002C0E  3  FE C0 7C 00  
-002C12  3  00 7C C6 C6          .byte 0,124,198,198,254,198,198,0
-002C16  3  FE C6 C6 00  
-002C1A  3  00 FC C6 FC          .byte 0,252,198,252,198,198,252,0
-002C1E  3  C6 C6 FC 00  
-002C22  3  00 7C C6 C0          .byte 0,124,198,192,192,198,124,0
-002C26  3  C0 C6 7C 00  
-002C2A  3  00 F8 CC C6          .byte 0,248,204,198,198,204,248,0
-002C2E  3  C6 CC F8 00  
-002C32  3  00 FE C0 FC          .byte 0,254,192,252,192,192,254,0
-002C36  3  C0 C0 FE 00  
-002C3A  3  00 FE C0 FC          .byte 0,254,192,252,192,192,192,0
-002C3E  3  C0 C0 C0 00  
-002C42  3  00 7C C6 C0          .byte 0,124,198,192,222,198,124,0
-002C46  3  DE C6 7C 00  
-002C4A  3  00 C6 C6 FE          .byte 0,198,198,254,198,198,198,0
-002C4E  3  C6 C6 C6 00  
-002C52  3  00 7E 18 18          .byte 0,126,24,24,24,24,126,0
-002C56  3  18 18 7E 00  
-002C5A  3  00 06 06 06          .byte 0,6,6,6,198,198,124,0
-002C5E  3  C6 C6 7C 00  
-002C62  3  00 CC D8 F0          .byte 0,204,216,240,216,204,198,0
-002C66  3  D8 CC C6 00  
-002C6A  3  00 C0 C0 C0          .byte 0,192,192,192,192,192,254,0
-002C6E  3  C0 C0 FE 00  
-002C72  3  00 C6 EE FE          .byte 0,198,238,254,198,198,198,0
-002C76  3  C6 C6 C6 00  
-002C7A  3  00 C6 E6 F6          .byte 0,198,230,246,222,206,198,0
-002C7E  3  DE CE C6 00  
-002C82  3  00 7C C6 C6          .byte 0,124,198,198,198,198,124,0
-002C86  3  C6 C6 7C 00  
-002C8A  3  00 FC C6 C6          .byte 0,252,198,198,252,192,192,0
-002C8E  3  FC C0 C0 00  
-002C92  3  00 7C C6 C6          .byte 0,124,198,198,246,222,124,0
-002C96  3  F6 DE 7C 00  
-002C9A  3  00 FC C6 C6          .byte 0,252,198,198,252,204,198,0
-002C9E  3  FC CC C6 00  
-002CA2  3  00 7C C0 7C          .byte 0,124,192,124,6,198,124,0
-002CA6  3  06 C6 7C 00  
-002CAA  3  00 FE 30 30          .byte 0,254,48,48,48,48,48,0
-002CAE  3  30 30 30 00  
-002CB2  3  00 C6 C6 C6          .byte 0,198,198,198,198,198,124,0
-002CB6  3  C6 C6 7C 00  
-002CBA  3  00 C6 C6 C6          .byte 0,198,198,198,198,108,56,0
-002CBE  3  C6 6C 38 00  
-002CC2  3  00 C6 C6 C6          .byte 0,198,198,198,198,254,108,0
-002CC6  3  C6 FE 6C 00  
-002CCA  3  00 C6 6C 38          .byte 0,198,108,56,56,108,198,0
-002CCE  3  38 6C C6 00  
-002CD2  3  00 86 CC 78          .byte 0,134,204,120,48,48,48,0
-002CD6  3  30 30 30 00  
-002CDA  3  00 FE 0C 18          .byte 0,254,12,24,48,96,254,0
-002CDE  3  30 60 FE 00  
-002CE2  3  00 1E 18 18          .byte 0,30,24,24,24,24,30,0
-002CE6  3  18 18 1E 00  
-002CEA  3  00 00 C0 60          .byte 0,0,192,96,48,24,12,0
-002CEE  3  30 18 0C 00  
-002CF2  3  00 F0 30 30          .byte 0,240,48,48,48,48,240,0
-002CF6  3  30 30 F0 00  
-002CFA  3  00 30 78 FC          .byte 0,48,120,252,48,48,48,0
-002CFE  3  30 30 30 00  
-002D02  3  00 00 00 00          .byte 0,0,0,0,0,0,0,255
-002D06  3  00 00 00 FF  
-002D0A  3  00 3C 66 F8          .byte 0,60,102,248,96,96,254,0
-002D0E  3  60 60 FE 00  
-002D12  3  00 00 78 0C          .byte 0,0,120,12,124,204,124,0
-002D16  3  7C CC 7C 00  
-002D1A  3  00 60 60 7C          .byte 0,96,96,124,102,102,124,0
-002D1E  3  66 66 7C 00  
-002D22  3  00 00 3C 60          .byte 0,0,60,96,96,96,60,0
-002D26  3  60 60 3C 00  
-002D2A  3  00 0C 0C 7C          .byte 0,12,12,124,204,204,124,0
-002D2E  3  CC CC 7C 00  
-002D32  3  00 00 78 CC          .byte 0,0,120,204,248,192,124,0
-002D36  3  F8 C0 7C 00  
-002D3A  3  00 1C 30 38          .byte 0,28,48,56,48,48,48,0
-002D3E  3  30 30 30 00  
-002D42  3  00 00 7C CC          .byte 0,0,124,204,204,124,12,120
-002D46  3  CC 7C 0C 78  
-002D4A  3  00 C0 C0 F8          .byte 0,192,192,248,204,204,204,0
-002D4E  3  CC CC CC 00  
-002D52  3  00 30 00 70          .byte 0,48,0,112,48,48,120,0
-002D56  3  30 30 78 00  
-002D5A  3  00 0C 00 0C          .byte 0,12,0,12,12,12,108,56
-002D5E  3  0C 0C 6C 38  
-002D62  3  00 60 78 70          .byte 0,96,120,112,112,120,108,0
-002D66  3  70 78 6C 00  
-002D6A  3  00 30 30 30          .byte 0,48,48,48,48,48,28,0
-002D6E  3  30 30 1C 00  
-002D72  3  00 00 F8 FC          .byte 0,0,248,252,252,252,252,0
-002D76  3  FC FC FC 00  
-002D7A  3  00 00 F8 CC          .byte 0,0,248,204,204,204,204,0
-002D7E  3  CC CC CC 00  
-002D82  3  00 00 78 CC          .byte 0,0,120,204,204,204,120,0
-002D86  3  CC CC 78 00  
-002D8A  3  00 00 F8 CC          .byte 0,0,248,204,204,248,192,192
-002D8E  3  CC F8 C0 C0  
-002D92  3  00 00 7C CC          .byte 0,0,124,204,204,124,12,14
-002D96  3  CC 7C 0C 0E  
-002D9A  3  00 00 3C 60          .byte 0,0,60,96,96,96,96,0
-002D9E  3  60 60 60 00  
-002DA2  3  00 00 78 C0          .byte 0,0,120,192,120,12,248,0
-002DA6  3  78 0C F8 00  
-002DAA  3  00 30 78 30          .byte 0,48,120,48,48,48,28,0
-002DAE  3  30 30 1C 00  
-002DB2  3  00 00 CC CC          .byte 0,0,204,204,204,204,120,0
-002DB6  3  CC CC 78 00  
-002DBA  3  00 00 CC CC          .byte 0,0,204,204,120,120,48,0
-002DBE  3  78 78 30 00  
-002DC2  3  00 00 CC FC          .byte 0,0,204,252,252,252,120,0
-002DC6  3  FC FC 78 00  
-002DCA  3  00 00 CC 78          .byte 0,0,204,120,48,120,204,0
-002DCE  3  30 78 CC 00  
-002DD2  3  00 00 CC CC          .byte 0,0,204,204,204,124,12,120
-002DD6  3  CC 7C 0C 78  
-002DDA  3  00 00 FC 18          .byte 0,0,252,24,48,96,252,0
-002DDE  3  30 60 FC 00  
-002DE2  3  00 1E 18 70          .byte 0,30,24,112,24,24,30,0
-002DE6  3  18 18 1E 00  
-002DEA  3  00 18 18 18          .byte 0,24,24,24,24,24,24,0
-002DEE  3  18 18 18 00  
-002DF2  3  00 F0 30 1C          .byte 0,240,48,28,48,48,240,0
-002DF6  3  30 30 F0 00  
-002DFA  3  00 3C 78 00          .byte 0,60,120,0,0,0,0,0
-002DFE  3  00 00 00 00  
-002E02  3  7C C6 BB E3          .byte 124,198,187,227,227,187,198,124
-002E06  3  E3 BB C6 7C  
-002E0A  3  42 61 68 48  keys:   .byte 66,97,104,72,98,16,55,48,49,17,18
-002E0E  3  62 10 37 30  
-002E12  3  31 11 12     
-002E15  3               
-002E15  1               end_asm:
-002E15  1               
-002E15  1               ;----------------------------------------------------------------------
-002E15  1               ; RELOCATION OF BEEB CODE FROM LOAD ADDRESS
-002E15  1               ;----------------------------------------------------------------------
-002E15  1               
-002E15  1               relocate:
-002E15  1               ; Issue *TAPE otherwise DFS goes mental that we've overwritten workspace from &E00 - &1100
-002E15  1               
-002E15  1  A9 8C            lda #$8C
-002E17  1  A2 0C            ldx #$0C
-002E19  1  A0 00            ldy #$00
-002E1B  1  20 F4 FF         jsr OSBYTE					; *FX &8C,0,0 - *TAPE 1200
-002E1E  1               
-002E1E  1               ; Other one off initialisation could happen here...
-002E1E  1               
-002E1E  1               ; Relocate all code down to &E00
-002E1E  1  A2 21        	ldx #>(end_asm - start_asm) + 1
-002E20  1  A0 00        	ldy #0
-002E22  1               reloop:
-002E22  1  B9 00 12     	lda load_address, y
-002E25  1  99 00 0E     	sta asm_code, y
-002E28  1  C8           	iny
-002E29  1  D0 F7        	bne reloop
-002E2B  1  EE 24 32     	inc reloop + 2 + load_address - asm_code
-002E2E  1  EE 27 32     	inc reloop + 5 + load_address - asm_code
-002E31  1  CA           	dex
-002E32  1  D0 EE        	bne reloop
-002E34  1  4C 03 0E     	jmp boot_game
-002E34  1               
+0022AE  3  60                   rts
+0022AF  3               evnt01:
+0022AF  3  60                   rts
+0022B0  3               evnt02:
+0022B0  3  60                   rts
+0022B1  3               evnt03:
+0022B1  3  60                   rts
+0022B2  3               evnt04:
+0022B2  3  60                   rts
+0022B3  3               evnt05:
+0022B3  3  60                   rts
+0022B4  3               evnt06:
+0022B4  3  60                   rts
+0022B5  3               evnt07:
+0022B5  3  60                   rts
+0022B6  3               evnt08:
+0022B6  3  60                   rts
+0022B7  3               evnt09:
+0022B7  3  60                   rts
+0022B8  3               evnt10:
+0022B8  3  A9 00                lda #0
+0022BA  3  85 rr                sta chary
+0022BC  3  A9 01                lda #1
+0022BE  3  85 rr                sta charx
+0022C0  3  A9 01                lda #1
+0022C2  3  85 rr                sta prtmod
+0022C4  3  A9 00                lda #0
+0022C6  3  20 ED 1A             jsr dmsg
+0022C9  3  A9 00                lda #0
+0022CB  3  85 rr                sta prtmod
+0022CD  3  A9 03                lda #3
+0022CF  3  85 rr                sta chary
+0022D1  3  A9 01                lda #1
+0022D3  3  85 rr                sta charx
+0022D5  3  A9 01                lda #1
+0022D7  3  20 ED 1A             jsr dmsg
+0022DA  3  A9 05                lda #5
+0022DC  3  85 rr                sta chary
+0022DE  3  A9 01                lda #1
+0022E0  3  85 rr                sta charx
+0022E2  3  A9 02                lda #2
+0022E4  3  20 ED 1A             jsr dmsg
+0022E7  3  A9 7B                lda #123
+0022E9  3  85 rr                sta varl
+0022EB  3  A5 rr                lda varl
+0022ED  3  A5 rr                lda varl
+0022EF  3  20 34 1F             jsr disply
+0022F2  3  A9 05                lda #5
+0022F4  3  85 rr                sta chary
+0022F6  3  A9 12                lda #18
+0022F8  3  85 rr                sta charx
+0022FA  3  A9 7B                lda #123
+0022FC  3  C5 rr                cmp varl
+0022FE  3  F0 03                beq *+5
+002300  3  4C 0B 23             jmp k00161
+002303  3  A9 03                lda #3
+002305  3  20 ED 1A             jsr dmsg
+002308  3  4C 10 23             jmp k00169
+00230B  3  A9 04        k00161: lda #4
+00230D  3  20 ED 1A             jsr dmsg
+002310  3  A9 06        k00169: lda #6
+002312  3  85 rr                sta chary
+002314  3  A9 01                lda #1
+002316  3  85 rr                sta charx
+002318  3  A9 05                lda #5
+00231A  3  20 ED 1A             jsr dmsg
+00231D  3  A9 7B                lda #123
+00231F  3  85 rr                sta varl
+002321  3  A5 rr                lda varl
+002323  3  4A                   lsr a
+002324  3  85 rr                sta varl
+002326  3  A5 rr                lda varl
+002328  3  20 34 1F             jsr disply
+00232B  3  A9 06                lda #6
+00232D  3  85 rr                sta chary
+00232F  3  A9 12                lda #18
+002331  3  85 rr                sta charx
+002333  3  A9 3D                lda #61
+002335  3  C5 rr                cmp varl
+002337  3  F0 03                beq *+5
+002339  3  4C 44 23             jmp k00269
+00233C  3  A9 06                lda #6
+00233E  3  20 ED 1A             jsr dmsg
+002341  3  4C 49 23             jmp k00277
+002344  3  A9 07        k00269: lda #7
+002346  3  20 ED 1A             jsr dmsg
+002349  3  A9 07        k00277: lda #7
+00234B  3  85 rr                sta chary
+00234D  3  A9 01                lda #1
+00234F  3  85 rr                sta charx
+002351  3  A9 08                lda #8
+002353  3  20 ED 1A             jsr dmsg
+002356  3  A9 7B                lda #123
+002358  3  85 rr                sta varl
+00235A  3  A5 rr                lda varl
+00235C  3  85 rr                sta z80_d
+00235E  3  A9 03                lda #3
+002360  3  85 rr                sta z80_e
+002362  3  20 3E 13             jsr idiv
+002365  3  A5 rr                lda z80_d
+002367  3  85 rr                sta varl
+002369  3  A5 rr                lda varl
+00236B  3  20 34 1F             jsr disply
+00236E  3  A9 07                lda #7
+002370  3  85 rr                sta chary
+002372  3  A9 12                lda #18
+002374  3  85 rr                sta charx
+002376  3  A9 29                lda #41
+002378  3  C5 rr                cmp varl
+00237A  3  F0 03                beq *+5
+00237C  3  4C 87 23             jmp k00396
+00237F  3  A9 09                lda #9
+002381  3  20 ED 1A             jsr dmsg
+002384  3  4C 8C 23             jmp k00404
+002387  3  A9 0A        k00396: lda #10
+002389  3  20 ED 1A             jsr dmsg
+00238C  3  A9 08        k00404: lda #8
+00238E  3  85 rr                sta chary
+002390  3  A9 01                lda #1
+002392  3  85 rr                sta charx
+002394  3  A9 0B                lda #11
+002396  3  20 ED 1A             jsr dmsg
+002399  3  A9 7B                lda #123
+00239B  3  85 rr                sta varl
+00239D  3  A5 rr                lda varl
+00239F  3  4A                   lsr a
+0023A0  3  4A                   lsr a
+0023A1  3  85 rr                sta varl
+0023A3  3  A5 rr                lda varl
+0023A5  3  20 34 1F             jsr disply
+0023A8  3  A9 08                lda #8
+0023AA  3  85 rr                sta chary
+0023AC  3  A9 12                lda #18
+0023AE  3  85 rr                sta charx
+0023B0  3  A9 1E                lda #30
+0023B2  3  C5 rr                cmp varl
+0023B4  3  F0 03                beq *+5
+0023B6  3  4C C1 23             jmp k00508
+0023B9  3  A9 0C                lda #12
+0023BB  3  20 ED 1A             jsr dmsg
+0023BE  3  4C C6 23             jmp k00517
+0023C1  3  A9 0D        k00508: lda #13
+0023C3  3  20 ED 1A             jsr dmsg
+0023C6  3  A9 09        k00517: lda #9
+0023C8  3  85 rr                sta chary
+0023CA  3  A9 01                lda #1
+0023CC  3  85 rr                sta charx
+0023CE  3  A9 0E                lda #14
+0023D0  3  20 ED 1A             jsr dmsg
+0023D3  3  A9 7B                lda #123
+0023D5  3  85 rr                sta varl
+0023D7  3  A5 rr                lda varl
+0023D9  3  85 rr                sta z80_d
+0023DB  3  A9 05                lda #5
+0023DD  3  85 rr                sta z80_e
+0023DF  3  20 3E 13             jsr idiv
+0023E2  3  A5 rr                lda z80_d
+0023E4  3  85 rr                sta varl
+0023E6  3  A5 rr                lda varl
+0023E8  3  20 34 1F             jsr disply
+0023EB  3  A9 09                lda #9
+0023ED  3  85 rr                sta chary
+0023EF  3  A9 12                lda #18
+0023F1  3  85 rr                sta charx
+0023F3  3  A9 18                lda #24
+0023F5  3  C5 rr                cmp varl
+0023F7  3  F0 03                beq *+5
+0023F9  3  4C 04 24             jmp k00636
+0023FC  3  A9 0F                lda #15
+0023FE  3  20 ED 1A             jsr dmsg
+002401  3  4C 09 24             jmp k00644
+002404  3  A9 10        k00636: lda #16
+002406  3  20 ED 1A             jsr dmsg
+002409  3  A9 0A        k00644: lda #10
+00240B  3  85 rr                sta chary
+00240D  3  A9 01                lda #1
+00240F  3  85 rr                sta charx
+002411  3  A9 11                lda #17
+002413  3  20 ED 1A             jsr dmsg
+002416  3  A9 7B                lda #123
+002418  3  85 rr                sta varl
+00241A  3  A5 rr                lda varl
+00241C  3  85 rr                sta z80_d
+00241E  3  A9 06                lda #6
+002420  3  85 rr                sta z80_e
+002422  3  20 3E 13             jsr idiv
+002425  3  A5 rr                lda z80_d
+002427  3  85 rr                sta varl
+002429  3  A5 rr                lda varl
+00242B  3  20 34 1F             jsr disply
+00242E  3  A9 0A                lda #10
+002430  3  85 rr                sta chary
+002432  3  A9 12                lda #18
+002434  3  85 rr                sta charx
+002436  3  A9 14                lda #20
+002438  3  C5 rr                cmp varl
+00243A  3  F0 03                beq *+5
+00243C  3  4C 47 24             jmp k00763
+00243F  3  A9 12                lda #18
+002441  3  20 ED 1A             jsr dmsg
+002444  3  4C 4C 24             jmp k00772
+002447  3  A9 13        k00763: lda #19
+002449  3  20 ED 1A             jsr dmsg
+00244C  3  A9 0B        k00772: lda #11
+00244E  3  85 rr                sta chary
+002450  3  A9 01                lda #1
+002452  3  85 rr                sta charx
+002454  3  A9 14                lda #20
+002456  3  20 ED 1A             jsr dmsg
+002459  3  A9 7B                lda #123
+00245B  3  85 rr                sta varl
+00245D  3  A5 rr                lda varl
+00245F  3  85 rr                sta z80_d
+002461  3  A9 07                lda #7
+002463  3  85 rr                sta z80_e
+002465  3  20 3E 13             jsr idiv
+002468  3  A5 rr                lda z80_d
+00246A  3  85 rr                sta varl
+00246C  3  A5 rr                lda varl
+00246E  3  20 34 1F             jsr disply
+002471  3  A9 0B                lda #11
+002473  3  85 rr                sta chary
+002475  3  A9 12                lda #18
+002477  3  85 rr                sta charx
+002479  3  A9 11                lda #17
+00247B  3  C5 rr                cmp varl
+00247D  3  F0 03                beq *+5
+00247F  3  4C 8A 24             jmp k00891
+002482  3  A9 15                lda #21
+002484  3  20 ED 1A             jsr dmsg
+002487  3  4C 8F 24             jmp k00899
+00248A  3  A9 16        k00891: lda #22
+00248C  3  20 ED 1A             jsr dmsg
+00248F  3  A9 0C        k00899: lda #12
+002491  3  85 rr                sta chary
+002493  3  A9 01                lda #1
+002495  3  85 rr                sta charx
+002497  3  A9 17                lda #23
+002499  3  20 ED 1A             jsr dmsg
+00249C  3  A9 7B                lda #123
+00249E  3  85 rr                sta varl
+0024A0  3  A5 rr                lda varl
+0024A2  3  4A                   lsr a
+0024A3  3  4A                   lsr a
+0024A4  3  4A                   lsr a
+0024A5  3  85 rr                sta varl
+0024A7  3  A5 rr                lda varl
+0024A9  3  20 34 1F             jsr disply
+0024AC  3  A9 0C                lda #12
+0024AE  3  85 rr                sta chary
+0024B0  3  A9 12                lda #18
+0024B2  3  85 rr                sta charx
+0024B4  3  A9 0F                lda #15
+0024B6  3  C5 rr                cmp varl
+0024B8  3  F0 03                beq *+5
+0024BA  3  4C C5 24             jmp k01008
+0024BD  3  A9 18                lda #24
+0024BF  3  20 ED 1A             jsr dmsg
+0024C2  3  4C CA 24             jmp k01016
+0024C5  3  A9 19        k01008: lda #25
+0024C7  3  20 ED 1A             jsr dmsg
+0024CA  3  A9 0D        k01016: lda #13
+0024CC  3  85 rr                sta chary
+0024CE  3  A9 01                lda #1
+0024D0  3  85 rr                sta charx
+0024D2  3  A9 1A                lda #26
+0024D4  3  20 ED 1A             jsr dmsg
+0024D7  3  A9 7B                lda #123
+0024D9  3  85 rr                sta varl
+0024DB  3  A5 rr                lda varl
+0024DD  3  85 rr                sta z80_d
+0024DF  3  A9 09                lda #9
+0024E1  3  85 rr                sta z80_e
+0024E3  3  20 3E 13             jsr idiv
+0024E6  3  A5 rr                lda z80_d
+0024E8  3  85 rr                sta varl
+0024EA  3  A5 rr                lda varl
+0024EC  3  20 34 1F             jsr disply
+0024EF  3  A9 0D                lda #13
+0024F1  3  85 rr                sta chary
+0024F3  3  A9 12                lda #18
+0024F5  3  85 rr                sta charx
+0024F7  3  A9 0D                lda #13
+0024F9  3  C5 rr                cmp varl
+0024FB  3  F0 03                beq *+5
+0024FD  3  4C 08 25             jmp k01136
+002500  3  A9 1B                lda #27
+002502  3  20 ED 1A             jsr dmsg
+002505  3  4C 0D 25             jmp k01144
+002508  3  A9 1C        k01136: lda #28
+00250A  3  20 ED 1A             jsr dmsg
+00250D  3  A9 0E        k01144: lda #14
+00250F  3  85 rr                sta chary
+002511  3  A9 01                lda #1
+002513  3  85 rr                sta charx
+002515  3  A9 1D                lda #29
+002517  3  20 ED 1A             jsr dmsg
+00251A  3  A9 7B                lda #123
+00251C  3  85 rr                sta varl
+00251E  3  A5 rr                lda varl
+002520  3  85 rr                sta z80_d
+002522  3  A9 0A                lda #10
+002524  3  85 rr                sta z80_e
+002526  3  20 3E 13             jsr idiv
+002529  3  A5 rr                lda z80_d
+00252B  3  85 rr                sta varl
+00252D  3  A5 rr                lda varl
+00252F  3  20 34 1F             jsr disply
+002532  3  A9 0E                lda #14
+002534  3  85 rr                sta chary
+002536  3  A9 12                lda #18
+002538  3  85 rr                sta charx
+00253A  3  A9 0C                lda #12
+00253C  3  C5 rr                cmp varl
+00253E  3  F0 03                beq *+5
+002540  3  4C 4B 25             jmp k01264
+002543  3  A9 1E                lda #30
+002545  3  20 ED 1A             jsr dmsg
+002548  3  4C 50 25             jmp k01272
+00254B  3  A9 1F        k01264: lda #31
+00254D  3  20 ED 1A             jsr dmsg
+002550  3  A9 0F        k01272: lda #15
+002552  3  85 rr                sta chary
+002554  3  A9 01                lda #1
+002556  3  85 rr                sta charx
+002558  3  A9 20                lda #32
+00255A  3  20 ED 1A             jsr dmsg
+00255D  3  A9 7B                lda #123
+00255F  3  85 rr                sta varl
+002561  3  A5 rr                lda varl
+002563  3  85 rr                sta z80_d
+002565  3  A9 0B                lda #11
+002567  3  85 rr                sta z80_e
+002569  3  20 3E 13             jsr idiv
+00256C  3  A5 rr                lda z80_d
+00256E  3  85 rr                sta varl
+002570  3  A5 rr                lda varl
+002572  3  20 34 1F             jsr disply
+002575  3  A9 0F                lda #15
+002577  3  85 rr                sta chary
+002579  3  A9 12                lda #18
+00257B  3  85 rr                sta charx
+00257D  3  A9 0B                lda #11
+00257F  3  C5 rr                cmp varl
+002581  3  F0 03                beq *+5
+002583  3  4C 8E 25             jmp k01392
+002586  3  A9 21                lda #33
+002588  3  20 ED 1A             jsr dmsg
+00258B  3  4C 93 25             jmp k01400
+00258E  3  A9 22        k01392: lda #34
+002590  3  20 ED 1A             jsr dmsg
+002593  3  A9 10        k01400: lda #16
+002595  3  85 rr                sta chary
+002597  3  A9 01                lda #1
+002599  3  85 rr                sta charx
+00259B  3  A9 23                lda #35
+00259D  3  20 ED 1A             jsr dmsg
+0025A0  3  A9 7B                lda #123
+0025A2  3  85 rr                sta varl
+0025A4  3  A5 rr                lda varl
+0025A6  3  85 rr                sta z80_d
+0025A8  3  A9 0C                lda #12
+0025AA  3  85 rr                sta z80_e
+0025AC  3  20 3E 13             jsr idiv
+0025AF  3  A5 rr                lda z80_d
+0025B1  3  85 rr                sta varl
+0025B3  3  A5 rr                lda varl
+0025B5  3  20 34 1F             jsr disply
+0025B8  3  A9 10                lda #16
+0025BA  3  85 rr                sta chary
+0025BC  3  A9 12                lda #18
+0025BE  3  85 rr                sta charx
+0025C0  3  A9 0A                lda #10
+0025C2  3  C5 rr                cmp varl
+0025C4  3  F0 03                beq *+5
+0025C6  3  4C D1 25             jmp k01520
+0025C9  3  A9 24                lda #36
+0025CB  3  20 ED 1A             jsr dmsg
+0025CE  3  4C D6 25             jmp k01528
+0025D1  3  A9 25        k01520: lda #37
+0025D3  3  20 ED 1A             jsr dmsg
+0025D6  3  A9 11        k01528: lda #17
+0025D8  3  85 rr                sta chary
+0025DA  3  A9 01                lda #1
+0025DC  3  85 rr                sta charx
+0025DE  3  A9 26                lda #38
+0025E0  3  20 ED 1A             jsr dmsg
+0025E3  3  A9 7B                lda #123
+0025E5  3  85 rr                sta varl
+0025E7  3  A5 rr                lda varl
+0025E9  3  85 rr                sta z80_d
+0025EB  3  A9 0D                lda #13
+0025ED  3  85 rr                sta z80_e
+0025EF  3  20 3E 13             jsr idiv
+0025F2  3  A5 rr                lda z80_d
+0025F4  3  85 rr                sta varl
+0025F6  3  A5 rr                lda varl
+0025F8  3  20 34 1F             jsr disply
+0025FB  3  A9 11                lda #17
+0025FD  3  85 rr                sta chary
+0025FF  3  A9 12                lda #18
+002601  3  85 rr                sta charx
+002603  3  A9 09                lda #9
+002605  3  C5 rr                cmp varl
+002607  3  F0 03                beq *+5
+002609  3  4C 14 26             jmp k01647
+00260C  3  A9 27                lda #39
+00260E  3  20 ED 1A             jsr dmsg
+002611  3  4C 19 26             jmp k01656
+002614  3  A9 28        k01647: lda #40
+002616  3  20 ED 1A             jsr dmsg
+002619  3  A9 12        k01656: lda #18
+00261B  3  85 rr                sta chary
+00261D  3  A9 01                lda #1
+00261F  3  85 rr                sta charx
+002621  3  A9 29                lda #41
+002623  3  20 ED 1A             jsr dmsg
+002626  3  A9 7B                lda #123
+002628  3  85 rr                sta varl
+00262A  3  A5 rr                lda varl
+00262C  3  85 rr                sta z80_d
+00262E  3  A9 0E                lda #14
+002630  3  85 rr                sta z80_e
+002632  3  20 3E 13             jsr idiv
+002635  3  A5 rr                lda z80_d
+002637  3  85 rr                sta varl
+002639  3  A5 rr                lda varl
+00263B  3  20 34 1F             jsr disply
+00263E  3  A9 12                lda #18
+002640  3  85 rr                sta chary
+002642  3  A9 12                lda #18
+002644  3  85 rr                sta charx
+002646  3  A9 08                lda #8
+002648  3  C5 rr                cmp varl
+00264A  3  F0 03                beq *+5
+00264C  3  4C 57 26             jmp k01775
+00264F  3  A9 2A                lda #42
+002651  3  20 ED 1A             jsr dmsg
+002654  3  4C 5C 26             jmp k01783
+002657  3  A9 2B        k01775: lda #43
+002659  3  20 ED 1A             jsr dmsg
+00265C  3  A9 13        k01783: lda #19
+00265E  3  85 rr                sta chary
+002660  3  A9 01                lda #1
+002662  3  85 rr                sta charx
+002664  3  A9 2C                lda #44
+002666  3  20 ED 1A             jsr dmsg
+002669  3  A9 7B                lda #123
+00266B  3  85 rr                sta varl
+00266D  3  A5 rr                lda varl
+00266F  3  4A                   lsr a
+002670  3  4A                   lsr a
+002671  3  4A                   lsr a
+002672  3  4A                   lsr a
+002673  3  85 rr                sta varl
+002675  3  A5 rr                lda varl
+002677  3  20 34 1F             jsr disply
+00267A  3  A9 13                lda #19
+00267C  3  85 rr                sta chary
+00267E  3  A9 12                lda #18
+002680  3  85 rr                sta charx
+002682  3  A9 07                lda #7
+002684  3  C5 rr                cmp varl
+002686  3  F0 03                beq *+5
+002688  3  4C 93 26             jmp k01895
+00268B  3  A9 2D                lda #45
+00268D  3  20 ED 1A             jsr dmsg
+002690  3  4C 98 26             jmp k01903
+002693  3  A9 2E        k01895: lda #46
+002695  3  20 ED 1A             jsr dmsg
+002698  3  A9 14        k01903: lda #20
+00269A  3  85 rr                sta chary
+00269C  3  A9 01                lda #1
+00269E  3  85 rr                sta charx
+0026A0  3  A9 2F                lda #47
+0026A2  3  20 ED 1A             jsr dmsg
+0026A5  3  A9 7B                lda #123
+0026A7  3  85 rr                sta varl
+0026A9  3  A5 rr                lda varl
+0026AB  3  4A                   lsr a
+0026AC  3  4A                   lsr a
+0026AD  3  4A                   lsr a
+0026AE  3  4A                   lsr a
+0026AF  3  4A                   lsr a
+0026B0  3  85 rr                sta varl
+0026B2  3  A5 rr                lda varl
+0026B4  3  20 34 1F             jsr disply
+0026B7  3  A9 14                lda #20
+0026B9  3  85 rr                sta chary
+0026BB  3  A9 12                lda #18
+0026BD  3  85 rr                sta charx
+0026BF  3  A9 03                lda #3
+0026C1  3  C5 rr                cmp varl
+0026C3  3  F0 03                beq *+5
+0026C5  3  4C D0 26             jmp k02019
+0026C8  3  A9 30                lda #48
+0026CA  3  20 ED 1A             jsr dmsg
+0026CD  3  4C D5 26             jmp k02027
+0026D0  3  A9 31        k02019: lda #49
+0026D2  3  20 ED 1A             jsr dmsg
+0026D5  3  A9 15        k02027: lda #21
+0026D7  3  85 rr                sta chary
+0026D9  3  A9 01                lda #1
+0026DB  3  85 rr                sta charx
+0026DD  3  A9 32                lda #50
+0026DF  3  20 ED 1A             jsr dmsg
+0026E2  3  A9 7B                lda #123
+0026E4  3  85 rr                sta varl
+0026E6  3  A5 rr                lda varl
+0026E8  3  4A                   lsr a
+0026E9  3  4A                   lsr a
+0026EA  3  4A                   lsr a
+0026EB  3  4A                   lsr a
+0026EC  3  4A                   lsr a
+0026ED  3  4A                   lsr a
+0026EE  3  85 rr                sta varl
+0026F0  3  A5 rr                lda varl
+0026F2  3  20 34 1F             jsr disply
+0026F5  3  A9 15                lda #21
+0026F7  3  85 rr                sta chary
+0026F9  3  A9 12                lda #18
+0026FB  3  85 rr                sta charx
+0026FD  3  A9 01                lda #1
+0026FF  3  C5 rr                cmp varl
+002701  3  F0 03                beq *+5
+002703  3  4C 0E 27             jmp k02146
+002706  3  A9 33                lda #51
+002708  3  20 ED 1A             jsr dmsg
+00270B  3  4C 13 27             jmp k02154
+00270E  3  A9 34        k02146: lda #52
+002710  3  20 ED 1A             jsr dmsg
+002713  3  A9 16        k02154: lda #22
+002715  3  85 rr                sta chary
+002717  3  A9 01                lda #1
+002719  3  85 rr                sta charx
+00271B  3  A9 35                lda #53
+00271D  3  20 ED 1A             jsr dmsg
+002720  3  A9 7B                lda #123
+002722  3  85 rr                sta varl
+002724  3  A5 rr                lda varl
+002726  3  4A                   lsr a
+002727  3  2A                   rol a
+002728  3  25 01                and 1
+00272A  3  85 rr                sta varl
+00272C  3  A5 rr                lda varl
+00272E  3  20 34 1F             jsr disply
+002731  3  A9 16                lda #22
+002733  3  85 rr                sta chary
+002735  3  A9 12                lda #18
+002737  3  85 rr                sta charx
+002739  3  A9 00                lda #0
+00273B  3  C5 rr                cmp varl
+00273D  3  F0 03                beq *+5
+00273F  3  4C 4A 27             jmp k02262
+002742  3  A9 36                lda #54
+002744  3  20 ED 1A             jsr dmsg
+002747  3  4C 4F 27             jmp k02270
+00274A  3  A9 37        k02262: lda #55
+00274C  3  20 ED 1A             jsr dmsg
+00274F  3  20 67 0E     k02270: jsr prskey
+002752  3  60                   rts
+002753  3               evnt11:
+002753  3  60                   rts
+002754  3               evnt12:
+002754  3  20 04 11             jsr cls
+002757  3  60                   rts
+002758  3               evnt13:
+002758  3  60                   rts
+002759  3               evnt14:
+002759  3  60                   rts
+00275A  3               evnt15:
+00275A  3  60                   rts
+00275B  3               evnt16:
+00275B  3  60                   rts
+00275C  3               evnt17:
+00275C  3  60                   rts
+00275D  3               evnt18:
+00275D  3  60                   rts
+00275E  3               evnt19:
+00275E  3  60                   rts
+00275F  3               evnt20:
+00275F  3  60                   rts
+002760  3  60           ptcusr: rts
+002761  3               msgdat:
+002761  3  43 41 4C 43          .byte "CALCULATIONS TEST",186
+002765  3  55 4C 41 54  
+002769  3  49 4F 4E 53  
+002773  3  44 49 56 49          .byte "DIVISION",186
+002777  3  53 49 4F 4E  
+00277B  3  BA           
+00277C  3  31 32 33 20          .byte "123 /  1 =",160
+002780  3  2F 20 20 31  
+002784  3  20 3D A0     
+002787  3  4F CB                .byte "O",203
+002789  3  4E 4F 54 20          .byte "NOT O",203
+00278D  3  4F CB        
+00278F  3  31 32 33 20          .byte "123 /  2 =",160
+002793  3  2F 20 20 32  
+002797  3  20 3D A0     
+00279A  3  4F CB                .byte "O",203
+00279C  3  4E 4F 54 20          .byte "NOT O",203
+0027A0  3  4F CB        
+0027A2  3  31 32 33 20          .byte "123 /  3 =",160
+0027A6  3  2F 20 20 33  
+0027AA  3  20 3D A0     
+0027AD  3  4F CB                .byte "O",203
+0027AF  3  4E 4F 54 20          .byte "NOT O",203
+0027B3  3  4F CB        
+0027B5  3  31 32 33 20          .byte "123 /  4 =",160
+0027B9  3  2F 20 20 34  
+0027BD  3  20 3D A0     
+0027C0  3  4F CB                .byte "O",203
+0027C2  3  4E 4F 54 20          .byte "NOT O",203
+0027C6  3  4F CB        
+0027C8  3  31 32 33 20          .byte "123 /  5 =",160
+0027CC  3  2F 20 20 35  
+0027D0  3  20 3D A0     
+0027D3  3  4F CB                .byte "O",203
+0027D5  3  4E 4F 54 20          .byte "NOT O",203
+0027D9  3  4F CB        
+0027DB  3  31 32 33 20          .byte "123 /  6 =",160
+0027DF  3  2F 20 20 36  
+0027E3  3  20 3D A0     
+0027E6  3  4F CB                .byte "O",203
+0027E8  3  4E 4F 54 20          .byte "NOT O",203
+0027EC  3  4F CB        
+0027EE  3  31 32 33 20          .byte "123 /  7 =",160
+0027F2  3  2F 20 20 37  
+0027F6  3  20 3D A0     
+0027F9  3  4F CB                .byte "O",203
+0027FB  3  4E 4F 54 20          .byte "NOT O",203
+0027FF  3  4F CB        
+002801  3  31 32 33 20          .byte "123 /  8 =",160
+002805  3  2F 20 20 38  
+002809  3  20 3D A0     
+00280C  3  4F CB                .byte "O",203
+00280E  3  4E 4F 54 20          .byte "NOT O",203
+002812  3  4F CB        
+002814  3  31 32 33 20          .byte "123 /  9 =",160
+002818  3  2F 20 20 39  
+00281C  3  20 3D A0     
+00281F  3  4F CB                .byte "O",203
+002821  3  4E 4F 54 20          .byte "NOT O",203
+002825  3  4F CB        
+002827  3  31 32 33 20          .byte "123 / 10 =",160
+00282B  3  2F 20 31 30  
+00282F  3  20 3D A0     
+002832  3  4F CB                .byte "O",203
+002834  3  4E 4F 54 20          .byte "NOT O",203
+002838  3  4F CB        
+00283A  3  31 32 33 20          .byte "123 / 11 =",160
+00283E  3  2F 20 31 31  
+002842  3  20 3D A0     
+002845  3  4F CB                .byte "O",203
+002847  3  4E 4F 54 20          .byte "NOT O",203
+00284B  3  4F CB        
+00284D  3  31 32 33 20          .byte "123 / 12 =",160
+002851  3  2F 20 31 32  
+002855  3  20 3D A0     
+002858  3  4F CB                .byte "O",203
+00285A  3  4E 4F 54 20          .byte "NOT O",203
+00285E  3  4F CB        
+002860  3  31 32 33 20          .byte "123 / 13 =",160
+002864  3  2F 20 31 33  
+002868  3  20 3D A0     
+00286B  3  4F CB                .byte "O",203
+00286D  3  4E 4F 54 20          .byte "NOT O",203
+002871  3  4F CB        
+002873  3  31 32 33 20          .byte "123 / 14 =",160
+002877  3  2F 20 31 34  
+00287B  3  20 3D A0     
+00287E  3  4F CB                .byte "O",203
+002880  3  4E 4F 54 20          .byte "NOT O",203
+002884  3  4F CB        
+002886  3  31 32 33 20          .byte "123 / 16 =",160
+00288A  3  2F 20 31 36  
+00288E  3  20 3D A0     
+002891  3  4F CB                .byte "O",203
+002893  3  4E 4F 54 20          .byte "NOT O",203
+002897  3  4F CB        
+002899  3  31 32 33 20          .byte "123 / 32 =",160
+00289D  3  2F 20 33 32  
+0028A1  3  20 3D A0     
+0028A4  3  4F CB                .byte "O",203
+0028A6  3  4E 4F 54 20          .byte "NOT O",203
+0028AA  3  4F CB        
+0028AC  3  31 32 33 20          .byte "123 / 64 =",160
+0028B0  3  2F 20 36 34  
+0028B4  3  20 3D A0     
+0028B7  3  4F CB                .byte "O",203
+0028B9  3  4E 4F 54 20          .byte "NOT O",203
+0028BD  3  4F CB        
+0028BF  3  31 32 33 20          .byte "123 /128 =",160
+0028C3  3  2F 31 32 38  
+0028C7  3  20 3D A0     
+0028CA  3  4F CB                .byte "O",203
+0028CC  3  4E 4F 54 20          .byte "NOT O",203
+0028D0  3  4F CB        
+0028D2  3               nummsg:
+0028D2  3  38                   .byte 56
+0028D3  3               chgfx:
+0028D3  3  00 00 00 00          .byte 0,0,0,0,0,0,0,0
+0028D7  3  00 00 00 00  
+0028DB  3               bprop:
+0028DB  3  00                   .byte 0
+0028DC  3               sprgfx:
+0028DC  3  00 00 00 00          .byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0028E0  3  00 00 00 00  
+0028E4  3  00 00 00 00  
+0028FC  3  00 00 00 00          .byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+002900  3  00 00 00 00  
+002904  3  00 00 00 00  
+00291C  3  00 00 00 00          .byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+002920  3  00 00 00 00  
+002924  3  00 00 00 00  
+00293C  3  00 00 00 00          .byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+002940  3  00 00 00 00  
+002944  3  00 00 00 00  
+00295C  3               frmlst:
+00295C  3  00 01 01 00          .byte 0,1,1,0
+002960  3               scdat:
+002960  3  09 00                .word 9
+002962  3  FF 00 00 FF          .byte 255,0,0,255,0,0,255,0,148
+002966  3  00 00 FF 00  
+00296A  3  94           
+00296B  3               numsc:
+00296B  3  01                   .byte 1
+00296C  3               nmedat:
+00296C  3  00 00 58 80          .byte 0,0,88,128,255
+002970  3  FF           
+002971  3               NUMOBJ = 1
+002971  3               objdta:
+002971  3  00 00 00 00          .byte 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,160,32,0,160,32
+002975  3  00 00 00 00  
+002979  3  00 00 00 00  
+002997  3               font:
+002997  3  00 00 00 00          .byte 0,0,0,0,0,0,0,0
+00299B  3  00 00 00 00  
+00299F  3  00 30 30 30          .byte 0,48,48,48,48,0,48,0
+0029A3  3  30 00 30 00  
+0029A7  3  00 6C 6C 00          .byte 0,108,108,0,0,0,0,0
+0029AB  3  00 00 00 00  
+0029AF  3  00 6C FE 6C          .byte 0,108,254,108,108,254,108,0
+0029B3  3  6C FE 6C 00  
+0029B7  3  00 18 7E 78          .byte 0,24,126,120,126,30,126,24
+0029BB  3  7E 1E 7E 18  
+0029BF  3  00 E6 EC 18          .byte 0,230,236,24,48,110,206,0
+0029C3  3  30 6E CE 00  
+0029C7  3  00 30 78 30          .byte 0,48,120,48,126,204,126,0
+0029CB  3  7E CC 7E 00  
+0029CF  3  00 18 30 00          .byte 0,24,48,0,0,0,0,0
+0029D3  3  00 00 00 00  
+0029D7  3  00 0C 18 18          .byte 0,12,24,24,24,24,12,0
+0029DB  3  18 18 0C 00  
+0029DF  3  00 60 30 30          .byte 0,96,48,48,48,48,96,0
+0029E3  3  30 30 60 00  
+0029E7  3  00 00 3C 18          .byte 0,0,60,24,126,24,60,0
+0029EB  3  7E 18 3C 00  
+0029EF  3  00 00 18 18          .byte 0,0,24,24,126,24,24,0
+0029F3  3  7E 18 18 00  
+0029F7  3  00 00 00 00          .byte 0,0,0,0,0,24,24,48
+0029FB  3  00 18 18 30  
+0029FF  3  00 00 00 00          .byte 0,0,0,0,126,0,0,0
+002A03  3  7E 00 00 00  
+002A07  3  00 00 00 00          .byte 0,0,0,0,0,56,56,0
+002A0B  3  00 38 38 00  
+002A0F  3  00 00 06 0C          .byte 0,0,6,12,24,48,96,0
+002A13  3  18 30 60 00  
+002A17  3  00 7C CE DE          .byte 0,124,206,222,246,230,124,0
+002A1B  3  F6 E6 7C 00  
+002A1F  3  00 38 78 18          .byte 0,56,120,24,24,24,126,0
+002A23  3  18 18 7E 00  
+002A27  3  00 7C C6 06          .byte 0,124,198,6,124,192,254,0
+002A2B  3  7C C0 FE 00  
+002A2F  3  00 7C C6 1C          .byte 0,124,198,28,6,198,124,0
+002A33  3  06 C6 7C 00  
+002A37  3  00 18 38 78          .byte 0,24,56,120,216,254,24,0
+002A3B  3  D8 FE 18 00  
+002A3F  3  00 FE C0 FC          .byte 0,254,192,252,6,198,124,0
+002A43  3  06 C6 7C 00  
+002A47  3  00 7C C0 FC          .byte 0,124,192,252,198,198,124,0
+002A4B  3  C6 C6 7C 00  
+002A4F  3  00 FE 06 0C          .byte 0,254,6,12,24,48,48,0
+002A53  3  18 30 30 00  
+002A57  3  00 7C C6 7C          .byte 0,124,198,124,198,198,124,0
+002A5B  3  C6 C6 7C 00  
+002A5F  3  00 7C C6 C6          .byte 0,124,198,198,126,6,124,0
+002A63  3  7E 06 7C 00  
+002A67  3  00 00 00 30          .byte 0,0,0,48,0,0,48,0
+002A6B  3  00 00 30 00  
+002A6F  3  00 00 30 00          .byte 0,0,48,0,0,48,48,96
+002A73  3  00 30 30 60  
+002A77  3  00 00 0C 18          .byte 0,0,12,24,48,24,12,0
+002A7B  3  30 18 0C 00  
+002A7F  3  00 00 00 7E          .byte 0,0,0,126,0,126,0,0
+002A83  3  00 7E 00 00  
+002A87  3  00 00 30 18          .byte 0,0,48,24,12,24,48,0
+002A8B  3  0C 18 30 00  
+002A8F  3  00 7C C6 0C          .byte 0,124,198,12,24,0,24,0
+002A93  3  18 00 18 00  
+002A97  3  00 7C DE FE          .byte 0,124,222,254,254,192,124,0
+002A9B  3  FE C0 7C 00  
+002A9F  3  00 7C C6 C6          .byte 0,124,198,198,254,198,198,0
+002AA3  3  FE C6 C6 00  
+002AA7  3  00 FC C6 FC          .byte 0,252,198,252,198,198,252,0
+002AAB  3  C6 C6 FC 00  
+002AAF  3  00 7C C6 C0          .byte 0,124,198,192,192,198,124,0
+002AB3  3  C0 C6 7C 00  
+002AB7  3  00 F8 CC C6          .byte 0,248,204,198,198,204,248,0
+002ABB  3  C6 CC F8 00  
+002ABF  3  00 FE C0 FC          .byte 0,254,192,252,192,192,254,0
+002AC3  3  C0 C0 FE 00  
+002AC7  3  00 FE C0 FC          .byte 0,254,192,252,192,192,192,0
+002ACB  3  C0 C0 C0 00  
+002ACF  3  00 7C C6 C0          .byte 0,124,198,192,222,198,124,0
+002AD3  3  DE C6 7C 00  
+002AD7  3  00 C6 C6 FE          .byte 0,198,198,254,198,198,198,0
+002ADB  3  C6 C6 C6 00  
+002ADF  3  00 7E 18 18          .byte 0,126,24,24,24,24,126,0
+002AE3  3  18 18 7E 00  
+002AE7  3  00 06 06 06          .byte 0,6,6,6,198,198,124,0
+002AEB  3  C6 C6 7C 00  
+002AEF  3  00 CC D8 F0          .byte 0,204,216,240,216,204,198,0
+002AF3  3  D8 CC C6 00  
+002AF7  3  00 C0 C0 C0          .byte 0,192,192,192,192,192,254,0
+002AFB  3  C0 C0 FE 00  
+002AFF  3  00 C6 EE FE          .byte 0,198,238,254,198,198,198,0
+002B03  3  C6 C6 C6 00  
+002B07  3  00 C6 E6 F6          .byte 0,198,230,246,222,206,198,0
+002B0B  3  DE CE C6 00  
+002B0F  3  00 7C C6 C6          .byte 0,124,198,198,198,198,124,0
+002B13  3  C6 C6 7C 00  
+002B17  3  00 FC C6 C6          .byte 0,252,198,198,252,192,192,0
+002B1B  3  FC C0 C0 00  
+002B1F  3  00 7C C6 C6          .byte 0,124,198,198,246,222,124,0
+002B23  3  F6 DE 7C 00  
+002B27  3  00 FC C6 C6          .byte 0,252,198,198,252,204,198,0
+002B2B  3  FC CC C6 00  
+002B2F  3  00 7C C0 7C          .byte 0,124,192,124,6,198,124,0
+002B33  3  06 C6 7C 00  
+002B37  3  00 FE 30 30          .byte 0,254,48,48,48,48,48,0
+002B3B  3  30 30 30 00  
+002B3F  3  00 C6 C6 C6          .byte 0,198,198,198,198,198,124,0
+002B43  3  C6 C6 7C 00  
+002B47  3  00 C6 C6 C6          .byte 0,198,198,198,198,108,56,0
+002B4B  3  C6 6C 38 00  
+002B4F  3  00 C6 C6 C6          .byte 0,198,198,198,198,254,108,0
+002B53  3  C6 FE 6C 00  
+002B57  3  00 C6 6C 38          .byte 0,198,108,56,56,108,198,0
+002B5B  3  38 6C C6 00  
+002B5F  3  00 86 CC 78          .byte 0,134,204,120,48,48,48,0
+002B63  3  30 30 30 00  
+002B67  3  00 FE 0C 18          .byte 0,254,12,24,48,96,254,0
+002B6B  3  30 60 FE 00  
+002B6F  3  00 1E 18 18          .byte 0,30,24,24,24,24,30,0
+002B73  3  18 18 1E 00  
+002B77  3  00 00 C0 60          .byte 0,0,192,96,48,24,12,0
+002B7B  3  30 18 0C 00  
+002B7F  3  00 F0 30 30          .byte 0,240,48,48,48,48,240,0
+002B83  3  30 30 F0 00  
+002B87  3  00 30 78 FC          .byte 0,48,120,252,48,48,48,0
+002B8B  3  30 30 30 00  
+002B8F  3  00 00 00 00          .byte 0,0,0,0,0,0,0,255
+002B93  3  00 00 00 FF  
+002B97  3  00 3C 66 F8          .byte 0,60,102,248,96,96,254,0
+002B9B  3  60 60 FE 00  
+002B9F  3  00 00 78 0C          .byte 0,0,120,12,124,204,124,0
+002BA3  3  7C CC 7C 00  
+002BA7  3  00 60 60 7C          .byte 0,96,96,124,102,102,124,0
+002BAB  3  66 66 7C 00  
+002BAF  3  00 00 3C 60          .byte 0,0,60,96,96,96,60,0
+002BB3  3  60 60 3C 00  
+002BB7  3  00 0C 0C 7C          .byte 0,12,12,124,204,204,124,0
+002BBB  3  CC CC 7C 00  
+002BBF  3  00 00 78 CC          .byte 0,0,120,204,248,192,124,0
+002BC3  3  F8 C0 7C 00  
+002BC7  3  00 1C 30 38          .byte 0,28,48,56,48,48,48,0
+002BCB  3  30 30 30 00  
+002BCF  3  00 00 7C CC          .byte 0,0,124,204,204,124,12,120
+002BD3  3  CC 7C 0C 78  
+002BD7  3  00 C0 C0 F8          .byte 0,192,192,248,204,204,204,0
+002BDB  3  CC CC CC 00  
+002BDF  3  00 30 00 70          .byte 0,48,0,112,48,48,120,0
+002BE3  3  30 30 78 00  
+002BE7  3  00 0C 00 0C          .byte 0,12,0,12,12,12,108,56
+002BEB  3  0C 0C 6C 38  
+002BEF  3  00 60 78 70          .byte 0,96,120,112,112,120,108,0
+002BF3  3  70 78 6C 00  
+002BF7  3  00 30 30 30          .byte 0,48,48,48,48,48,28,0
+002BFB  3  30 30 1C 00  
+002BFF  3  00 00 F8 FC          .byte 0,0,248,252,252,252,252,0
+002C03  3  FC FC FC 00  
+002C07  3  00 00 F8 CC          .byte 0,0,248,204,204,204,204,0
+002C0B  3  CC CC CC 00  
+002C0F  3  00 00 78 CC          .byte 0,0,120,204,204,204,120,0
+002C13  3  CC CC 78 00  
+002C17  3  00 00 F8 CC          .byte 0,0,248,204,204,248,192,192
+002C1B  3  CC F8 C0 C0  
+002C1F  3  00 00 7C CC          .byte 0,0,124,204,204,124,12,14
+002C23  3  CC 7C 0C 0E  
+002C27  3  00 00 3C 60          .byte 0,0,60,96,96,96,96,0
+002C2B  3  60 60 60 00  
+002C2F  3  00 00 78 C0          .byte 0,0,120,192,120,12,248,0
+002C33  3  78 0C F8 00  
+002C37  3  00 30 78 30          .byte 0,48,120,48,48,48,28,0
+002C3B  3  30 30 1C 00  
+002C3F  3  00 00 CC CC          .byte 0,0,204,204,204,204,120,0
+002C43  3  CC CC 78 00  
+002C47  3  00 00 CC CC          .byte 0,0,204,204,120,120,48,0
+002C4B  3  78 78 30 00  
+002C4F  3  00 00 CC FC          .byte 0,0,204,252,252,252,120,0
+002C53  3  FC FC 78 00  
+002C57  3  00 00 CC 78          .byte 0,0,204,120,48,120,204,0
+002C5B  3  30 78 CC 00  
+002C5F  3  00 00 CC CC          .byte 0,0,204,204,204,124,12,120
+002C63  3  CC 7C 0C 78  
+002C67  3  00 00 FC 18          .byte 0,0,252,24,48,96,252,0
+002C6B  3  30 60 FC 00  
+002C6F  3  00 1E 18 70          .byte 0,30,24,112,24,24,30,0
+002C73  3  18 18 1E 00  
+002C77  3  00 18 18 18          .byte 0,24,24,24,24,24,24,0
+002C7B  3  18 18 18 00  
+002C7F  3  00 F0 30 1C          .byte 0,240,48,28,48,48,240,0
+002C83  3  30 30 F0 00  
+002C87  3  00 3C 78 00          .byte 0,60,120,0,0,0,0,0
+002C8B  3  00 00 00 00  
+002C8F  3  7C C6 BB E3          .byte 124,198,187,227,227,187,198,124
+002C93  3  E3 BB C6 7C  
+002C97  3  42 61 68 48  keys:   .byte 66,97,104,72,98,16,55,48,49,17,18
+002C9B  3  62 10 37 30  
+002C9F  3  31 11 12     
+002CA2  3               
+002CA2  1               end_asm:
+002CA2  1               
+002CA2  1               ;----------------------------------------------------------------------
+002CA2  1               ; RELOCATION OF BEEB CODE FROM LOAD ADDRESS
+002CA2  1               ;----------------------------------------------------------------------
+002CA2  1               
+002CA2  1               relocate:
+002CA2  1               ; Issue *TAPE otherwise DFS goes mental that we've overwritten workspace from &E00 - &1100
+002CA2  1               
+002CA2  1  A9 8C            lda #$8C
+002CA4  1  A2 0C            ldx #$0C
+002CA6  1  A0 00            ldy #$00
+002CA8  1  20 F4 FF         jsr OSBYTE					; *FX &8C,0,0 - *TAPE 1200
+002CAB  1               
+002CAB  1               ; Other one off initialisation could happen here...
+002CAB  1               
+002CAB  1               ; Relocate all code down to &E00
+002CAB  1  A2 1F        	ldx #>(end_asm - start_asm) + 1
+002CAD  1  A0 00        	ldy #0
+002CAF  1               reloop:
+002CAF  1  B9 00 12     	lda load_address, y
+002CB2  1  99 00 0E     	sta asm_code, y
+002CB5  1  C8           	iny
+002CB6  1  D0 F7        	bne reloop
+002CB8  1  EE B1 30     	inc reloop + 2 + load_address - asm_code
+002CBB  1  EE B4 30     	inc reloop + 5 + load_address - asm_code
+002CBE  1  CA           	dex
+002CBF  1  D0 EE        	bne reloop
+002CC1  1  4C 03 0E     	jmp boot_game
+002CC1  1               
