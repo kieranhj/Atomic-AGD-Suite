@@ -145,3 +145,23 @@ Moving all variables to ZP saved 1K of script from Terrapins!!
 Still over by 4K though...
 
 Could save another page by copying font data over BBC char defs...
+
+Terrapins
+data start = $4D44
+message = $4D44 - $4E78 = 135
+chgfx = $4E79 - $5148 = 720
+bprop = $5149 - $51A2 = 90
+sprgfx = $51A3 - $6D22 = 7040
+frmlst = $6D23 - $6D4C = 42
+scdat = $6D4D - $71C5 = 1144
+nme = $71C6 - $7229 = 100
+objdata = $722A - $737f = 342
+font = $7380 - $767F = 768
+data end = $768B
+data size = $2907
+
+script start = $22AE
+script end = $4D43
+script size = $2A95
+
+Can save another 1K from Terrapins script if can fix the beq *+5:jmp xxxxxx pattern!
