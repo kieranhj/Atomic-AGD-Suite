@@ -1745,6 +1745,7 @@ rpblc0:
 	sta z80_x
 	lda #>sprtab
 	sta z80_i
+
 	jsr dspr 		; display sprites.
 
 	lda #<(sprtab+TABSIZ) 	; address of first odd sprite.
@@ -1759,7 +1760,10 @@ mloop:
 	sta z80_x
 	lda #>sprtab
 	sta z80_i
+
+DEBUG_PAL PAL_red
 	jsr dspr 		; display even sprites.
+DEBUG_PAL PAL_black
 
 	jsr plsnd 		; play sounds.
 	jsr vsync 		; synchronise with display.
@@ -1768,15 +1772,20 @@ mloop:
 	sta z80_x
 	lda #>(sprtab+TABSIZ)
 	sta z80_i
+
+DEBUG_PAL PAL_red
 	jsr dspr 		; display odd sprites.
+DEBUG_PAL PAL_black
 
 	lda #<(ssprit) 		; point to spare sprite for spawning purposes.
 	sta z80_x
 	lda #>(ssprit)
 	sta z80_i
 evlp1:
+DEBUG_PAL PAL_green
 	jsr evnt10 		; called once per main loop.
 	jsr pspr 		; process sprites.
+DEBUG_PAL PAL_black
 
 ; Main loop events.
 
@@ -1784,10 +1793,12 @@ evlp1:
 	sta z80_x
 	lda #>ssprit
 	sta z80_i
+DEBUG_PAL PAL_green
 evlp2:
 	jsr evnt11 		; called once per main loop.
 bsortx:
 	jsr bsort 		; sort sprites.
+DEBUG_PAL PAL_black
 
 	lda nexlev		; finished level flag.
 	bne newlev		; is set, go to next level.

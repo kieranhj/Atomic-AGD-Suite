@@ -167,3 +167,6 @@ script size = $2A95 = 10901
 Can save another 1K from Terrapins script if can fix the beq *+5:jmp xxxxxx pattern!
 ldy optimisation saves 345 bytes
 sprite optimisation lda sprtab+N,y saves 471 bytes (but also 3 cycles...)
+
+Rather than vsync twice just count retraces and sync to 25Hz if running too fast (otherwise don't sync)
+At the moment one frame has a large amount of script / logic processing and the other one doesn't so is wasted

@@ -23,6 +23,12 @@
 	OSARGS	 = $ffda
 
 	PAL_black = 0 ^ 7
+	PAL_red = 1 ^ 7
+	PAL_green = 2 ^ 7
+	PAL_yellow = 3 ^ 7
+	PAL_blue = 4 ^ 7
+	PAL_magenta = 5 ^ 7
+	PAL_cyan = 6 ^ 7
 	PAL_white = 7 ^ 7
 
 ; System constants
@@ -44,6 +50,29 @@
 .endif
 
 	sprtab		= $B00				; NUMSPR*TABSIZ
+
+	.macro DEBUG_PAL pal
+		SET_PAL pal
+	.endmacro
+
+	.macro SET_PAL pal
+		lda #$00+pal
+		sta $fe21
+		lda #$10+pal
+		sta $fe21
+		lda #$20+pal
+		sta $fe21
+		lda #$30+pal
+		sta $fe21
+		lda #$40+pal
+		sta $fe21
+		lda #$50+pal
+		sta $fe21
+		lda #$60+pal
+		sta $fe21
+		lda #$70+pal
+		sta $fe21
+	.endmacro
 
 ;----------------------------------------------------------------------
 ; ZERO PAGE SEGMENT

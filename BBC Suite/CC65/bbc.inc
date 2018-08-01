@@ -349,15 +349,12 @@ scadd:
 sspria:
 	jsr gsprad		; get old sprite address.
 sspri2:
-	lda #16			; vertical lines.
-	sta acnt
+	ldx #16			; vertical lines.
 sspri0:
 	jsr dline		; draw a line.
-	dec acnt
+	dex
 	bne sspri0		; repeat 16 times
 	rts
-
-acnt:	.byte 0
 
 ;-----------------------------------------------------------------
 
@@ -372,18 +369,12 @@ sspric:
 	jsr exx  		; store addresses.
 	jsr gspran 		; get new sprite addresses.
 
-	lda #15
-	sta ccnt
+	ldx #16
 lloop:
-	jsr dline 		; draw a line.
-	jsr exx  		; restore old addresses.
-	jsr dline 		; delete a line.
-	jsr exx  		; flip to new sprite addresses.
-	dec ccnt
+	jsr ddline 		; draw a line.
+	dex
 	bne lloop
-
-	jsr dline		; draw a line.
-	jsr exx 		; restore old addresses.
+	rts
 
 ;-------------------------------------------------------------
 ; Drop through.
@@ -399,53 +390,36 @@ lloop:
 dline:
 	ldy #0
 	lda (z80_de),y 		; graphic data.
-	and z80_c 		; mask away what's not needed.
-	eor (scraddr),y 	; XOR with what's there.
-	sta (scraddr),y 	; bung it in.
+	and z80_c 			; mask away what's not needed.
 
 ; _BEEB screen arrangement
-	clc
-	lda scraddr
-	adc #16
-	sta scraddr
-	bcc :+
-	inc scraddr+1
-:
+	eor (scraddr),y 	; XOR with what's there.
+	sta (scraddr),y 	; bung it in.
 
 	lda (z80_de),y 		; fetch data.
-	and z80_b 		; mask away unwanted bits.
+	and z80_b 			; mask away unwanted
+
+; _BEEB screen arrangement
+	ldy #16
 	eor (scraddr),y 	; XOR with what's there.
 	sta (scraddr),y 	; bung it in.
 
-	inc z80_e 		; next graphic.
+	inc z80_e			; next graphic.
 	bne :+
 	inc z80_d
 :
-; _BEEB screen arrangement
-	sec
-	lda scraddr 		; one character cell to the left.
-	sbc #8
-	sta scraddr
-	lda scraddr+1
-	sbc #0
-	sta scraddr+1
-
+	ldy #0
 	lda (z80_de),y 		; second bit of data.
+
+; _BEEB screen arrangement
+	ldy #8
 	eor (scraddr),y 	; XOR with what's there.
 	sta (scraddr),y 	; bung it in.
 
-	inc z80_e 		; point to next line of data.
+	inc z80_e			; next graphic.
 	bne :+
 	inc z80_d
 :
-; _BEEB screen arrangement
-	sec
-	lda scraddr 		; another char left.
-	sbc #8
-	sta scraddr
-	lda scraddr+1
-	sbc #0
-	sta scraddr+1
 
 ;----------------------------------------------------------------------
 ; Line drawn, now work out next target address.
@@ -474,6 +448,132 @@ beeb_next_row:
 	lda scraddr+1
 	adc #>(ScreenRowBytes-7)
 	sta scraddr+1		; new high byte of address.
+	rts
+
+;-------------------------------------------------------------
+; Drop through.
+; Line drawn, now work out next target address.
+;
+; Input:
+;  B  = right mask
+;  C  = left mask
+;  DE = spriteaddress
+;  scraddr = screen address
+;-------------------------------------------------------------
+
+ddline:
+
+; NEW SPRITE
+
+	ldy #0
+	lda (z80_de),y 		; graphic data.
+	and z80_c 			; mask away what's not needed.
+
+; _BEEB screen arrangement
+	eor (scraddr),y 	; XOR with what's there.
+	sta (scraddr),y 	; bung it in.
+
+	lda (z80_de),y 		; fetch data.
+	and z80_b 			; mask away unwanted
+
+; _BEEB screen arrangement
+	ldy #16
+	eor (scraddr),y 	; XOR with what's there.
+	sta (scraddr),y 	; bung it in.
+
+	inc z80_e			; next graphic.
+	bne :+
+	inc z80_d
+:
+	ldy #0
+	lda (z80_de),y 		; second bit of data.
+
+; _BEEB screen arrangement
+	ldy #8
+	eor (scraddr),y 	; XOR with what's there.
+	sta (scraddr),y 	; bung it in.
+
+	inc z80_e			; next graphic.
+	bne :+
+	inc z80_d
+:
+
+; _BEEB next row
+
+	lda scraddr 		; get low byte of address.
+	and #7				
+	cmp #7				; is this last line of row?
+	beq :+
+
+	; within same row can't increment page
+	inc scraddr			; new low byte of address.
+	jmp ddline2
+
+:
+	clc
+	lda scraddr
+	adc #<(ScreenRowBytes-7)
+	sta scraddr			; new low byte of address.
+	lda scraddr+1
+	adc #>(ScreenRowBytes-7)
+	sta scraddr+1		; new high byte of address.
+
+; OLD SPRITE
+
+ddline2:
+
+	ldy #0
+	lda (z80_dep),y 		; graphic data.
+	and z80_cp 			; mask away what's not needed.
+
+; _BEEB screen arrangement
+	eor (z80_hlp),y 	; XOR with what's there.
+	sta (z80_hlp),y 	; bung it in.
+
+	lda (z80_dep),y 		; fetch data.
+	and z80_bp 			; mask awayh unwanted
+
+; _BEEB screen arrangement
+	ldy #16
+	eor (z80_hlp),y 	; XOR with what's there.
+	sta (z80_hlp),y 	; bung it in.
+
+	inc z80_ep			; next graphic.
+	bne :+
+	inc z80_dp
+:
+	ldy #0
+	lda (z80_dep),y 		; second bit of data.
+
+; _BEEB screen arrangement
+	ldy #8
+	eor (z80_hlp),y 	; XOR with what's there.
+	sta (z80_hlp),y 	; bung it in.
+
+	inc z80_ep			; next graphic.
+	bne :+
+	inc z80_dp
+:
+
+; _BEEB screen arrangement
+
+	lda z80_lp 		; get low byte of address.
+	and #7				
+	cmp #7				; is this last line of row?
+	beq :+
+
+	; within same row can't increment page
+	inc z80_lp			; new low byte of address.
+	rts
+
+:
+	clc
+	lda z80_lp
+	adc #<(ScreenRowBytes-7)
+	sta z80_lp			; new low byte of address.
+	lda z80_lp+1
+	adc #>(ScreenRowBytes-7)
+	sta z80_lp+1		; new high byte of address.
 	rts
 
 ;----------------------------------------------------
