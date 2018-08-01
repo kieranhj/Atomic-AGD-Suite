@@ -287,7 +287,6 @@ sprite:
 	sta sprit2+2
 
 	ldx #0			; pixel height.
-	ldy #0
 sprit1:
 	lda objdta,x		; fetch first byte.
 	sta spr
@@ -323,8 +322,6 @@ sprit2:
 
 	ldx xtmp		; retreive X-reg
 	rts
-
-spr:	.byte 0,0,0
 
 ;------------------------------------------------------------------
 ; This routine returns a screen address for (dispx, dispy) in scraddr.

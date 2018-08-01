@@ -95,6 +95,8 @@ sktptr:	    .res 1      ; not a ptr
 tmproom:	.res 1
 ogptr:	    .res 2		; original sprite pointer.
 
+spr:	    .res 3      ; static sprite data
+
 .if mflag
 TmpAddr:	.res 2
 bwid:	    .res 1     ; box/menu width.

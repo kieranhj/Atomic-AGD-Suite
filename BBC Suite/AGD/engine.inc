@@ -2817,12 +2817,12 @@ pchr:
 sprit7:
 	lda z80_b
 	beq sprit0
-	sta z80_a
+	tay
 sprit3:
 	lsr spr			; shift into position.
 	ror spr+1
 	ror spr+2
-	dec z80_a		; one less iteration.
+	dey				; one less iteration.
 	bne sprit3
 sprit0:
 	rts 			; now apply to screen.
