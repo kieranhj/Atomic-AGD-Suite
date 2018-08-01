@@ -162,6 +162,8 @@ data size = $2907
 
 script start = $22AE
 script end = $4D43
-script size = $2A95
+script size = $2A95 = 10901
 
 Can save another 1K from Terrapins script if can fix the beq *+5:jmp xxxxxx pattern!
+ldy optimisation saves 345 bytes
+sprite optimisation lda sprtab+N,y saves 471 bytes (but also 3 cycles...)

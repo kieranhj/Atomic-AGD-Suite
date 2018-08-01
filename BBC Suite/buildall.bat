@@ -1,1 +1,1 @@
-for %%F in (Scripts\*.agd) DO build %%~nF
+for %%F in (Scripts\*.agd) DO build %%~nF p
