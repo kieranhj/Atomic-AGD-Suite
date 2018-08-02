@@ -96,6 +96,7 @@ tmproom:	.res 1
 ogptr:	    .res 2		; original sprite pointer.
 
 spr:	    .res 3      ; static sprite data
+vsync_count:.res 1
 
 .if mflag
 TmpAddr:	.res 2

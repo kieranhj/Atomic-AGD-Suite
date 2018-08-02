@@ -49,6 +49,60 @@ prsloop:
 	tax
 	rts
 
+bbcinit:
+	sei
+	lda EVENTV
+	sta old_eventv
+	lda EVENTV+1
+	sta old_eventv+1
+
+	lda #<event_handler
+	sta EVENTV
+	lda #>event_handler
+	sta EVENTV+1
+	cli
+	
+	; Enable VSYNC event.
+	lda #14
+	ldx #4
+	jmp OSBYTE
+
+bbckill:
+	sei
+	lda old_eventv
+	sta EVENTV
+	lda old_eventv+1
+	sta EVENTV+1
+	cli
+	
+	; Disable VSYNC event.
+	lda #13
+	ldx #4
+	jmp OSBYTE
+
+
+old_eventv:
+	.res 2
+
+event_handler:
+	php
+	cmp #4
+	bne not_vsync
+
+	inc vsync_count
+
+not_vsync:
+	plp
+	jmp (old_eventv)
+
+bbcsync:
+	lda vsync_count
+	cmp #2
+	bcc bbcsync
+	lda #0
+	sta vsync_count
+	rts
+
 ;--------------------------------------------------------
 ; Keyboard test routine.
 ;
@@ -166,15 +220,9 @@ vsync:
 	pha
 	jsr joykey		; read joystick/keyboard.
 vsync1:
-;	lda Timer2_High		; sync framerate with clock
-;	bne vsync1
-;	lda #>50000
-;	sta Timer2_High
-;	lda #<50000
-;	sta Timer2_Low
-
-	lda #19
-	jsr OSBYTE		; _BEEB vsync
+; Don't sync to vsync here - we can sync to every other vsync in main loop
+;	lda #19
+;	jsr OSBYTE		; _BEEB vsync
 
 	lda clock
 	and #1
@@ -183,6 +231,7 @@ vsync1:
 :
 	lda sndtyp
 	beq sndskip
+
 ; _BEEB TODO SOUND
 ;sndloop:
 ;	lda SpeakerBit		; handle sound
@@ -194,6 +243,7 @@ vsync1:
 ;	sta SpeakerBit
 ;	dec sndtyp
 ;	bne sndloop
+
 sndskip: 
 	pla
 	tax

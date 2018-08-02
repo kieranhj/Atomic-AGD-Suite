@@ -1753,7 +1753,10 @@ rpblc0:
 	lda #>(sprtab+TABSIZ)
 	sta z80_i
 	jsr dspr 		; display sprites.
+
 mloop:
+	jsr bbcsync
+
 	jsr vsync 		; synchronise with display.
 
 	lda #<sprtab 		; address of sprite table, even sprites.

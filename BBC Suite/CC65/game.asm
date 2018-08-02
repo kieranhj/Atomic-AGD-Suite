@@ -22,6 +22,8 @@
 	OSGBPB	 = $ffd1
 	OSARGS	 = $ffda
 
+	EVENTV	 = $0220
+
 	PAL_black = 0 ^ 7
 	PAL_red = 1 ^ 7
 	PAL_green = 2 ^ 7
@@ -52,7 +54,7 @@
 	sprtab		= $B00				; NUMSPR*TABSIZ
 
 	.macro DEBUG_PAL pal
-		SET_PAL pal
+	;	SET_PAL pal
 	.endmacro
 
 	.macro SET_PAL pal
@@ -118,8 +120,12 @@ clear_zp:
 	dex
 	stx varobj
 
+	jsr bbcinit
+
 	; Call AGD Engine start game
 	jsr start_game
+
+	jsr bbckill
 
     ; Wait for keypress
 	ldx #$ff
