@@ -408,6 +408,14 @@ sspri2:
 	sta dline_spraddr1+2	; 4c
 	sta dline_spraddr2+2	; 4c
 
+	ldx sprshft
+	lda shift_table,x
+	sta dline_shift1+1
+	sta dline_shift2+1
+	lda shift_table+1,x
+	sta dline_shift1+2
+	sta dline_shift2+2
+
 	ldx #0			; vertical lines.
 sspri0:
 	jsr dline		; draw a line.
@@ -434,6 +442,14 @@ sspric:
 	sta ddline_spraddr3+2	; 4c
 	sta ddline_spraddr4+2	; 4c
 
+	ldx sprshft
+	lda shift_table,x
+	sta ddline_shift3+1
+	sta ddline_shift4+1
+	lda shift_table+1,x
+	sta ddline_shift3+2
+	sta ddline_shift4+2
+
 	jsr exx  		; store addresses.
 	jsr gspran 		; get new sprite addresses.
 
@@ -445,12 +461,26 @@ sspric:
 	sta ddline_spraddr1+2	; 4c
 	sta ddline_spraddr2+2	; 4c
 
+	ldx sprshft
+	lda shift_table,x
+	sta ddline_shift1+1
+	sta ddline_shift2+1
+	lda shift_table+1,x
+	sta ddline_shift1+2
+	sta ddline_shift2+2
+
 	ldx #0
 lloop:
 	jsr ddline 		; draw a line.
 	cpx #32
 	bne lloop
 	rts
+
+shift_table:
+.word shift0
+.word shift2
+.word shift4
+.word shift6
 
 ;-------------------------------------------------------------
 ; Drop through.
@@ -465,31 +495,46 @@ lloop:
 
 dline:
 
+; first screen byte
+
 dline_spraddr1:
-	lda $ffff,x 		; graphic data.
-;	lda (z80_de),y
+	ldy $ffff,x 		; graphic data.
+dline_shift1:
+	lda $ffff,y
 	sta sprtmp
 	and z80_c 			; mask away what's not needed.
 
-; _BEEB screen arrangement
 	ldy #0
 	eor (scraddr),y 	; XOR with what's there.
 	sta (scraddr),y 	; bung it in.
 
-	lda sprtmp
-	and z80_b 			; mask away unwanted
+; carry to next screen byte
 
-; _BEEB screen arrangement
-	ldy #16
-	eor (scraddr),y 	; XOR with what's there.
-	sta (scraddr),y 	; bung it in.
+	lda sprtmp			; fetch data.
+	and z80_b 			; mask away unwanted
+	sta sprtmp
+
+; middle screen byte
 
 	inx
 dline_spraddr2:
-	lda $ffff,x 		; second bit of data.
+	ldy $ffff,x 		; second bit of data.
+dline_shift2:
+	lda $ffff,y
+	sta sprtmp2
+	and z80_c 			; mask away what's not needed.
+	ora sprtmp
 
-; _BEEB screen arrangement
 	ldy #8
+	eor (scraddr),y 	; XOR with what's there.
+	sta (scraddr),y 	; bung it in.
+
+; carry to last screen byte
+
+	lda sprtmp2
+	and z80_b 			; mask away unwanted
+
+	ldy #16
 	eor (scraddr),y 	; XOR with what's there.
 	sta (scraddr),y 	; bung it in.
 
@@ -542,8 +587,9 @@ ddline:
 ; first screen byte
 
 ddline_spraddr1:
-	lda $ffff,x 		; graphic data.
-;	lda (z80_de),y
+	ldy $ffff,x 		; graphic data.
+ddline_shift1:
+	lda $ffff,y
 	sta sprtmp
 	and z80_c 			; mask away what's not needed.
 
@@ -551,22 +597,33 @@ ddline_spraddr1:
 	eor (scraddr),y 	; XOR with what's there.
 	sta (scraddr),y 	; bung it in.
 
-; last screen byte
+; carry to next screen byte
 
 	lda sprtmp			; fetch data.
 	and z80_b 			; mask away unwanted
-
-	ldy #16
-	eor (scraddr),y 	; XOR with what's there.
-	sta (scraddr),y 	; bung it in.
+	sta sprtmp
 
 ; middle screen byte
 
 	inx
 ddline_spraddr2:
-	lda $ffff,x 		; second bit of data.
+	ldy $ffff,x 		; second bit of data.
+ddline_shift2:
+	lda $ffff,y
+	sta sprtmp2
+	and z80_c 			; mask away what's not needed.
+	ora sprtmp
 
 	ldy #8
+	eor (scraddr),y 	; XOR with what's there.
+	sta (scraddr),y 	; bung it in.
+
+; carry to last screen byte
+
+	lda sprtmp2
+	and z80_b 			; mask away unwanted
+
+	ldy #16
 	eor (scraddr),y 	; XOR with what's there.
 	sta (scraddr),y 	; bung it in.
 
@@ -601,8 +658,9 @@ ddline2:
 ; first screen byte
 
 ddline_spraddr3:
-	lda $ffff,x			; graphic data.
-;	lda (z80_dep),y 	; graphic data.
+	ldy $ffff,x			; graphic data.
+ddline_shift3:
+	lda $ffff,y
 	sta sprtmp
 	and z80_cp 			; mask away what's not needed.
 
@@ -610,22 +668,33 @@ ddline_spraddr3:
 	eor (z80_hlp),y 	; XOR with what's there.
 	sta (z80_hlp),y 	; bung it in.
 
-; last screen byte
+; carry to next screen byte
 
-	lda sprtmp 			; fetch data.
+	lda sprtmp			; fetch data.
 	and z80_bp 			; mask away unwanted
-
-	ldy #16
-	eor (z80_hlp),y 	; XOR with what's there.
-	sta (z80_hlp),y 	; bung it in.
+	sta sprtmp
 
 ; middle screen byte
 
 	inx
 ddline_spraddr4:
-	lda $ffff,x 		; second bit of data.
+	ldy $ffff,x 		; second bit of data.
+ddline_shift4:
+	lda $ffff,y
+	sta sprtmp2
+	and z80_cp 			; mask away what's not needed.
+	ora sprtmp
 
 	ldy #8
+	eor (z80_hlp),y 	; XOR with what's there.
+	sta (z80_hlp),y 	; bung it in.
+
+; last screen byte
+
+	lda sprtmp2			; fetch data.
+	and z80_bp 			; mask away unwanted
+
+	ldy #16
 	eor (z80_hlp),y 	; XOR with what's there.
 	sta (z80_hlp),y 	; bung it in.
 
@@ -696,8 +765,13 @@ pchar0:
 ; Shift tables
 ;----------------------------------------------------
 
-.if 0
+.if 1
 .align 256
+shift0:
+.repeat 256, i
+	.byte i
+.endrep
+
 shift2:
 .repeat 256, i
 	.byte (i >> 2) | (i << 6) & $c0
@@ -710,7 +784,7 @@ shift4:
 
 shift6:
 .repeat 256, i
-	.byte (i >> 6) | ((i << 2) & 0xfc)
+	.byte (i >> 6) | ((i << 2) & $fc)
 .endrep
 .align 1
 .endif

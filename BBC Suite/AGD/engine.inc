@@ -4227,11 +4227,29 @@ gsprad:
 	adc (z80_ix),y 		; add frame number.
 
 gspra0:
+.if 0
 	lsr a	  		; multiply by 128.
 	sta z80_d 		; store in d.
 	lda #0
 	ror a
 	sta z80_e 		; got low byte.
+.else
+	sta z80_e
+	lda #0
+	sta z80_d
+
+	asl z80_e
+	rol z80_d
+	asl z80_e
+	rol z80_d
+	asl z80_e
+	rol z80_d
+	asl z80_e
+	rol z80_d
+	asl z80_e
+	rol z80_d
+
+.endif
 
 	clc 			; address of play sprites.
 	lda z80_e
@@ -4244,7 +4262,9 @@ gspra0:
 	lda dispx 		; y coordinate.
 	and #6 			; position within byte boundary.
 	tax	 		; low byte of table displacement.
+	stx sprshft
 
+.if 0
 	asl a	  		; multiply by 32.
 	asl a  			; already a multiple
 	asl a  			; of 2, so just 4
@@ -4256,6 +4276,8 @@ gspra0:
 	bcc :+
 	inc z80_d
 :
+.endif
+
 	lda spmask,x		 ; pointer to mask table.
 	sta z80_c 		; left mask.
 	lda spmask+1,x

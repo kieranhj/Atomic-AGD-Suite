@@ -99,6 +99,8 @@ spr:	    .res 3      ; static sprite data
 vsync_count:.res 1
 colpatt:	.res 1
 sprtmp:     .res 1
+sprtmp2:    .res 1
+sprshft:    .res 1
 
 .if mflag
 TmpAddr:	.res 2

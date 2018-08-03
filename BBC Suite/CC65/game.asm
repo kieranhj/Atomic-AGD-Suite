@@ -54,7 +54,7 @@
 	sprtab		= $B00				; NUMSPR*TABSIZ
 
 	.macro DEBUG_PAL pal
-		SET_PAL pal
+	;	SET_PAL pal
 	.endmacro
 
 	.macro SET_PAL pal
