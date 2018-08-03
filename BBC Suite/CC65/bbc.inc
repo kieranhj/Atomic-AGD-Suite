@@ -399,11 +399,20 @@ scadd:
 sspria:
 	jsr gsprad		; get old sprite address.
 sspri2:
-	ldx #16			; vertical lines.
+
+	lda z80_e				; 3c
+	sta dline_spraddr1+1	; 4c
+	sta dline_spraddr2+1	; 4c
+
+	lda z80_d				; 3c
+	sta dline_spraddr1+2	; 4c
+	sta dline_spraddr2+2	; 4c
+
+	ldx #0			; vertical lines.
 sspri0:
 	jsr dline		; draw a line.
-	dex
-	bne sspri0		; repeat 16 times
+	cpx #32
+	bne sspri0		; repeat 16 times x 2 bytes
 	rts
 
 ;-----------------------------------------------------------------
@@ -416,13 +425,30 @@ ssprib:
 
 sspric:
 	jsr gsprad 		; get old sprite address.
+
+	lda z80_e				; 3c
+	sta ddline_spraddr3+1	; 4c
+	sta ddline_spraddr4+1	; 4c
+
+	lda z80_d				; 3c
+	sta ddline_spraddr3+2	; 4c
+	sta ddline_spraddr4+2	; 4c
+
 	jsr exx  		; store addresses.
 	jsr gspran 		; get new sprite addresses.
 
-	ldx #16
+	lda z80_e				; 3c
+	sta ddline_spraddr1+1	; 4c
+	sta ddline_spraddr2+1	; 4c
+
+	lda z80_d				; 3c
+	sta ddline_spraddr1+2	; 4c
+	sta ddline_spraddr2+2	; 4c
+
+	ldx #0
 lloop:
 	jsr ddline 		; draw a line.
-	dex
+	cpx #32
 	bne lloop
 	rts
 
@@ -438,15 +464,19 @@ lloop:
 ;-------------------------------------------------------------
 
 dline:
-	ldy #0
-	lda (z80_de),y 		; graphic data.
+
+dline_spraddr1:
+	lda $ffff,x 		; graphic data.
+;	lda (z80_de),y
+	sta sprtmp
 	and z80_c 			; mask away what's not needed.
 
 ; _BEEB screen arrangement
+	ldy #0
 	eor (scraddr),y 	; XOR with what's there.
 	sta (scraddr),y 	; bung it in.
 
-	lda (z80_de),y 		; fetch data.
+	lda sprtmp
 	and z80_b 			; mask away unwanted
 
 ; _BEEB screen arrangement
@@ -454,22 +484,16 @@ dline:
 	eor (scraddr),y 	; XOR with what's there.
 	sta (scraddr),y 	; bung it in.
 
-	inc z80_e			; next graphic.
-	bne :+
-	inc z80_d
-:
-	ldy #0
-	lda (z80_de),y 		; second bit of data.
+	inx
+dline_spraddr2:
+	lda $ffff,x 		; second bit of data.
 
 ; _BEEB screen arrangement
 	ldy #8
 	eor (scraddr),y 	; XOR with what's there.
 	sta (scraddr),y 	; bung it in.
 
-	inc z80_e			; next graphic.
-	bne :+
-	inc z80_d
-:
+	inx
 
 ;----------------------------------------------------------------------
 ; Line drawn, now work out next target address.
@@ -515,15 +539,18 @@ ddline:
 
 ; NEW SPRITE
 
-	ldy #0
-	lda (z80_de),y 		; graphic data.
+ddline_spraddr1:
+	lda $ffff,x 		; graphic data.
+;	lda (z80_de),y
+	sta sprtmp
 	and z80_c 			; mask away what's not needed.
 
 ; _BEEB screen arrangement
+	ldy #0
 	eor (scraddr),y 	; XOR with what's there.
 	sta (scraddr),y 	; bung it in.
 
-	lda (z80_de),y 		; fetch data.
+	lda sprtmp			; fetch data.
 	and z80_b 			; mask away unwanted
 
 ; _BEEB screen arrangement
@@ -531,22 +558,14 @@ ddline:
 	eor (scraddr),y 	; XOR with what's there.
 	sta (scraddr),y 	; bung it in.
 
-	inc z80_e			; next graphic.
-	bne :+
-	inc z80_d
-:
-	ldy #0
-	lda (z80_de),y 		; second bit of data.
+	inx
+ddline_spraddr2:
+	lda $ffff,x 		; second bit of data.
 
 ; _BEEB screen arrangement
 	ldy #8
 	eor (scraddr),y 	; XOR with what's there.
 	sta (scraddr),y 	; bung it in.
-
-	inc z80_e			; next graphic.
-	bne :+
-	inc z80_d
-:
 
 ; _BEEB next row
 
@@ -557,7 +576,7 @@ ddline:
 
 	; within same row can't increment page
 	inc scraddr			; new low byte of address.
-	jmp ddline2
+	bne ddline2
 
 :
 	clc
@@ -572,15 +591,19 @@ ddline:
 
 ddline2:
 
-	ldy #0
-	lda (z80_dep),y 		; graphic data.
+	dex
+ddline_spraddr3:
+	lda $ffff,x			; graphic data.
+;	lda (z80_dep),y 	; graphic data.
+	sta sprtmp
 	and z80_cp 			; mask away what's not needed.
 
 ; _BEEB screen arrangement
+	ldy #0
 	eor (z80_hlp),y 	; XOR with what's there.
 	sta (z80_hlp),y 	; bung it in.
 
-	lda (z80_dep),y 		; fetch data.
+	lda sprtmp 			; fetch data.
 	and z80_bp 			; mask awayh unwanted
 
 ; _BEEB screen arrangement
@@ -588,22 +611,16 @@ ddline2:
 	eor (z80_hlp),y 	; XOR with what's there.
 	sta (z80_hlp),y 	; bung it in.
 
-	inc z80_ep			; next graphic.
-	bne :+
-	inc z80_dp
-:
-	ldy #0
-	lda (z80_dep),y 		; second bit of data.
+	inx
+ddline_spraddr4:
+	lda $ffff,x 		; second bit of data.
 
 ; _BEEB screen arrangement
 	ldy #8
 	eor (z80_hlp),y 	; XOR with what's there.
 	sta (z80_hlp),y 	; bung it in.
 
-	inc z80_ep			; next graphic.
-	bne :+
-	inc z80_dp
-:
+	inx
 
 ; _BEEB screen arrangement
 
