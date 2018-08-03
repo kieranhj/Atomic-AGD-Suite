@@ -458,13 +458,12 @@ dbar:
 	lda z80_h		
 	sta z80_d		; store screen address high byte.
 dbar1:
-	ldx #7			; pixel height in b.
+	ldy #7			; pixel height in b.
 dbar0:
-	ldy scrtab,x
 	lda (scraddr),y		; get screen byte.
 	eor #255		; reverse all bits.
 	sta (scraddr),y		; write back to screen.
-	dex			; next line down.
+	dey			; next line down.
 	bpl dbar0		; draw rest of character.
 
 	clc
@@ -2757,8 +2756,6 @@ pradd:
 ;  A	= tile number
 ;----------------------------------------------
 
-colpatt:	.byte 0
-
 pattr:
 	sta z80_b		; store cell in b register for now.
 	tax
@@ -2795,18 +2792,12 @@ panp:
 	adc #>chgfx
 	sta tileaddr+1
 	jsr gprad 		; get screen address.
-	ldx #7			; number of pixel rows to write.
+	ldy #7			; number of pixel rows to write.
 panp0:
-	ldy #0
 	lda (tileaddr),y 	; get image byte.
 	eor #TxtInvert		; Invert
-	ldy scrtab,x
 	sta (scraddr),y 	; copy to screen.
-	inc tileaddr 		; next image byte.
-	bne :+
-	inc tileaddr+1
-:
-	dex	 		; repeat for 8 pixel rows.
+	dey	 		; repeat for 8 pixel rows.
 	bpl panp0
 	inc dispx 		; move along one.
 	inc charx
@@ -3321,18 +3312,12 @@ gtblk:
 	adc #>chgfx
 	sta tileaddr+1
 	jsr gprad 		; get screen address.
-	ldx #7			; number of pixel rows to write.
+	ldy #7			; number of pixel rows to write.
 gtblk0:
-	ldy #0
 	lda (tileaddr),y 	; get image byte.
-	ldy scrtab,x
 	eor (scraddr),y 	; XOR tile on screen
 	sta (scraddr),y 	; copy to screen.
-	inc tileaddr 		; next image byte.
-	bne :+
-	inc tileaddr+1
-:
-	dex	 		; repeat for 8 pixel rows.
+	dey	 		; repeat for 8 pixel rows.
 	bpl gtblk0
 	rts
 
@@ -3540,13 +3525,14 @@ jump:
 	rts
 
 ; Jump table.
-
+.align 32
 jtab:
 	.byte 248,250,252
 	.byte 254,254,255
 	.byte 255,255,0,0
 	.byte 0,1,1,1,2,2
 	.byte 4,6,8,8,8,99
+.align 1
 
 ;------------------------------------------------
 ; Random numbers code.
@@ -5102,11 +5088,10 @@ clw3:
 clw2:
 	jsr gprad 			; get print address.
 	lda #0				; zero byte to write.
-	ldx #7				; pixel height of each cell.
+	ldy #7				; pixel height of each cell.
 clw1:
-	ldy scrtab,x
-	sta (scraddr),y 			; copy to screen.
-	dex				; next screen row down.
+	sta (scraddr),y 	; copy to screen.
+	dey					; next screen row down.
 	bpl clw1
 
 	inc dispx			; next column.
