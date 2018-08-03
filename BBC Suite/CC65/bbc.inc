@@ -539,30 +539,33 @@ ddline:
 
 ; NEW SPRITE
 
+; first screen byte
+
 ddline_spraddr1:
 	lda $ffff,x 		; graphic data.
 ;	lda (z80_de),y
 	sta sprtmp
 	and z80_c 			; mask away what's not needed.
 
-; _BEEB screen arrangement
 	ldy #0
 	eor (scraddr),y 	; XOR with what's there.
 	sta (scraddr),y 	; bung it in.
 
+; last screen byte
+
 	lda sprtmp			; fetch data.
 	and z80_b 			; mask away unwanted
 
-; _BEEB screen arrangement
 	ldy #16
 	eor (scraddr),y 	; XOR with what's there.
 	sta (scraddr),y 	; bung it in.
+
+; middle screen byte
 
 	inx
 ddline_spraddr2:
 	lda $ffff,x 		; second bit of data.
 
-; _BEEB screen arrangement
 	ldy #8
 	eor (scraddr),y 	; XOR with what's there.
 	sta (scraddr),y 	; bung it in.
@@ -591,40 +594,48 @@ ddline_spraddr2:
 
 ddline2:
 
+; still first row but different data!
+
 	dex
+
+; first screen byte
+
 ddline_spraddr3:
 	lda $ffff,x			; graphic data.
 ;	lda (z80_dep),y 	; graphic data.
 	sta sprtmp
 	and z80_cp 			; mask away what's not needed.
 
-; _BEEB screen arrangement
 	ldy #0
 	eor (z80_hlp),y 	; XOR with what's there.
 	sta (z80_hlp),y 	; bung it in.
 
-	lda sprtmp 			; fetch data.
-	and z80_bp 			; mask awayh unwanted
+; last screen byte
 
-; _BEEB screen arrangement
+	lda sprtmp 			; fetch data.
+	and z80_bp 			; mask away unwanted
+
 	ldy #16
 	eor (z80_hlp),y 	; XOR with what's there.
 	sta (z80_hlp),y 	; bung it in.
+
+; middle screen byte
 
 	inx
 ddline_spraddr4:
 	lda $ffff,x 		; second bit of data.
 
-; _BEEB screen arrangement
 	ldy #8
 	eor (z80_hlp),y 	; XOR with what's there.
 	sta (z80_hlp),y 	; bung it in.
+
+; next row of sprite data
 
 	inx
 
 ; _BEEB screen arrangement
 
-	lda z80_lp 		; get low byte of address.
+	lda z80_lp 			; get low byte of address.
 	and #7				
 	cmp #7				; is this last line of row?
 	beq :+
@@ -681,3 +692,25 @@ pchar0:
 	bcc pchar0			; repeat.
 	rts
 
+;----------------------------------------------------
+; Shift tables
+;----------------------------------------------------
+
+.if 0
+.align 256
+shift2:
+.repeat 256, i
+	.byte (i >> 2) | (i << 6) & $c0
+.endrep
+
+shift4:
+.repeat 256, i
+	.byte (i >> 4) | ((i << 4) & $f0)
+.endrep
+
+shift6:
+.repeat 256, i
+	.byte (i >> 6) | ((i << 2) & 0xfc)
+.endrep
+.align 1
+.endif

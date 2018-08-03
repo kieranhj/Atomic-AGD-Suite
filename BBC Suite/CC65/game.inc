@@ -1,1 +1,1 @@
-.include "test.inc" 
+.include "testspeed.inc" 
