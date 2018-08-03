@@ -458,14 +458,14 @@ dbar:
 	lda z80_h		
 	sta z80_d		; store screen address high byte.
 dbar1:
-	ldx #7			; pixel height in b.
+	ldy #0
 dbar0:
-	ldy scrtab,x
 	lda (scraddr),y		; get screen byte.
 	eor #255		; reverse all bits.
 	sta (scraddr),y		; write back to screen.
-	dex			; next line down.
-	bpl dbar0		; draw rest of character.
+	iny			; next line down.
+	cpy #8
+	bcc dbar0		; draw rest of character.
 
 	clc
 	lda scraddr		; one char right.
@@ -2795,19 +2795,14 @@ panp:
 	adc #>chgfx
 	sta tileaddr+1
 	jsr gprad 		; get screen address.
-	ldx #7			; number of pixel rows to write.
-panp0:
 	ldy #0
+panp0:
 	lda (tileaddr),y 	; get image byte.
 	eor #TxtInvert		; Invert
-	ldy scrtab,x
 	sta (scraddr),y 	; copy to screen.
-	inc tileaddr 		; next image byte.
-	bne :+
-	inc tileaddr+1
-:
-	dex	 		; repeat for 8 pixel rows.
-	bpl panp0
+	iny
+	cpy #8
+	bcc panp0
 	inc dispx 		; move along one.
 	inc charx
 	rts
@@ -3283,8 +3278,8 @@ gtblk:
 	ldy #0
 	lda (bufaddr),y
 	sta z80_a
-        lda #0
-        sta (bufaddr),y		; make it empty now.
+    lda #0
+    sta (bufaddr),y		; make it empty now.
        
 	lda bufaddr		; set dispx
 	and #31
@@ -3321,19 +3316,15 @@ gtblk:
 	adc #>chgfx
 	sta tileaddr+1
 	jsr gprad 		; get screen address.
-	ldx #7			; number of pixel rows to write.
-gtblk0:
+
 	ldy #0
+gtblk0:
 	lda (tileaddr),y 	; get image byte.
-	ldy scrtab,x
 	eor (scraddr),y 	; XOR tile on screen
 	sta (scraddr),y 	; copy to screen.
-	inc tileaddr 		; next image byte.
-	bne :+
-	inc tileaddr+1
-:
-	dex	 		; repeat for 8 pixel rows.
-	bpl gtblk0
+	iny
+	cpy #8
+	bcc gtblk0
 	rts
 
 ;--------------------------------------------------------------
@@ -5102,12 +5093,12 @@ clw3:
 clw2:
 	jsr gprad 			; get print address.
 	lda #0				; zero byte to write.
-	ldx #7				; pixel height of each cell.
+	ldy #0
 clw1:
-	ldy scrtab,x
-	sta (scraddr),y 			; copy to screen.
-	dex				; next screen row down.
-	bpl clw1
+	sta (scraddr),y 	; copy to screen.
+	iny					; next screen row down.
+	cpy #8
+	bcc clw1
 
 	inc dispx			; next column.
 	dec rcol			; one less to do.

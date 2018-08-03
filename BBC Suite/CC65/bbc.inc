@@ -651,24 +651,16 @@ pchar:
 	lda fntaddr+1
 	adc FontPtr+1
 	sta fntaddr+1		; add displacement.
+
 pchark:
 	jsr gprad		; get screen address.
-	ldx #7			; lines to write.
-pchar0:
 	ldy #0
+
+pchar0:
 	lda (fntaddr),y 	; get image byte.
-	ldy scrtab,x		; Get rowoffset
-
 	eor #TxtInvert		; Invert
-
 	sta (scraddr),y 	; copy to screen.
-	inc fntaddr		; next image byte.
-	bne :+
-	inc fntaddr+1
-:
-	dex			; next screen row down.
-	bpl pchar0		; repeat.
+	iny
+	cpy #8
+	bcc pchar0		; repeat.
 	rts
-
-scrtab:		.byte $07,$06,$05,$04,$03,$02,$01,$00
-;scrtab:	.byte $e0,$c0,$a0,$80,$60,$40,$20,$00
