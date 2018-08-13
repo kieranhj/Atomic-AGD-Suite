@@ -170,3 +170,18 @@ sprite optimisation lda sprtab+N,y saves 471 bytes (but also 3 cycles...)
 
 Rather than vsync twice just count retraces and sync to 25Hz if running too fast (otherwise don't sync)
 At the moment one frame has a large amount of script / logic processing and the other one doesn't so is wasted
+
+Spectrum Attribute Bytes
+
+(msb) Flash Bright PaperG PaperR PaperB InkG InkR InkB (lsb)
+
+So Spectrum colours:
+0 = black
+1 = blue
+2 = red
+3 = magenta
+4 = green
+5 = cyan
+6 = yellow
+7 = white
+Which is in brightness order - makes a lot of sense!
