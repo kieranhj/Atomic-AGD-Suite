@@ -696,51 +696,35 @@ clsloop:
 ;----------------------------------------------------------------------
 
 fdchk:
-	ldy #0
-	lda (z80_hl),y	 	; fetch cell.
 	cmp #FODDER 		; is it fodder?
 	beq :+
 	rts 			; no.
 :
-	lda #0
+	lda #0			; wipe fodder in MAP
 	ldy #0
-	sta (z80_hl),y 		; rewrite block type.
+	sta (bufaddr),y 	; rewrite block type.
 
-	lda z80_h		; store pointer to block.
+	lda dispx		; x=x/8
 	pha
-	lda z80_l
+	lsr a
+	lsr a
+	lsr a
+	sta dispx
+
+	lda dispy		; y=y/8
 	pha
-
-	sec			; set carry flag for subtraction.
-	lda z80_l 		; find simple displacement for block.
-	sbc #<MAP
-	sta z80_l
-	lda z80_h
-	sbc #>MAP
-	sta z80_h
-
-	lda z80_l		; low byte is y coordinate.
-	and #31 		; column position 0 - 31.
-	sta dispx		; set up x position.
-
-	asl z80_l		; multiply displacement by 8.
-	rol z80_h
-	asl z80_l
-	rol z80_h
-	asl z80_l
-	rol z80_h
-
-	lda z80_h		; x coordinate now in h.
-	sta dispy		; set the display coordinate.
+	lsr a
+	lsr a
+	lsr a
+	sta dispy
 
 	lda #0 			; block to write.
 	jsr pattr 		; write block.
 
-	pla 			; restore block pointer.
-	sta z80_l
 	pla
-	sta z80_h
-
+	sta dispy
+	pla
+	sta dispx
 	rts
 
 ;----------------------------------------------------
@@ -1698,6 +1682,14 @@ mapst:
 	sta roomtb		; set up position in table, if there is one.
 
 inipbl:
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.if aflag
+	lda #<eop		; reset blockpointer
+	sta pbptr
+	lda #>eop
+	sta pbptr+1
+.endif
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	jsr initsc 		; set up first screen.
 
 	lda #<ssprit 		; default to spare sprite in table.
@@ -1738,6 +1730,11 @@ rpblc0:
 .if pflag
 	jsr inishr 		; initialise particle engine.
 .endif
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.if aflag
+	jsr rbloc		; draw blocks for this screen
+.endif
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	jsr shwob		; draw objects.
 
 	lda #<sprtab 		; address of sprite table, even sprites.
@@ -1823,6 +1820,52 @@ DEBUG_PAL PAL_black
 	inc frmno
 	inc clock
 	jmp mloop		; switched to a jmp mloop during test mode.
+
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+;----------------------------------------------------------
+; Read blocks from list and update screen accordingly.
+;----------------------------------------------------------
+
+.if aflag
+rbloc:
+	lda #<eop		; reset temp blockpointer
+	sta tmp
+	lda #>eop
+	sta tmp+1
+
+rbloc2:
+	lda tmp			; check for last block
+	cmp pbptr
+	bne rbloc1
+	lda tmp+1
+	cmp pbptr+1
+	bne rbloc1
+	rts
+rbloc1:
+	ldy #0
+	lda (tmp),y		; check if block for this scno
+	cmp scno
+	bne rbloc0		; if not, skip
+	iny
+	lda (tmp),y		; get y
+	sta dispy
+	iny
+	lda (tmp),y		; get x
+	sta dispx
+	iny
+	lda (tmp),y		; get blocknr
+	jsr pattr2		; draw block
+rbloc0:
+	clc			; point to next block
+	lda tmp
+	adc #4
+	sta tmp
+	bcc rbloc2
+	inc tmp+1
+	jmp rbloc2
+.endif
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ;----------------------------------------------------------
 ; New level
@@ -2757,6 +2800,15 @@ pradd:
 ;----------------------------------------------
 
 pattr:
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.if aflag
+	pha
+	jsr wbloc		; save blockinfo
+	pla
+.endif
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+pattr2:
 	sta z80_b		; store cell in b register for now.
 	tax
 	lda bprop,x 		; block properties.
@@ -2802,6 +2854,35 @@ panp0:
 	inc dispx 		; move along one.
 	inc charx
 	rts
+
+;----------------------------------------------
+; Write block
+;----------------------------------------------
+
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.if aflag
+wbloc:
+	ldy #3
+	sta (pbptr),y		; store block number
+	dey
+	lda dispx
+	sta (pbptr),y		; write x position of block.
+	dey
+	lda dispy
+	sta (pbptr),y		; write y position of block.
+	dey
+	lda scno
+	sta (pbptr),y		; write screen.
+	clc			; point to next free location
+	lda pbptr
+	adc #4
+	sta pbptr
+	bcc :+
+	inc pbptr+1
+:
+	rts
+.endif
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ;----------------------------------------------
 ; Print character pixels, no more.
@@ -2891,7 +2972,7 @@ droom0:
 	sta rcol		; set column counter
 droom1:
 	jsr flbyt 		; decompress next byte on the fly.
-	jsr pattr 		; show attributes and block.
+	jsr pattr2 		; show attributes and block.
 	dec rcol		; one less column.
 	bne droom1 		; repeat for entire line.
 	inc dispy		; move down one line.
@@ -2942,11 +3023,11 @@ flbyt1:
 ;------------------------------------------
 
 laddd:
-	ldy #9
+	ldy #var_newX
 	lda (z80_ix),y		; x coordinate.
 	sta dispx
 
-	ldy #8
+	ldy #var_newY
 	lda (z80_ix),y		; y coordinate.
 	and #254		; make it even.
 	sta (z80_ix),y 		; reset it.
@@ -2967,11 +3048,11 @@ numsp5:
 ;------------------------------------------
 
 laddu:
-	ldy #9
+	ldy #var_newX
 	lda (z80_ix),y		; x coordinate.
 	sta dispx
 
-	ldy #8
+	ldy #var_newY
 	lda (z80_ix),y		; y coordinate.
 	and #254 		; make it even.
 	sta (z80_ix),y		; reset it.
@@ -3016,10 +3097,10 @@ laddv:
 ;---------------------------------------------------------
 
 cangu:
-	ldy #9
+	ldy #var_newX
 	lda (z80_ix),y		; x coordinate.
 	sta dispx
-	ldy #8
+	ldy #var_newY
 	lda (z80_ix),y 		; y coordinate.
 	sec
 	sbc #2
@@ -3060,10 +3141,10 @@ cangu:
 ;---------------------------------------------------------
 
 cangd:
-	ldy #9
+	ldy #var_newX
 	lda (z80_ix),y 		; x coordinate.
 	sta dispx
-	ldy #8
+	ldy #var_newY
 	lda (z80_ix),y		; y coordinate.
 numsp3:
 	clc
@@ -3105,10 +3186,10 @@ numsp3:
 ;---------------------------------------------------------
 
 cangl:
-	ldy #8
+	ldy #var_newY
 	lda (z80_ix),y 		; y coordinate.
 	sta dispy
-	ldy #9
+	ldy #var_newX
 	lda (z80_ix),y 		; x coordinate.
 	sec
 	sbc #2			; look left 2 pixels.
@@ -3126,10 +3207,10 @@ cangl:
 ;---------------------------------------------------------
 
 cangr:
-	ldy #8
+	ldy #var_newY
 	lda (z80_ix),y		; y coordinate.
 	sta dispy
-	ldy #9
+	ldy #var_newX
 	lda (z80_ix),y		; x coordinate.
 	clc
 	adc #16			; look right 16 pixels.
@@ -3333,7 +3414,7 @@ gtblk0:
 ;--------------------------------------------------------------
 
 tded:
-	ldy #8
+	ldy #var_newY
 	lda (z80_ix),y 		; y coordinate.
 	sta dispy
 	iny
@@ -3464,10 +3545,12 @@ tded1:
 ;---------------------------------------------------
 
 tstbl:
-	lda dispy 		; fetch y coord.
-	lsr a			; bufaddr = y/8
+	lda dispy 			; fetch y coord.
+	lsr a				; bufaddr = y/8
 	lsr a
 	lsr a
+	sta chary
+
 	sta bufaddr
 	lda #0
 	sta bufaddr+1
@@ -3483,14 +3566,15 @@ tstbl:
 	asl bufaddr
 	rol bufaddr+1
 
-	lda dispx		; x/8
+	lda dispx			; x/8
 	lsr a
 	lsr a
 	lsr a
+	sta charx
 
-	clc			; bufaddr = MAP + x/8 + y/8*32
+	clc					; bufaddr = MAP + x/8 + y/8*32
 	adc bufaddr
-	adc #<MAP
+;	adc #<MAP			; only works because <MAP == $0
 	sta bufaddr
 	lda bufaddr+1
 	adc #>MAP
@@ -3525,14 +3609,13 @@ jump:
 	rts
 
 ; Jump table.
-.align 32
-jtab:
-	.byte 248,250,252
-	.byte 254,254,255
-	.byte 255,255,0,0
-	.byte 0,1,1,1,2,2
-	.byte 4,6,8,8,8,99
-.align 1
+
+;jtab:
+;	.byte 248,250,252
+;	.byte 254,254,255
+;	.byte 255,255,0,0
+;	.byte 0,1,1,1,2,2
+;	.byte 4,6,8,8,8,99
 
 ;------------------------------------------------
 ; Random numbers code.
@@ -4612,12 +4695,17 @@ grav:
 	bne grav0			; no, continue.
 grav2:
 	dec z80_l			; go back to previous value.
-	; 6502 WARNING - not updating 16-bit pointer properly!
+	cmp #$ff
+	bne :+
+	dec z80_h
+:
 	lda (z80_hl),y			; fetch that from table.
 	sta z80_a
 grav0:
 	inc z80_l			; point to next table entry.
-	; 6502 WARNING - not updating 16-bit pointer properly!
+	bne :+
+	inc z80_h
+:
 	lda z80_l
 	ldy #var_jumpLo
 	sta (z80_ix),y			; store new pointer low.
@@ -4637,7 +4725,7 @@ gravd:
 gravd0:
 	jsr cangd			; can we go down?
 	bne gravst			; can't move down, so stop.
-	ldy #8
+	ldy #var_newY
 	lda (z80_ix),y			; adjust new x coord.
 	clc
 	adc #1
@@ -4653,7 +4741,7 @@ gravu:
 gravu0:
 	jsr cangu			; can we go up?
 	bne ifalls			; can't move up, go down next.
-	ldy #8
+	ldy #var_newY
 	lda (z80_ix),y
 	sec
 	sbc #1
@@ -4699,11 +4787,11 @@ ifall:
 	beq :+
 	rts				; if either is set, we're already in the air.
 :
-	ldy #9
+	ldy #var_newX
 	lda (z80_ix),y			; y coordinate.
 	sta dispx
 numsp7:
-	ldy #8
+	ldy #var_newY
 	lda (z80_ix),y			; look x coordinate.
 	clc
 	adc #16				; add 16 pixels.
@@ -5298,6 +5386,126 @@ iscrl0:
 	sta txtbit
 
 	jmp scrly4
+.endif
+
+;------------------------------------------------------------------
+; Dig routine, conditional assembly depending on dflag
+;------------------------------------------------------------------
+.if dflag
+dig:
+	and #3
+	beq digr		; dig right
+	cmp #1
+	beq digl		; dig left
+	cmp #2
+	beq digd		; dig down
+
+; Dig up.
+
+digu:				; dig up
+	ldy #var_newY
+	lda (z80_ix),y
+	sec
+	sbc #2
+	sta dispy		; set y
+
+	iny
+	lda (z80_ix),y
+	sta dispx		; set x
+	jmp digv
+
+; Dig down.
+
+digd:
+	ldy #var_newX
+	lda (z80_ix),y
+	sta dispx		; set x
+
+	dey
+	clc
+	lda (z80_ix),y
+	adc #16
+	sta dispy		; set y
+	jmp digv
+
+; Dig left.
+
+digl:
+	ldy #var_newY
+	lda (z80_ix),y
+	sta dispy		; set y
+
+	iny
+	lda (z80_ix),y
+	sec
+	sbc #2			; x=x-2
+	sta dispx		; set x
+	jmp digh
+
+; Dig right.
+
+digr:
+	ldy #var_newY
+	lda (z80_ix),y
+	sta dispy		; set y
+
+	iny
+	lda (z80_ix),y
+	clc
+	adc #16
+	sta dispx		; set x+16
+	jmp digh
+
+; Vertical digging
+
+digv:
+	jsr tstbl		; check blocktype in MAP
+	jsr fdchk		; test if FODDER
+
+	clc
+	lda dispx		; look 1 cell down
+	adc #8
+	sta dispx
+	jsr tstbl		; check blocktype in MAP
+	jsr fdchk
+	lda dispx
+	and #7
+	bne :+
+	rts
+:
+	clc
+	lda dispx		; look 1 cell down
+	adc #8
+	sta dispx
+	jsr tstbl		; check blocktype in MAP
+	jmp fdchk
+
+; Horizontal digging
+
+digh:
+	jsr tstbl		; check blocktype in MAP
+	jsr fdchk		; test if FODDER
+
+	clc
+	lda dispy		; look 1 cell down
+	adc #8
+	sta dispy
+	jsr tstbl		; check blocktype in MAP
+	jsr fdchk
+	lda dispy
+	and #7
+	bne :+
+	rts
+:
+	clc
+	lda dispy		; look 1 cell down
+	adc #8
+	sta dispy
+	jsr tstbl		; check blocktype in MAP
+	jmp fdchk
+
+digcnt:	.byte 0
+
 .endif
 
 ;------------------------------------------------------------------

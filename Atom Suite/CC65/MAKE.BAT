@@ -6,24 +6,48 @@ rem Set flags
  if "%3"=="m" set mf=1
  if "%4"=="m" set mf=1
  if "%5"=="m" set mf=1
+ if "%6"=="m" set mf=1
+ if "%7"=="m" set mf=1
 
  set pf=0
  if "%2"=="p" set pf=1
  if "%3"=="p" set pf=1
  if "%4"=="p" set pf=1
  if "%5"=="p" set pf=1
+ if "%6"=="p" set pf=1
+ if "%7"=="p" set pf=1
 
  set sf=0
  if "%2"=="s" set sf=1
  if "%3"=="s" set sf=1
  if "%4"=="s" set sf=1
  if "%5"=="s" set sf=1
+ if "%6"=="s" set sf=1
+ if "%7"=="s" set sf=1
 
  set if=0
  if "%2"=="i" set if=1
  if "%3"=="i" set if=1
  if "%4"=="i" set if=1
  if "%5"=="i" set if=1
+ if "%6"=="i" set if=1
+ if "%7"=="i" set if=1
+
+ set df=0
+ if "%2"=="d" set df=1
+ if "%3"=="d" set df=1
+ if "%4"=="d" set df=1
+ if "%5"=="d" set df=1
+ if "%6"=="d" set df=1
+ if "%7"=="d" set df=1
+
+ set af=0
+ if "%2"=="a" set af=1
+ if "%3"=="a" set af=1
+ if "%4"=="a" set af=1
+ if "%5"=="a" set af=1
+ if "%6"=="a" set af=1
+ if "%7"=="a" set af=1
 
 rem Build asm file
  echo.
@@ -37,7 +61,9 @@ rem Conditional assemble game
  if %pf%==1 echo - Particle code loaded ...
  if %sf%==1 echo - Scrollytext code loaded ...
  if %if%==1 echo - Invertmode activated ...
- ca65 -l -o %1.o game.asm -D mflag=%mf% -D pflag=%pf% -D sflag=%sf% -D iflag=%if%
+ if %df%==1 echo - Diggingmode activated ...
+ if %af%==1 echo - Adventuremode activated ...
+ ca65 -l -o %1.o game.asm -D mflag=%mf% -D pflag=%pf% -D sflag=%sf% -D iflag=%if% -D dflag=%df% -D aflag=%af%
  if not "%errorlevel%" == "0" goto failed
 
 rem Linking
@@ -62,6 +88,9 @@ echo Error %errorlevel%
  echo m = Add menu/inventory code
  echo p = Add particle code
  echo s = Add scrollytext code
+ echo i = Invertmode
+ echo d = Diggingmode
+ echo a = Adventuremode
  echo.
 
 
