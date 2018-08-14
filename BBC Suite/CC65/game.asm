@@ -130,6 +130,13 @@ relocate:
     ldy #$00
     jsr OSBYTE					; *FX &8C,0,0 - *TAPE 1200
 
+	sei
+	lda #$7f
+	sta $fe4e					; disable all interupts
+	lda #$82
+	sta $fe4e					; enable vsync interupt only
+	cli
+
 ; Other one off initialisation could happen here...
 
 ; Relocate all code down to &E00

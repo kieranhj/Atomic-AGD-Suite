@@ -1,1 +1,1 @@
-.include "testdiv.inc" 
+.include "testdig.inc" 

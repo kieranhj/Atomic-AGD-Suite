@@ -13,7 +13,7 @@ rem Assemble file
  call make %1 %2 %3 %4 %5
 
  copy %1.bin ..\Output
-rem del %1.inc
+ del %1.inc
  del %1.bin
  cd ..
  goto end
