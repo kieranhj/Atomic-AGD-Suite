@@ -172,7 +172,7 @@ Rather than vsync twice just count retraces and sync to 25Hz if running too fast
 At the moment one frame has a large amount of script / logic processing and the other one doesn't so is wasted
 
 Spectrum Attribute Bytes
-
+~~~
 (msb) Flash Bright PaperG PaperR PaperB InkG InkR InkB (lsb)
 
 So Spectrum colours:
@@ -185,3 +185,62 @@ So Spectrum colours:
 6 = yellow
 7 = white
 Which is in brightness order - makes a lot of sense!
+
+Mapping Spectrum Attributes to MODE 1
+~~~
+
+0 = black -> colour 0 solid
+    0000
+    0000
+
+1 = blue -> colour 1 solid
+    1111
+    1111
+
+2 = red -> colour 2 solid
+    2222
+    2222
+
+3 = magenta -> colour 1 & 2 stipple
+    1212
+    2121
+
+4 = green -> colour 1,2 & 3 stripple
+    3212
+    2131
+
+5 = cyan -> colour 1 & 3 stipple
+    3131
+    1313
+
+6 = yellow -> colour 2 & 3 stipple
+    2323
+    3232
+
+7 = white -> colour 3 solid
+    3333
+    3333
+
+Then set palette for colours 0-3 on a per-screen basis
+Assume colours 0-3 are increasing brightness
+E.g. black,blue,red,green or black,blue,magenta,yellow
+Different combos should give fairly pleasing results
+Can pre-bake the MODE1 screen byte values for blocks in compiler
+1x8 -> 2x8 according to attribute value in block
+
+For sprites gets a bit more convoluted
+Map 4 white pixels at 1bpp to 4 white pixels at 2bpp
+abcd -> abcd abcd
+Then mask this against colour byte for ink on odd/even row
+
+ldy sprite_data,X
+lda shift_table,Y
+; this is 1bpp
+
+; convert to 2bpp
+and #$f         ; mask 4 bits for 4 pixels
+tay
+lda map_1bpp_to_2bpp_white,y        ; only white pixels
+; this is mask against our colour
+and sprite_ink_colour_byte          ; alternate byte odd/even rows for stipple
+
