@@ -102,6 +102,10 @@ sprtmp:     .res 1
 sprtmp2:    .res 1
 sprshft:    .res 1
 
+spriteink:  .res 1
+colour_byte:.res 1
+colour_xor: .res 1
+
 .if mflag
 TmpAddr:	.res 2
 bwid:	    .res 1     ; box/menu width.

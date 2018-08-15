@@ -268,7 +268,7 @@ crtcloop:
 	bpl crtcloop
 
     ; Set ULA
-    lda #$88            ; MODE 4
+    lda #$D8            ; MODE 4=$88 MODE 1=$D8
     sta $248            ; Tell the OS or it will mess with ULA settings at vsync
     sta $FE20
 
@@ -284,10 +284,10 @@ palloop:
 	rts
 
 crtc_regs_high:
-	.byte 63				; R0  horizontal total
-	.byte 32				; R1  horizontal displayed
-	.byte 49				; R2  horizontal position
-	.byte $24				; R3  sync width 40 = &28
+	.byte 127				; R0  horizontal total
+	.byte 64				; R1  horizontal displayed
+	.byte 98				; R2  horizontal position
+	.byte $28				; R3  sync width 40 = &28
 	.byte 38				; R4  vertical total
 	.byte 0					; R5  vertical total adjust
 	.byte 24				; R6  vertical displayed
@@ -302,18 +302,18 @@ crtc_regs_high:
 ula_pal:
 	.byte $00 + PAL_black
 	.byte $10 + PAL_black
-	.byte $20 + PAL_black
-	.byte $30 + PAL_black
+	.byte $20 + PAL_blue
+	.byte $30 + PAL_blue
 	.byte $40 + PAL_black
 	.byte $50 + PAL_black
-	.byte $60 + PAL_black
-	.byte $70 + PAL_black
-	.byte $80 + PAL_white
-	.byte $90 + PAL_white
+	.byte $60 + PAL_blue
+	.byte $70 + PAL_blue
+	.byte $80 + PAL_red
+	.byte $90 + PAL_red
 	.byte $a0 + PAL_white
 	.byte $b0 + PAL_white
-	.byte $c0 + PAL_white
-	.byte $d0 + PAL_white
+	.byte $c0 + PAL_red
+	.byte $d0 + PAL_red
 	.byte $e0 + PAL_white
 	.byte $f0 + PAL_white
 
@@ -336,7 +336,7 @@ sprite:
 	sta sprit1+2
 	sta sprit2+2
 
-	ldx #0			; pixel height.
+	ldx #0				; pixel height.
 sprit1:
 	lda objdta,x		; fetch first byte.
 	sta spr
@@ -347,30 +347,87 @@ sprit2:
 
 	lda #0
 	sta spr+2
-	jsr sprit7		; shift sprite
+	jsr sprit7			; shift sprite
 
-	lda spr			; fetch graphic.
-	ldy #0			; _BEEB
+	lda spr				; fetch graphic.
+	lsr a				; top nibble
+	lsr a
+	lsr a
+	lsr a
+	tay
+	lda pixels_to_mode1,y
+	and colour_byte
+
+	ldy #0				; _BEEB
 	eor (scraddr),y		; merge with screen image.
 	sta (scraddr),y		; write to screen.
 
-	lda spr+1		; fetch graphic.
-	ldy #8			; _BEEB
+	lda spr				; fetch graphic.
+	and #$0f
+	tay
+	lda pixels_to_mode1,y
+	and colour_byte
+
+	ldy #8				; _BEEB
 	eor (scraddr),y		; merge with screen image.
 	sta (scraddr),y		; write to screen.
 
-	lda spr+2		; fetch graphic.
-	ldy #16			; _BEEB
+	lda spr+1			; fetch graphic.
+	lsr a				; top nibble
+	lsr a
+	lsr a
+	lsr a
+	tay
+	lda pixels_to_mode1,y
+	and colour_byte
+
+	ldy #16				; _BEEB
+	eor (scraddr),y		; merge with screen image.
+	sta (scraddr),y		; write to screen.
+
+	lda spr+1			; fetch graphic.
+	and #$0f
+	tay
+	lda pixels_to_mode1,y
+	and colour_byte
+	ldy #24				; _BEEB
+	eor (scraddr),y		; merge with screen image.
+	sta (scraddr),y		; write to screen.
+
+	lda spr+2			; fetch graphic.
+	lsr a				; top nibble
+	lsr a
+	lsr a
+	lsr a
+	tay
+	lda pixels_to_mode1,y
+	and colour_byte
+
+	ldy #32				; _BEEB
+	eor (scraddr),y		; merge with screen image.
+	sta (scraddr),y		; write to screen.
+
+	lda spr+2			; fetch graphic.
+	and #$0f
+	tay
+	lda pixels_to_mode1,y
+	and colour_byte
+	ldy #40				; _BEEB
 	eor (scraddr),y		; merge with screen image.
 	sta (scraddr),y		; write to screen.
 
 	jsr nline
 
-	inx			; next source byte.
-	cpx #32
-	bne sprit1		; repeat
+	lda colour_byte
+	eor colour_xor
+	sta colour_byte		; toggle colour mask each line
 
-	ldx xtmp		; retreive X-reg
+	inx					; next source byte.
+	cpx #32
+	bcs :+				; repeat
+	jmp sprit1
+:
+	ldx xtmp			; retreive X-reg
 	rts
 
 ;------------------------------------------------------------------
@@ -379,13 +436,20 @@ sprit2:
 
 scadd:
 	ldx dispy
-	lda dispx
+	
+	lda #0
+	sta scraddr+1
+
+	lda dispx		; x*2
 	and #$f8
+	asl a
+	rol scraddr+1
+
 	clc
 	adc SCADTB_lb,x
 	sta scraddr
 	lda SCADTB_hb,x
-	adc #0
+	adc scraddr+1
 	sta scraddr+1
 	rts
 
@@ -504,7 +568,25 @@ dline_shift1:
 	sta sprtmp
 	and z80_c 			; mask away what's not needed.
 
+	lsr a				; top nibble
+	lsr a
+	lsr a
+	lsr a
+	tay
+	lda pixels_to_mode1,y
+	and colour_byte
+
 	ldy #0
+	eor (scraddr),y 	; XOR with what's there.
+	sta (scraddr),y 	; bung it in.
+
+	lda sprtmp			; fetch data.
+	and z80_c 			; mask away what's not needed.
+	and #$f				; bottom nibble
+	tay
+	lda pixels_to_mode1,y
+	and colour_byte
+	ldy #8
 	eor (scraddr),y 	; XOR with what's there.
 	sta (scraddr),y 	; bung it in.
 
@@ -524,8 +606,26 @@ dline_shift2:
 	sta sprtmp2
 	and z80_c 			; mask away what's not needed.
 	ora sprtmp
+	sta sprtmp
 
-	ldy #8
+	lsr a				; top nibble
+	lsr a
+	lsr a
+	lsr a
+	tay
+	lda pixels_to_mode1,y
+	and colour_byte
+
+	ldy #16
+	eor (scraddr),y 	; XOR with what's there.
+	sta (scraddr),y 	; bung it in.
+
+	lda sprtmp			; fetch data.
+	and #$f				; bottom nibble
+	tay
+	lda pixels_to_mode1,y
+	and colour_byte
+	ldy #24
 	eor (scraddr),y 	; XOR with what's there.
 	sta (scraddr),y 	; bung it in.
 
@@ -534,9 +634,31 @@ dline_shift2:
 	lda sprtmp2
 	and z80_b 			; mask away unwanted
 
-	ldy #16
+	lsr a				; top nibble
+	lsr a
+	lsr a
+	lsr a
+	tay
+	lda pixels_to_mode1,y
+	and colour_byte
+
+	ldy #32
 	eor (scraddr),y 	; XOR with what's there.
 	sta (scraddr),y 	; bung it in.
+
+	lda sprtmp2
+	and z80_b 			; mask away unwanted
+	and #$f				; bottom nibble
+	tay
+	lda pixels_to_mode1,y
+	and colour_byte
+	ldy #40
+	eor (scraddr),y 	; XOR with what's there.
+	sta (scraddr),y 	; bung it in.
+
+	lda colour_byte
+	eor colour_xor
+	sta colour_byte
 
 	inx
 
@@ -593,7 +715,25 @@ ddline_shift1:
 	sta sprtmp
 	and z80_c 			; mask away what's not needed.
 
+	lsr a				; top nibble
+	lsr a
+	lsr a
+	lsr a
+	tay
+	lda pixels_to_mode1,y
+	and colour_byte
+
 	ldy #0
+	eor (scraddr),y 	; XOR with what's there.
+	sta (scraddr),y 	; bung it in.
+
+	lda sprtmp
+	and z80_c 			; mask away what's not needed.
+	and #$f				; bottom nibble
+	tay
+	lda pixels_to_mode1,y
+	and colour_byte
+	ldy #8
 	eor (scraddr),y 	; XOR with what's there.
 	sta (scraddr),y 	; bung it in.
 
@@ -613,8 +753,26 @@ ddline_shift2:
 	sta sprtmp2
 	and z80_c 			; mask away what's not needed.
 	ora sprtmp
+	sta sprtmp
 
-	ldy #8
+	lsr a				; top nibble
+	lsr a
+	lsr a
+	lsr a
+	tay
+	lda pixels_to_mode1,y
+	and colour_byte
+
+	ldy #16
+	eor (scraddr),y 	; XOR with what's there.
+	sta (scraddr),y 	; bung it in.
+
+	lda sprtmp
+	and #$f				; bottom nibble
+	tay
+	lda pixels_to_mode1,y
+	and colour_byte
+	ldy #24
 	eor (scraddr),y 	; XOR with what's there.
 	sta (scraddr),y 	; bung it in.
 
@@ -623,7 +781,25 @@ ddline_shift2:
 	lda sprtmp2
 	and z80_b 			; mask away unwanted
 
-	ldy #16
+	lsr a				; top nibble
+	lsr a
+	lsr a
+	lsr a
+	tay
+	lda pixels_to_mode1,y
+	and colour_byte
+
+	ldy #32
+	eor (scraddr),y 	; XOR with what's there.
+	sta (scraddr),y 	; bung it in.
+
+	lda sprtmp2
+	and z80_b 			; mask away unwanted
+	and #$f				; bottom nibble
+	tay
+	lda pixels_to_mode1,y
+	and colour_byte
+	ldy #40
 	eor (scraddr),y 	; XOR with what's there.
 	sta (scraddr),y 	; bung it in.
 
@@ -664,7 +840,25 @@ ddline_shift3:
 	sta sprtmp
 	and z80_cp 			; mask away what's not needed.
 
+	lsr a				; top nibble
+	lsr a
+	lsr a
+	lsr a
+	tay
+	lda pixels_to_mode1,y
+	and colour_byte
+
 	ldy #0
+	eor (z80_hlp),y 	; XOR with what's there.
+	sta (z80_hlp),y 	; bung it in.
+
+	lda sprtmp
+	and z80_cp 			; mask away what's not needed.
+	and #$f				; bottom nibble
+	tay
+	lda pixels_to_mode1,y
+	and colour_byte
+	ldy #8
 	eor (z80_hlp),y 	; XOR with what's there.
 	sta (z80_hlp),y 	; bung it in.
 
@@ -684,8 +878,26 @@ ddline_shift4:
 	sta sprtmp2
 	and z80_cp 			; mask away what's not needed.
 	ora sprtmp
+	sta sprtmp
 
-	ldy #8
+	lsr a				; top nibble
+	lsr a
+	lsr a
+	lsr a
+	tay
+	lda pixels_to_mode1,y
+	and colour_byte
+
+	ldy #16
+	eor (z80_hlp),y 	; XOR with what's there.
+	sta (z80_hlp),y 	; bung it in.
+
+	lda sprtmp
+	and #$f				; bottom nibble
+	tay
+	lda pixels_to_mode1,y
+	and colour_byte
+	ldy #24
 	eor (z80_hlp),y 	; XOR with what's there.
 	sta (z80_hlp),y 	; bung it in.
 
@@ -694,13 +906,35 @@ ddline_shift4:
 	lda sprtmp2			; fetch data.
 	and z80_bp 			; mask away unwanted
 
-	ldy #16
+	lsr a				; top nibble
+	lsr a
+	lsr a
+	lsr a
+	tay
+	lda pixels_to_mode1,y
+	and colour_byte
+
+	ldy #32
+	eor (z80_hlp),y 	; XOR with what's there.
+	sta (z80_hlp),y 	; bung it in.
+
+	lda sprtmp2			; fetch data.
+	and z80_bp 			; mask away unwanted
+	and #$f				; bottom nibble
+	tay
+	lda pixels_to_mode1,y
+	and colour_byte
+	ldy #40
 	eor (z80_hlp),y 	; XOR with what's there.
 	sta (z80_hlp),y 	; bung it in.
 
 ; next row of sprite data
 
 	inx
+
+	lda colour_byte
+	eor colour_xor
+	sta colour_byte
 
 ; _BEEB screen arrangement
 
@@ -751,15 +985,207 @@ pchar:
 pchark:
 	jsr gprad		; get screen address.
 	ldy #0
+	ldx #0
 
 pchar0:
+	txa
+	tay
 	lda (fntaddr),y 	; get image byte.
 	eor #TxtInvert		; Invert
+	sta tmp
+
+	lsr a
+	lsr a
+	lsr a
+	lsr a
+	tay
+	lda pixels_to_mode1,y
+	ldy #0
 	sta (scraddr),y 	; copy to screen.
-	iny					; next screen row down.
-	cpy #8				; number lines
+
+	lda tmp
+	and #$0f
+	tay
+	lda pixels_to_mode1,y
+	ldy #8
+	sta (scraddr),y 	; copy to screen.
+
+	inc scraddr
+
+	inx					; next screen row down.
+	cpx #8				; number lines
 	bcc pchar0			; repeat.
 	rts
+
+;----------------------------------------------------
+; Get print address.
+;----------------------------------------------------
+
+gprad:
+	tya
+	pha
+
+	lda dispx 		; x coordinate.
+	sta scraddr
+	lda #0
+	sta scraddr+1
+	asl scraddr  	; multiply char by 16
+	rol scraddr+1
+	asl scraddr
+	rol scraddr+1
+	asl scraddr
+	rol scraddr+1
+	asl scraddr
+	rol scraddr+1
+
+	lda dispy		; y coordinate.
+	asl a
+	asl a
+	asl a			; multiply char by 8
+	tay
+
+	clc
+	lda scraddr
+	adc SCADTB_lb,y
+	sta scraddr
+	lda scraddr+1
+	adc SCADTB_hb,y
+	sta scraddr+1
+
+	pla
+	tay
+	rts
+
+;--------------------------------------------------------------
+; Get property buffer address of char at (dispx, dispy) in hl.
+; 
+; Output:
+;  bufaddr = MAP + dispy*32 + dispx
+;--------------------------------------------------------------
+
+pradd:
+	lda dispy 		; y coordinate.
+	sta bufaddr
+	lda #0
+	sta bufaddr+1
+	asl bufaddr  		; multiply char by 32
+	rol bufaddr+1
+	asl bufaddr
+	rol bufaddr+1
+	asl bufaddr
+	rol bufaddr+1
+	asl bufaddr
+	rol bufaddr+1
+	asl bufaddr
+	rol bufaddr+1
+	clc			; add address of MAP graphics.
+	lda bufaddr
+	adc dispx
+	adc #<MAP
+	sta bufaddr
+	lda bufaddr+1
+	adc #>MAP
+	sta bufaddr+1
+	rts
+
+;----------------------------------------------
+; Print attributes, properties and pixels.
+;
+; Input:
+;  A	= tile number
+;----------------------------------------------
+
+pattr:
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.if aflag
+	pha
+	jsr wbloc		; save blockinfo
+	pla
+.endif
+;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+pattr2:
+	sta z80_b		; store cell in b register for now.
+	tax
+	lda bprop,x 		; block properties.
+	sta z80_c
+	cmp #COLECT
+	bne :+
+	lda z80_b
+	sta colpatt
+:
+	jsr pradd 		; get property buffer address.
+	lda z80_c
+	ldy #0
+	sta (bufaddr),y 	; write property.
+	lda z80_b 		; restore cell.
+
+; Print attributes, no properties.
+
+panp:
+	sta z80_e		; displacement in e.
+	lda #0
+	sta z80_d		; no high byte.
+	asl z80_e  		; multiply char by 16.
+	rol z80_d
+	asl z80_e
+	rol z80_d
+	asl z80_e
+	rol z80_d
+	asl z80_e
+	rol z80_d
+	clc
+	lda z80_e
+	adc #<chgfx 		; address of graphics.
+	sta tileaddr
+	lda z80_d
+	adc #>chgfx
+	sta tileaddr+1
+	
+	jsr gprad 		; get screen address.
+	ldx #0			; number of pixel rows to write.
+
+panp0:
+	txa
+	tay
+	lda (tileaddr),y 	; get image byte.
+	eor #TxtInvert		; Invert
+	ldy #0
+	sta (scraddr),y 	; copy to screen.
+
+	inx
+	txa
+	tay
+	lda (tileaddr),y 	; get image byte.
+	eor #TxtInvert		; Invert
+	ldy #8
+	sta (scraddr),y 	; copy to screen.
+
+	inc scraddr			; within char
+	inx	 		; repeat for 8 pixel rows.
+	cpx #16
+	bcc panp0
+	inc dispx 		; move along one.
+	inc charx
+	rts
+
+;----------------------------------------------------
+; MODE 1 Colour Lookups
+;----------------------------------------------------
+
+ink_to_mode1:
+	.byte $00, $00 ^ $00 ; solid 0
+	.byte $0f, $0f ^ $0f ; solid 1
+	.byte $f0, $f0 ^ $f0 ; solid 2
+	.byte $5a, $a5 ^ $5a ; stipple 1,2
+	.byte $da, $a7 ^ $da ; stripple 1,2,3
+	.byte $5f, $af ^ $5f ; stipple 1,3
+	.byte $f5, $fa ^ $f5 ; stipple 2,3
+	.byte $ff, $ff ^ $ff ; solid 3
+
+pixels_to_mode1:
+	.byte $00,$11,$22,$33,$44,$55,$66,$77
+	.byte $88,$99,$aa,$bb,$cc,$dd,$ee,$ff
 
 ;----------------------------------------------------
 ; Shift tables

@@ -210,8 +210,8 @@ Mapping Spectrum Attributes to MODE 1
     2131
 
 5 = cyan -> colour 1 & 3 stipple
-    3131
     1313
+    3131
 
 6 = yellow -> colour 2 & 3 stipple
     2323
@@ -243,4 +243,29 @@ tay
 lda map_1bpp_to_2bpp_white,y        ; only white pixels
 ; this is mask against our colour
 and sprite_ink_colour_byte          ; alternate byte odd/even rows for stipple
+eor (screen_addr),y
+sta (screen_addr),y
 
+; then can write to screen...
+; thankfully sprites can't have paper, only ink!
+
+Thrust plotting code
+~~~
+.ship_sprite_0_data
+        EQUB    $10,$8F,$11,$8F,$11,$8E,$12,$8E
+        EQUB    $12,$8D,$13,$8D,$13,$8C,$14,$8C
+        EQUB    $14,$8A,$0B,$15,$16,$89,$17,$8A
+        EQUB    $16,$8B,$15,$8B,$0F,$10,$11,$15
+        EQUB    $8C,$0E,$12,$14,$8D,$13,$FF
+
+IF data = $ff then finished
+IF data >= $80 then move down one row
+IF data = $80 skip row
+Pixel masks lookups are for single colour pixels [0-3]
+Each byte contains single pixel [0-63]
+Optimised for sparse 64 pixel wide sprites
+
+Hmmm, not convinced that automatic colour conversion is going to work effectively
+Also in MODE 1 can only get ~7 sprites plotted at 25Hz vs 11 in MODE 4
+Because sprites are plotted XOR to screen, this looks terrible in 2bpp
+Unless just had single bg colour and single fg colour but is this worth it?

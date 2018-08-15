@@ -35,9 +35,9 @@
 
 ; System constants
 
-	ScreenSize  = $1800	; Startaddress video RAM _BEEB
+	ScreenSize  = $3000	; Startaddress video RAM _BEEB
 	ScreenAddr 	= $8000 - ScreenSize	; Screen size bytes _BEEB
-	ScreenRowBytes = 256				; 40 columns
+	ScreenRowBytes = 512				; 40 columns
 
 	SpriteMaxY	= 177	; used for clipping bottom of screen
 
@@ -119,6 +119,10 @@ clear_zp:
 	stx varblk
 	dex
 	stx varobj
+
+	; TEMP
+	lda #$ff
+	sta colour_byte
 
 	jsr bbcinit
 
