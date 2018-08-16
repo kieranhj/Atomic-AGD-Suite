@@ -269,3 +269,12 @@ Hmmm, not convinced that automatic colour conversion is going to work effectivel
 Also in MODE 1 can only get ~7 sprites plotted at 25Hz vs 11 in MODE 4
 Because sprites are plotted XOR to screen, this looks terrible in 2bpp
 Unless just had single bg colour and single fg colour but is this worth it?
+
+Extended RAM
+~~~
+Propose this is a compile option for SWRAM usage
+Just put all data into SWRAM and load separately
+
+Sprite options
+~~~
+Plot sprites with mask against background

@@ -6,6 +6,7 @@
 
 .DEFINE asm_code $0e00		; assembly address _BEEB
 .DEFINE load_address $1200	; load address _BEEB
+.DEFINE data_address $8000	; data address _SWRAM
 
 ;----------------------------------------------------------------------
 ; BBC MICRO PLATFORM DEFINES
@@ -62,18 +63,18 @@
 		sta $fe21
 		lda #$10+pal
 		sta $fe21
-		lda #$20+pal
-		sta $fe21
-		lda #$30+pal
-		sta $fe21
+;		lda #$20+pal
+;		sta $fe21
+;		lda #$30+pal
+;		sta $fe21
 		lda #$40+pal
 		sta $fe21
 		lda #$50+pal
 		sta $fe21
-		lda #$60+pal
-		sta $fe21
-		lda #$70+pal
-		sta $fe21
+;		lda #$60+pal
+;		sta $fe21
+;		lda #$70+pal
+;		sta $fe21
 	.endmacro
 
 ;----------------------------------------------------------------------
@@ -123,6 +124,8 @@ clear_zp:
 	; TEMP
 	lda #$ff
 	sta colour_byte
+	lda #7
+	sta spriteink
 
 	jsr bbcinit
 
@@ -176,10 +179,14 @@ relocate:
 	sta $fe4e					; enable vsync interupt only
 	cli
 
+	lda #4						; select SWRAM
+    sta $f4
+    sta $fe30
+
 ; Other one off initialisation could happen here...
 
 ; Relocate all code down to &E00
-	ldx #>(end_asm - start_asm) + 1
+	ldx #>(data_start - start_asm) + 1
 	ldy #0
 reloop:
 	lda load_address, y
@@ -190,4 +197,18 @@ reloop:
 	inc reloop + 5 + load_address - asm_code
 	dex
 	bne reloop
+
+; Relocate all data up to &8000
+	ldx #>(end_asm - data_start) + 1
+	ldy #0
+uploop:
+	lda data_start + load_address - asm_code, y
+	sta data_address, y
+	iny
+	bne uploop
+	inc uploop + 2 + load_address - asm_code
+	inc uploop + 5 + load_address - asm_code
+	dex
+	bne uploop
+
 	jmp boot_game

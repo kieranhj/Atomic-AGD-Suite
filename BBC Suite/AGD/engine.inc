@@ -6,7 +6,7 @@
 
 ; Global definitions ------------------------------------------------------------
 
-	FONT = font			; Font address
+	FONT = font + data_address - data_start			; Font address
 
 ; Block characteristics.
 
@@ -107,7 +107,7 @@ wnrgtx:	.byte ((WINDOWLFT * 8) + (WINDOWWID * 8) - 16)-2
 
 ; Make sure pointers are arranged in the same order as the data itself.
 
-frmptr:	.word frmlst         ; sprite frames.
+frmptr:	.word frmlst + data_address - data_start         ; sprite frames.
 
 ; Assorted game routines which can go in contended memory.
 
@@ -167,9 +167,9 @@ mmenu:
 ;--------------------------------------------------------------
 
 dbox:
-	lda #<(msgdat)		; pointer to messages.
+	lda #<(msgdat + data_address - data_start)		; pointer to messages.
 	sta z80_l
-	lda #>(msgdat)
+	lda #>(msgdat + data_address - data_start)
 	sta z80_h
 	
 	jsr getwrd		; get message number.
@@ -580,9 +580,9 @@ xspr0:
 ;-------------------------------------------------------------
 
 iniob:
-	lda #<objdta 		; objects table.
+	lda #<(objdta + data_address - data_start) 		; objects table.
 	sta z80_x
-	lda #>objdta
+	lda #>(objdta + data_address - data_start)
 	sta z80_i
 
 	ldx numob 		; number of objects in the game.
@@ -734,8 +734,8 @@ fdchk:
 .if sflag
 txtbit:	.byte 128		; bit to write.
 txtwid:	.byte 16		; width of ticker message.
-txtpos:	.word msgdat
-txtini:	.word msgdat
+txtpos:	.word (msgdat + data_address - data_start)
+txtini:	.word (msgdat + data_address - data_start)
 txtscr:	.word ScreenAddr
 .endif
 
@@ -1875,7 +1875,7 @@ newlev:
 	lda scno 			; current screen.
 	clc
 	adc #1				; next screen.
-	cmp numsc			; total number of screens.
+	cmp numsc + data_address - data_start			; total number of screens.
 	bcs evwon			; yes, game finished.
 	sta scno			; set new level number.
 	jmp rstrt			; restart, clearing all aliens.
@@ -2117,9 +2117,9 @@ plsnd:
 ;---------------------------------------------------
 
 shwob:
-	lda #<objdta 			; objects table.
+	lda #<(objdta + data_address - data_start) 			; objects table.
 	sta z80_l
-	lda #>objdta
+	lda #>(objdta + data_address - data_start)
 	sta z80_h
 
 	lda numob 			; number of objects in the game.
@@ -2242,9 +2242,9 @@ gotob0:
 
 findob:
 	pha			; save object number
-	lda #<objdta 		; objects.
+	lda #<(objdta + data_address - data_start) 		; objects.
 	sta z80_l
-	lda #>objdta
+	lda #>(objdta + data_address - data_start)
 	sta z80_h
 	pla			; retreive object number
 	beq fndob1 		; is it zero? yes, skip loop.
@@ -2300,9 +2300,9 @@ drpob:
 ;-----------------------------------------------
 
 skobj:
-	lda #<objdta 		; pointer to objects.
+	lda #<(objdta + data_address - data_start) 		; pointer to objects.
 	sta z80_l
-	lda #>objdta
+	lda #>(objdta + data_address - data_start)
 	sta z80_h
 
 	lda numob 		; number of objects in game.
@@ -2789,9 +2789,9 @@ groom:
 	ldx scno 		; screen number.
 	ldy #0
 groomx:
-	lda #<scdat 		; pointer to screens.
+	lda #<(scdat + data_address - data_start) 		; pointer to screens.
 	sta z80_l
-	lda #>scdat
+	lda #>(scdat + data_address - data_start)
 	sta z80_h
 groom1:
 	cpx #0			; is it the first one?
@@ -2799,18 +2799,18 @@ groom1:
 
 	clc
 	lda z80_l
-	adc scdat,y 		; low byte of screen size.
+	adc scdat + data_address - data_start,y 		; low byte of screen size.
 	sta z80_l
 	iny			; point to high byte.
 	lda z80_h
-	adc scdat,y 		; high byte of screen size.
+	adc scdat + data_address - data_start,y 		; high byte of screen size.
 	sta z80_h
 	iny			; next address.
 
 	dex 			; one less iteration.
 	jmp groom1 		; loop until we reach the end.
 groom0:
-	lda numsc 		; add displacement.
+	lda numsc + data_address - data_start 		; add displacement.
 	asl a
 	clc			; add double displacement to address.
 	adc z80_l
@@ -3255,10 +3255,10 @@ gtblk:
 	rol z80_d
 	clc
 	lda z80_e
-	adc #<chgfx 		; address of graphics.
+	adc #<(chgfx + data_address - data_start) 		; address of graphics.
 	sta tileaddr
 	lda z80_d
-	adc #>chgfx
+	adc #>(chgfx + data_address - data_start)
 	sta tileaddr+1
 	jsr gprad 		; get screen address.
 	ldy #7			; number of pixel rows to write.
@@ -3468,10 +3468,10 @@ jump:
 	beq :+
 	rts			; already in the air.
 :
-	lda #>jtab
+	lda #>(jtab + data_address - data_start)
 	ldy #var_jumpHi
 	sta (z80_ix),y		; set jump high.
-	lda #<jtab		; jump table start.
+	lda #<(jtab + data_address - data_start)		; jump table start.
 	ldy #var_jumpLo
 	sta (z80_ix),y		; set jump low.
 	rts
@@ -3530,7 +3530,7 @@ joykey:
 
 	ldy #6	 		; address of last key.
 joyke0:
-	lda keys,y 		; get key from table.
+	lda keys + data_address - data_start,y 		; get key from table.
 	jsr ktest		; being pressed?
 	rol z80_e 		; rotate into reading.
 
@@ -3567,9 +3567,9 @@ joyjo2:
 
 dmsg:
 	tax
-	lda #<msgdat		; pointer to messages.
+	lda #<(msgdat + data_address - data_start)		; pointer to messages.
 	sta z80_l
-	lda #>msgdat
+	lda #>(msgdat + data_address - data_start)
 	sta z80_h
 	jsr getwrd		; get message number.
 dmsg3:
@@ -4204,10 +4204,10 @@ gspra0:
 
 	clc 			; address of play sprites.
 	lda z80_e
-	adc #<sprgfx
+	adc #<(sprgfx + data_address - data_start)
 	sta z80_e
 	lda z80_d
-	adc #>sprgfx
+	adc #>(sprgfx + data_address - data_start)
 	sta z80_d
 
 	lda dispx 		; y coordinate.
@@ -4683,9 +4683,9 @@ numsp7:
 	rts				; it's solid, don't fall.
 :
 ifalls:
-	lda #<jtab			; jump table start.
+	lda #<(jtab + data_address - data_start)			; jump table start.
 	sta z80_l
-	lda #>jtab
+	lda #>(jtab + data_address - data_start)
 	sta z80_h
 ifal0:
 	inc z80_l			; point to next value.
@@ -4742,9 +4742,9 @@ gfrm:
 ;----------------------------------------------------
 
 sprlst:
-	lda #<nmedat 			; list of enemy sprites.
+	lda #<(nmedat + data_address - data_start) 			; list of enemy sprites.
 	sta z80_l
-	lda #>nmedat
+	lda #>(nmedat + data_address - data_start)
 	sta z80_h
 	ldx scno 			; screen number.
 	bne sprls2 			; is it the first screen?
@@ -5214,9 +5214,9 @@ scrline:	.byte $00,$20,$40,$60,$80,$a0,$c0,$e0
 iscrly:
 	jsr prescr 		; set up display position.
 
-	lda #<msgdat 		; text messages.
+	lda #<(msgdat + data_address - data_start) 		; text messages.
 	sta z80_l
-	lda #>msgdat
+	lda #>(msgdat + data_address - data_start)
 	sta z80_h
 
 	lda z80_c 		; width.

@@ -1,29 +1,103 @@
 
 DEFINEWINDOW    0 2 20 28
 
+;DEFINECONTROLS  'Q' 'A' 'O' 'P' ' ' 'Z' 'I'
+
 DEFINEMESSAGES
-    "FOGGYS;QUEST"
-    "LIVES:"
-    "CRYSTALS:"
-    "@"
-    "`"
-    "____________________________"
-    "$"
-    "BY:;J.BLYTHE"
-    "x"
-    ";KEY;BLUE;;CRYSTAL;BLUCRYSTAL;REDCRYSTAL;GRN;;KEY;RED;;;KEY;PINK;;;;LADDER;;;;;;BOMB;;;;;THE;CUBE;;;THE;SKULL;;PIT;PLANT;;;;ROCK;;;;EXTRA;LIFE;EXTRA;LIFE;;;A;SEED;;;;;BALLOON;;;PICK;AXE;;;;BRICKS;;;;ICE;DRILL;;;SPLICER;;"
-    "z"
-    "WELL;DONE;FOGGY!!"
-    ";;;;;;;;w___________x__y;;;.;.;;;;;;@;;;;;;;;;;;;;;@;;;;;;;;z;;;CONTROLS;;;@;.;;;;;.;;@;;;;;;;;;;;;;;@;;;;;;.;;;;.;;;@;;1;KEYBOARD;;z;;;;;;;;@;;2;KEMPSTON;;@;;;;;;;;z;;3;SINCLAIR;;@;;;;.;;;;;;.;@;;;;;;;;;;;;;;@;;;;;.;;.;;;;;`_xx___________$;;.;;;;;;;;;;KEYS:O,P,Q,A;;;;;;;;;;;;;;;I-INV.;;;;;;;;;;;;;;;SPC-JUMP"
-    ";;;;;;;;;RUCKSACK;GAMES;;;;;;;c;2017;JOHN;BLYTHE"
-    "/+"
-    ">"
-    "?"
-    ";;;;;;;;;POWERED;BY;AGD"
-    ";;;;;;;;;;v;;;;;;;;;;u"
-    ";;;HOME;AT;LAST.;FOGGY;TAKES;A;;WELL;EARNED;REST;FROM;HOLIDAYS.;;;;;TIME;FOR;BIT;OF;TREASURE;;;;;;;;;HUNTING;INSTEAD!!!;;;;;;;;;THANKS;FOR;PLAYING!;;CREDITS..;;CODING;AND;GFX;-;JOHN;BLYTHE;ADDITIONAL;CODE;-;ANDY;JOHNS;;MANY;THANKS;TO..;JONATHAN CAULDWELL;FOR;AGD"
-    "PRESS;A;KEY"
-    "IS;OVER.."
+    "FOGGYS;QUEST
+"
+    "LIVES:
+"
+    "CRYSTALS:
+"
+    "@
+"
+    "`
+"
+    "____________________________
+"
+    "$
+"
+    "BY:;J.BLYTHE
+"
+    "x
+"
+    ";KEY;BLUE;;
+CRYSTAL;BLU
+CRYSTAL;RED
+CRYSTAL;GRN
+;;KEY;RED;;
+;KEY;PINK;;
+;;LADDER;;;
+;;;BOMB;;;;
+;THE;CUBE;;
+;THE;SKULL;
+;PIT;PLANT;
+;;;ROCK;;;;
+EXTRA;LIFE;
+EXTRA;LIFE;
+;;A;SEED;;;
+;;BALLOON;;
+;PICK;AXE;;
+;;BRICKS;;;
+;ICE;DRILL;
+;;SPLICER;;
+"
+    "z
+"
+    "WELL;DONE;FOGGY!!
+"
+    ";;;;;;;;w___________x__y;;;.
+;.;;;;;;@;;;;;;;;;;;;;;@
+;;;;;;;;z;;;CONTROLS;;;@;.
+;;;;;.;;@;;;;;;;;;;;;;;@;;;;;;.
+;;;;.;;;@;;1;KEYBOARD;;z
+;;;;;;;;@;;2;KEMPSTON;;@
+;;;;;;;;z;;3;SINCLAIR;;@;;;;.
+;;;;;;.;@;;;;;;;;;;;;;;@;;;;;.
+;;.;;;;;`_xx___________$;;.
+
+;;;;;;;;;;KEYS:O,P,Q,A
+;;;;;;;;;;;;;;;I-INV.
+;;;;;;;;;;;;;;;SPC-JUMP
+"
+    ";;;;;;;;;RUCKSACK;GAMES
+;;;;;;;c;2017;JOHN;BLYTHE
+"
+    "/+
+"
+    ">
+"
+    "?
+"
+    ";;;;;;;;;POWERED;BY;AGD
+"
+    ";;;;;;;;;;v
+;;;;;;;;;;u
+"
+    ";;;HOME;AT;LAST.;FOGGY;TAKES;A
+;
+;WELL;EARNED;REST;FROM;HOLIDAYS.
+;
+;;;;TIME;FOR;BIT;OF;TREASURE
+;
+;;;;;;;;HUNTING;INSTEAD!!!
+;
+;
+;;;;;;;THANKS;FOR;PLAYING!
+;
+;CREDITS..
+;
+;CODING;AND;GFX;-;JOHN;BLYTHE
+;ADDITIONAL;CODE;-;ANDY;JOHNS
+;
+;MANY;THANKS;TO..
+;JONATHAN CAULDWELL;FOR;AGD
+"
+    "PRESS;A;KEY
+"
+    "IS;OVER..
+"
 
 DEFINEFONT      0 0 0 0 0 0 0 0
                 0 48 120 120 48 48 0 48
@@ -121,6 +195,8 @@ DEFINEFONT      0 0 0 0 0 0 0 0
                 0 240 48 28 48 48 240 0
                 0 60 120 0 0 0 0 0
                 60 66 153 161 161 153 66 60
+
+DEFINEJUMP      249 250 251 254 254 255 255 255 0 0 0 1 1 1 2 2 6 7 6 15 16 99
 
 DEFINEBLOCK     EMPTYBLOCK
                 0 0 0 0 0 0 0 0
@@ -1362,7 +1438,7 @@ ENDMAP
 
 EVENT PLAYER
 IF CANGODOWN
-    FALL
+    TABLEFALL
 ENDIF
 DETECTOBJ
 IF OBJ <> 255
@@ -1370,14 +1446,14 @@ IF OBJ <> 255
     BEEP 50
     IF SCREEN = 1
         ADD 1 TO K
-        ; COLOUR 79
+        COLOUR 79
         LET LINE 20
         LET COLUMN 29
         DISPLAY K
     ENDIF
     IF SCREEN = 16
         ADD 1 TO K
-        ; COLOUR 79
+        COLOUR 79
         LET LINE 20
         LET COLUMN 29
         DISPLAY K
@@ -1385,7 +1461,7 @@ IF OBJ <> 255
     IF SCREEN = 7
         IF GOT 3
             ADD 1 TO K
-            ; COLOUR 79
+            COLOUR 79
             LET LINE 20
             LET COLUMN 29
             DISPLAY K
@@ -1398,7 +1474,7 @@ IF OBJ <> 255
     ENDIF
     IF SCREEN = 17
         ADD 1 TO LIVES
-        ; COLOUR 78
+        COLOUR 78
         LET LINE 21
         LET COLUMN 29
         DISPLAY LIVES
@@ -1406,7 +1482,7 @@ IF OBJ <> 255
     ENDIF
     IF SCREEN = 19
         ADD 1 TO LIVES
-        ; COLOUR 78
+        COLOUR 78
         LET LINE 21
         LET COLUMN 29
         DISPLAY LIVES
@@ -1541,7 +1617,7 @@ IF KEY FIRE
         IF CANGODOWN
         ELSE
             BEEP 40
-            JUMP 7
+            TABLEJUMP
         ENDIF
     ENDIF
 ENDIF
@@ -1565,7 +1641,7 @@ ENDIF
 IF COLLISION 0
     IF KEY FIRE3
         INV 9
-        ; SILENCE
+        SILENCE
         LET E = Y
         LET F = X
         IF SCREEN 0
@@ -1598,7 +1674,7 @@ IF COLLISION 0
         ENDIF
         IF SCREEN 4
             IF OPT 6
-                ; COLOUR 71
+                COLOUR 71
                 LET LINE 2
                 LET COLUMN 11
                 PUTBLOCK 21
@@ -1792,7 +1868,7 @@ ENDIF
 
 
 EVENT SPRITETYPE4
-; SPRITEINK 71
+SPRITEINK 71
 IF SETTINGA 0
     IF CANGODOWN
         SPRITEDOWN
@@ -1822,10 +1898,10 @@ IF COLLISION 0
     KILL
 ENDIF
 IF IMAGE 3
-    ; SPRITEINK 70
+    SPRITEINK 70
 ENDIF
 IF IMAGE 6
-    ; SPRITEINK 77
+    SPRITEINK 77
 ENDIF
 
 
@@ -1836,7 +1912,7 @@ ENDIF
 IF COLLISION 0
     IF KEY FIRE3
         INV 9
-        ; SILENCE
+        SILENCE
         LET E = Y
         LET F = X
         IF SCREEN 25
@@ -1920,7 +1996,7 @@ IF COLLISION 0
     KILL
 ENDIF
 IF IMAGE = 8
-    ; SPRITEINK 6
+    SPRITEINK 6
 ENDIF
 
 
@@ -1972,11 +2048,11 @@ IF I = 1
 ENDIF
 IF SCREEN 27
     IF G = 0
-        ; COLOUR 69
+        COLOUR 69
         LET LINE 2
         LET COLUMN 3
         MESSAGE 11
-        ; COLOUR 70
+        COLOUR 70
         LET LINE 18
         LET COLUMN 12
         MESSAGE 20
@@ -1996,33 +2072,33 @@ EVENT MAINLOOP2
 
 
 EVENT INTROMENU
-; COLOUR 70
+COLOUR 70
 CLS
 LET LINE 2
 LET COLUMN 10
 MESSAGE 0
 LET LINE 1
 MESSAGE 18
-; COLOUR 69
+COLOUR 69
 LET LINE 4
 LET COLUMN 0
 MESSAGE 12
-; COLOUR 68
+COLOUR 68
 LET LINE 18
 LET COLUMN 0
 MESSAGE 13
-; COLOUR 71
+COLOUR 71
 LET LINE 1
 LET COLUMN 15
 MESSAGE 14
 LET LINE 8
 LET COLUMN 2
 MESSAGE 15
-; COLOUR 70
+COLOUR 70
 LET LINE 4
 LET COLUMN 29
 MESSAGE 16
-; COLOUR 5
+COLOUR 5
 LET LINE 6
 LET COLUMN 8
 MESSAGE 10
@@ -2032,42 +2108,42 @@ MESSAGE 10
 LET LINE 8
 LET COLUMN 23
 MESSAGE 10
-; COLOUR 69
+COLOUR 69
 LET LINE 9
 LET COLUMN 23
 MESSAGE 10
-; COLOUR 78
+COLOUR 78
 LET LINE 4
 LET COLUMN 20
 MESSAGE 8
-; COLOUR 86
+COLOUR 86
 LET LINE 12
 LET COLUMN 10
 MESSAGE 8
-; COLOUR 94
+COLOUR 94
 LET LINE 12
 LET COLUMN 12
 MESSAGE 8
-; COLOUR 102
+COLOUR 102
 LET LINE 12
 LET COLUMN 11
 MESSAGE 8
-; COLOUR 66
+COLOUR 66
 LET LINE 21
 MESSAGE 17
-WAITKEY
+CONTROLMENU
 
 
 EVENT GAMEINIT
-; BORDER 0
-; COLOUR 77
+BORDER 0
+COLOUR 77
 CLS
-; SILENCE
-; COLOUR 75
+SILENCE
+COLOUR 75
 LET LINE 20
 LET COLUMN 2
 MESSAGE 0
-; COLOUR 77
+COLOUR 77
 LET C = 0
 LET G = 0
 LET O = 128
@@ -2098,7 +2174,7 @@ MESSAGE 5
 LET LINE 22
 LET COLUMN 30
 MESSAGE 6
-; COLOUR 78
+COLOUR 78
 LET LINE 21
 LET COLUMN 22
 MESSAGE 1
@@ -2108,7 +2184,7 @@ DISPLAY LIVES
 LET LINE 21
 LET COLUMN 2
 MESSAGE 7
-; COLOUR 79
+COLOUR 79
 LET LINE 20
 LET COLUMN 19
 MESSAGE 2
@@ -2131,7 +2207,7 @@ BEEP 50
 SUBTRACT 1 FROM LIVES
 LET Y O
 LET X P
-; COLOUR 78
+COLOUR 78
 LET LINE 21
 LET COLUMN 29
 DISPLAY LIVES
@@ -2140,17 +2216,17 @@ DISPLAY LIVES
 EVENT LOSTGAME
 DELAY 50
 CLS
-; COLOUR 77
+COLOUR 77
 LET LINE 10
 LET COLUMN 10
 MESSAGE 0
 LET LINE 9
 MESSAGE 18
-; COLOUR 206
+COLOUR 206
 LET LINE 12
 LET COLUMN 12
 MESSAGE 21
-; COLOUR 79
+COLOUR 79
 LET LINE 14
 LET COLUMN 15
 MESSAGE 14
@@ -2158,13 +2234,13 @@ DELAY 200
 
 
 EVENT COMPLETEDGAME
-; COLOUR 69
+COLOUR 69
 CLS
 DELAY 50
 LET LINE 1
 LET COLUMN 0
 MESSAGE 19
-; COLOUR 70
+COLOUR 70
 LET LINE = 21
 LET COLUMN = 11
 MESSAGE 20
@@ -2173,4 +2249,5 @@ WAITKEY
 
 EVENT NEWHIGHSCORE
 
-EVENT COLLECTBLOCK 
+
+EVENT COLLECTBLOCK

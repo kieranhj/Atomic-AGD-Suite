@@ -26,7 +26,7 @@
 ;keys:   .byte $42,$61,$68,$48,$62,$10,$37       ; Keys defined by game designer.
 ;        .byte $30,$31,$11,$12                   ; menu options.
 
-jkeys:  .byte $42,$61,$68,$48,$62,$10,$37       ; Keys defined by game designer.
+jkeys:  .byte $42,$61,$68,$48,$49,$10,$37       ; Keys defined by game designer.
         .byte $30,$31,$11,$12                   ; menu options.
 
 ;----------------------------------------------------
@@ -335,14 +335,23 @@ sprite:
 	lda z80_h
 	sta sprit1+2
 	sta sprit2+2
-
+.if 0
+	lda spriteink
+;	and #7
+	asl a
+	tax
+	lda ink_to_mode1,x
+	sta colour_byte
+	lda ink_to_mode1 + 1,x
+	sta colour_xor
+.endif
 	ldx #0				; pixel height.
 sprit1:
-	lda objdta,x		; fetch first byte.
+	lda objdta + data_address - data_start,x		; fetch first byte.
 	sta spr
 	inx
 sprit2:
-	lda objdta,x
+	lda objdta + data_address - data_start,x
 	sta spr+1
 
 	lda #0
@@ -480,6 +489,17 @@ sspri2:
 	sta dline_shift1+2
 	sta dline_shift2+2
 
+.if 0
+	lda spriteink
+;	and #7
+	asl a
+	tax
+	lda ink_to_mode1,x
+	sta colour_byte
+	lda ink_to_mode1 + 1,x
+	sta colour_xor
+.endif
+
 	ldx #0			; vertical lines.
 sspri0:
 	jsr dline		; draw a line.
@@ -513,6 +533,17 @@ sspric:
 	lda shift_table+1,x
 	sta ddline_shift3+2
 	sta ddline_shift4+2
+
+.if 0
+	lda spriteink
+;	and #7
+	asl a
+	tax
+	lda ink_to_mode1,x
+	sta colour_byte
+	lda ink_to_mode1 + 1,x
+	sta colour_xor
+.endif
 
 	jsr exx  		; store addresses.
 	jsr gspran 		; get new sprite addresses.
@@ -1107,7 +1138,7 @@ pattr:
 pattr2:
 	sta z80_b		; store cell in b register for now.
 	tax
-	lda bprop,x 		; block properties.
+	lda bprop + data_address - data_start,x 		; block properties.
 	sta z80_c
 	cmp #COLECT
 	bne :+
@@ -1136,10 +1167,10 @@ panp:
 	rol z80_d
 	clc
 	lda z80_e
-	adc #<chgfx 		; address of graphics.
+	adc #<(chgfx + data_address - data_start) 		; address of graphics.
 	sta tileaddr
 	lda z80_d
-	adc #>chgfx
+	adc #>(chgfx + data_address - data_start)
 	sta tileaddr+1
 	
 	jsr gprad 		; get screen address.
