@@ -23,8 +23,8 @@
 ; Sprites.
 
 	NUMSPR = 12			; number of sprites.
-	TABSIZ = 17			; size of each entry.
-	SPRBUF = NUMSPR * TABSIZ; size of entire table.
+	TABSIZ = 19			; size of each entry.
+	SPRBUF = NUMSPR * TABSIZ	; size of entire table.
 	NMESIZ = 4			; bytes stored in nmetab for each sprite.
 
 ; Sprite table variable offsets.
@@ -50,6 +50,9 @@
 	var_dataLo = 15		; sprite data ptr low
 	var_dataHi = 16		; sprite data ptr high
 
+	var_Ink = 17
+	var_newInk = 18
+
 ; Particle engine.
 
 	NUMSHR = 55			; pieces of shrapnel.
@@ -72,6 +75,7 @@
 .endif
 
 	ASCII_NEWLINE = 13
+	ASCII_CR = 10
 
 ;===============================================================
 ; Game starts here
@@ -205,6 +209,8 @@ dbox6:
 	beq dbox3		; yes.
 	cmp #ASCII_NEWLINE
 	beq dbox3		; yes.
+	cmp #ASCII_CR
+	beq dbox3		; yes.
 	inc z80_b		; add to this line"s width.
 	lda z80_a
 	bmi dbox4		; end of message? yes, end count.
@@ -289,6 +295,8 @@ dbox0:
 	beq dbox1		; yes, next one.
 	cmp #ASCII_NEWLINE			; end of line?
 	beq dbox1		; yes, next one.
+	cmp #ASCII_CR
+	beq dbox1		; yes, next one.
 
 	dec z80_b		; one less to display.
 	and #127		; remove terminator.
@@ -325,6 +333,8 @@ dbox9:
 	cmp #','		; another line?
 	beq dbox10		; yes, do next line.
 	cmp #ASCII_NEWLINE			; another line?
+	beq dbox10		; yes, do next line.
+	cmp #ASCII_CR			; another line?
 	beq dbox10		; yes, do next line.
 	cmp #128		; end of message?
 	bcs :+
@@ -429,6 +439,8 @@ dbox13:
 	jmp dbox2		; yes, do next line.
 :
 	cmp #ASCII_NEWLINE			; another line?
+	bne :+
+	cmp #ASCII_CR			; another line?
 	bne :+
 	jmp dbox2		; yes, do next line.
 :
@@ -2438,6 +2450,12 @@ spaw1:
 	ldy #var_Direction
 	sta (z80_hl),y		; direction
 
+	lda #7				; default to white ink - spriteink?
+	ldy #var_Ink
+	sta (z80_hl),y		; set sprite ink
+	ldy #var_newInk
+	sta (z80_hl),y		; set sprite ink
+
 	lda #0
 	ldy #var_jumpLo
 	sta (z80_hl),y		; reset parameter.
@@ -3588,6 +3606,8 @@ dmsg0:
 	and #127		; remove any end marker.
 	cmp #ASCII_NEWLINE
 	beq dmsg1
+	cmp #ASCII_CR
+	beq dmsg1
 	jsr pchar		; display character.
 	jsr nexpos 		; display position.
 	bne dmsg2		; not on a new line.
@@ -3633,6 +3653,8 @@ bmsg1:
 	lda (z80_hl),y 		; get character to display.
 	and #127		; only want 7 bits.
 	cmp #ASCII_NEWLINE
+	beq bmsg2
+	cmp #ASCII_CR
 	beq bmsg2
 	jsr bchar 		; display big char.
 bmsg3:
@@ -4044,6 +4066,11 @@ dspr2:
 	lda (z80_ix),y 		; copy new x.
 	ldy #var_X
 	sta (z80_ix),y
+
+	ldy #var_newInk
+	lda (z80_ix),y 		; copy new ink.
+	ldy #var_Ink
+	sta (z80_ix),y 		; copy new ink.
 
 	clc
 	lda z80_x
@@ -5014,6 +5041,12 @@ cpsp:
 	ldy #var_jumpHi	 		; reset jump pointer high.
 	sta (z80_ix),y
 
+	lda #7					; default white ink - spriteink?
+	ldy #var_Ink
+	sta (z80_ix),y
+	ldy #var_newInk
+	sta (z80_ix),y
+
 	lda #255 				; reset data pointer to auto-restore.
 	ldy #var_dataHi
 	sta (z80_ix),y
@@ -5142,6 +5175,8 @@ scrly0:
 	lda (scr_txt),y 		; find character we're displaying.
 	and #127 		; remove end marker bit if applicable.
 	cmp #ASCII_NEWLINE			; is it newline?
+	bne scrly5 		; no, it's okay.
+	cmp #ASCII_CR			; is it newline?
 	bne scrly5 		; no, it's okay.
 	lda #32			; convert to a space instead.
 scrly5:
@@ -5401,10 +5436,13 @@ digcnt:	.byte 0
 ; ix+15 = data pointer low.
 ; ix+16 = data pointer high.
 
+; ix+17 = ink
+; ix+18 = new ink
+
 ; block NUMSPR * TABSIZ,255
 ; sprtab NUMSPR*TABSIZ,255
 
-ssprit:	.byte 255,255,255,255,255,255,255,0,192,120,0,0,0,255,255,255,255
+ssprit:	.byte 255,255,255,255,255,255,255,0,192,120,0,0,0,255,255,255,255,7,7
 roomtb:	.byte 7                      ; start room map offset.
 
 ; User routine.  Put your own code in here to be called with USER instruction.

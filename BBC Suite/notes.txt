@@ -269,12 +269,37 @@ Hmmm, not convinced that automatic colour conversion is going to work effectivel
 Also in MODE 1 can only get ~7 sprites plotted at 25Hz vs 11 in MODE 4
 Because sprites are plotted XOR to screen, this looks terrible in 2bpp
 Unless just had single bg colour and single fg colour but is this worth it?
+Doh - Foggy looks really nice in MODE 1 :)
 
 Extended RAM
 ~~~
 Propose this is a compile option for SWRAM usage
 Just put all data into SWRAM and load separately
+Some games have more script than data (e.g. Terrapins ~10K script but Foggy ~14K data)
 
-Sprite options
+To Do
 ~~~
-Plot sprites with mask against background
+Align with Kees:
+- splitting the engine
+- conditional assembly flags
+- optimise rest of code for 6502
+- compiler optimisation
+- streamline Atom/BBC versions
+
+Merge Script Compiler changes w/ Kees
+Agree new CC65 version
+
+Sprite ink old/new per sprite
+Compiler to spit out script + data segments separately not combined
+Gmae Compile options for swram or not
+Game Compile options for mode 4 / mode 1
+Script compiler option for mode 1
+
+Keyboard mapping in script compiler
+Scrolly text
+Sound
+
+MODE 2 version
+Pixel formats
+Sprite plot routines
+Languge extensions for palettes / clut

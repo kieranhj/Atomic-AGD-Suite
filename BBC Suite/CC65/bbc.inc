@@ -300,22 +300,22 @@ crtc_regs_high:
 	.byte <(ScreenAddr/8)	; R13 screen start address, low
 
 ula_pal:
-	.byte $00 + PAL_black
-	.byte $10 + PAL_black
-	.byte $20 + PAL_blue
-	.byte $30 + PAL_blue
-	.byte $40 + PAL_black
-	.byte $50 + PAL_black
-	.byte $60 + PAL_blue
-	.byte $70 + PAL_blue
-	.byte $80 + PAL_red
-	.byte $90 + PAL_red
-	.byte $a0 + PAL_white
-	.byte $b0 + PAL_white
-	.byte $c0 + PAL_red
-	.byte $d0 + PAL_red
-	.byte $e0 + PAL_white
-	.byte $f0 + PAL_white
+	.byte $00 + COLOUR0
+	.byte $10 + COLOUR0
+	.byte $20 + COLOUR1
+	.byte $30 + COLOUR1
+	.byte $40 + COLOUR0
+	.byte $50 + COLOUR0
+	.byte $60 + COLOUR1
+	.byte $70 + COLOUR1
+	.byte $80 + COLOUR2
+	.byte $90 + COLOUR2
+	.byte $a0 + COLOUR3
+	.byte $b0 + COLOUR3
+	.byte $c0 + COLOUR2
+	.byte $d0 + COLOUR2
+	.byte $e0 + COLOUR3
+	.byte $f0 + COLOUR3
 
 ;----------------------------------------------------
 ; Draw sprite
@@ -335,6 +335,7 @@ sprite:
 	lda z80_h
 	sta sprit1+2
 	sta sprit2+2
+
 .if 0
 	lda spriteink
 ;	and #7
@@ -345,6 +346,7 @@ sprite:
 	lda ink_to_mode1 + 1,x
 	sta colour_xor
 .endif
+
 	ldx #0				; pixel height.
 sprit1:
 	lda objdta + data_address - data_start,x		; fetch first byte.
@@ -471,6 +473,17 @@ scadd:
 
 sspria:
 	jsr gsprad		; get old sprite address.
+
+.if 1
+	ldy #var_Ink
+	asl a
+	tax
+	lda ink_to_mode1,x
+	sta colour_byte
+	lda ink_to_mode1 + 1,x
+	sta colour_xor
+.endif
+
 sspri2:
 
 	lda z80_e				; 3c
@@ -489,20 +502,19 @@ sspri2:
 	sta dline_shift1+2
 	sta dline_shift2+2
 
-.if 0
-	lda spriteink
-;	and #7
-	asl a
-	tax
-	lda ink_to_mode1,x
-	sta colour_byte
-	lda ink_to_mode1 + 1,x
-	sta colour_xor
-.endif
-
 	ldx #0			; vertical lines.
 sspri0:
 	jsr dline		; draw a line.
+
+; invert colour byte
+
+	lda colour_byte
+	eor colour_xor
+	sta colour_byte
+
+; next row of sprite data
+
+	inx
 	cpx #32
 	bne sspri0		; repeat 16 times x 2 bytes
 	rts
@@ -511,9 +523,21 @@ sspri0:
 
 ssprib:
 	jsr gspran 		; get new sprite address.
+
+.if 1
+	ldy #var_newInk
+	lda (z80_ix),y
+	asl a
+	tax
+	lda ink_to_mode1,x
+	sta colour_byte
+	lda ink_to_mode1 + 1,x
+	sta colour_xor
+.endif
+
 	jmp sspri2
 
-;-----------------------------------------------------------------
+;----------------------------------------------------------------
 
 sspric:
 	jsr gsprad 		; get old sprite address.
@@ -534,39 +558,69 @@ sspric:
 	sta ddline_shift3+2
 	sta ddline_shift4+2
 
-.if 0
-	lda spriteink
-;	and #7
+.if 1
+	ldy #var_newInk
+	lda (z80_ix),y
 	asl a
 	tax
 	lda ink_to_mode1,x
 	sta colour_byte
 	lda ink_to_mode1 + 1,x
 	sta colour_xor
+
+	ldy #var_Ink
+	lda (z80_ix),y
+	asl a
+	tax
+	lda ink_to_mode1,x
+	sta newcol_byte
+	lda ink_to_mode1 + 1,x
+	sta newcol_xor
 .endif
 
 	jsr exx  		; store addresses.
 	jsr gspran 		; get new sprite addresses.
 
 	lda z80_e				; 3c
-	sta ddline_spraddr1+1	; 4c
-	sta ddline_spraddr2+1	; 4c
+	sta dline_spraddr1+1	; 4c
+	sta dline_spraddr2+1	; 4c
 
 	lda z80_d				; 3c
-	sta ddline_spraddr1+2	; 4c
-	sta ddline_spraddr2+2	; 4c
+	sta dline_spraddr1+2	; 4c
+	sta dline_spraddr2+2	; 4c
 
 	ldx sprshft
 	lda shift_table,x
-	sta ddline_shift1+1
-	sta ddline_shift2+1
+	sta dline_shift1+1
+	sta dline_shift2+1
 	lda shift_table+1,x
-	sta ddline_shift1+2
-	sta ddline_shift2+2
+	sta dline_shift1+2
+	sta dline_shift2+2
 
 	ldx #0
 lloop:
-	jsr ddline 		; draw a line.
+	jsr dline
+
+; still first row but different data!
+
+	dex
+
+	jsr ddline	 		; draw a line.
+
+; invert colour bytes
+
+	lda colour_byte
+	eor colour_xor
+	sta colour_byte
+
+	lda newcol_byte
+	eor newcol_xor
+	sta newcol_byte
+
+; next row of sprite data
+
+	inx
+
 	cpx #32
 	bne lloop
 	rts
@@ -630,6 +684,7 @@ dline_shift1:
 ; middle screen byte
 
 	inx
+
 dline_spraddr2:
 	ldy $ffff,x 		; second bit of data.
 dline_shift2:
@@ -687,12 +742,6 @@ dline_shift2:
 	eor (scraddr),y 	; XOR with what's there.
 	sta (scraddr),y 	; bung it in.
 
-	lda colour_byte
-	eor colour_xor
-	sta colour_byte
-
-	inx
-
 ;----------------------------------------------------------------------
 ; Line drawn, now work out next target address.
 ;----------------------------------------------------------------------
@@ -723,7 +772,6 @@ beeb_next_row:
 	rts
 
 ;-------------------------------------------------------------
-; Drop through.
 ; Line drawn, now work out next target address.
 ;
 ; Input:
@@ -733,134 +781,9 @@ beeb_next_row:
 ;  scraddr = screen address
 ;-------------------------------------------------------------
 
-ddline:
-
-; NEW SPRITE
-
-; first screen byte
-
-ddline_spraddr1:
-	ldy $ffff,x 		; graphic data.
-ddline_shift1:
-	lda $ffff,y
-	sta sprtmp
-	and z80_c 			; mask away what's not needed.
-
-	lsr a				; top nibble
-	lsr a
-	lsr a
-	lsr a
-	tay
-	lda pixels_to_mode1,y
-	and colour_byte
-
-	ldy #0
-	eor (scraddr),y 	; XOR with what's there.
-	sta (scraddr),y 	; bung it in.
-
-	lda sprtmp
-	and z80_c 			; mask away what's not needed.
-	and #$f				; bottom nibble
-	tay
-	lda pixels_to_mode1,y
-	and colour_byte
-	ldy #8
-	eor (scraddr),y 	; XOR with what's there.
-	sta (scraddr),y 	; bung it in.
-
-; carry to next screen byte
-
-	lda sprtmp			; fetch data.
-	and z80_b 			; mask away unwanted
-	sta sprtmp
-
-; middle screen byte
-
-	inx
-ddline_spraddr2:
-	ldy $ffff,x 		; second bit of data.
-ddline_shift2:
-	lda $ffff,y
-	sta sprtmp2
-	and z80_c 			; mask away what's not needed.
-	ora sprtmp
-	sta sprtmp
-
-	lsr a				; top nibble
-	lsr a
-	lsr a
-	lsr a
-	tay
-	lda pixels_to_mode1,y
-	and colour_byte
-
-	ldy #16
-	eor (scraddr),y 	; XOR with what's there.
-	sta (scraddr),y 	; bung it in.
-
-	lda sprtmp
-	and #$f				; bottom nibble
-	tay
-	lda pixels_to_mode1,y
-	and colour_byte
-	ldy #24
-	eor (scraddr),y 	; XOR with what's there.
-	sta (scraddr),y 	; bung it in.
-
-; carry to last screen byte
-
-	lda sprtmp2
-	and z80_b 			; mask away unwanted
-
-	lsr a				; top nibble
-	lsr a
-	lsr a
-	lsr a
-	tay
-	lda pixels_to_mode1,y
-	and colour_byte
-
-	ldy #32
-	eor (scraddr),y 	; XOR with what's there.
-	sta (scraddr),y 	; bung it in.
-
-	lda sprtmp2
-	and z80_b 			; mask away unwanted
-	and #$f				; bottom nibble
-	tay
-	lda pixels_to_mode1,y
-	and colour_byte
-	ldy #40
-	eor (scraddr),y 	; XOR with what's there.
-	sta (scraddr),y 	; bung it in.
-
-; _BEEB next row
-
-	lda scraddr 		; get low byte of address.
-	and #7				
-	cmp #7				; is this last line of row?
-	beq :+
-
-	; within same row can't increment page
-	inc scraddr			; new low byte of address.
-	bne ddline2
-
-:
-	clc
-	lda scraddr
-	adc #<(ScreenRowBytes-7)
-	sta scraddr			; new low byte of address.
-	lda scraddr+1
-	adc #>(ScreenRowBytes-7)
-	sta scraddr+1		; new high byte of address.
-
 ; OLD SPRITE
 
-ddline2:
-
-; still first row but different data!
-
-	dex
+ddline:
 
 ; first screen byte
 
@@ -877,7 +800,7 @@ ddline_shift3:
 	lsr a
 	tay
 	lda pixels_to_mode1,y
-	and colour_byte
+	and newcol_byte
 
 	ldy #0
 	eor (z80_hlp),y 	; XOR with what's there.
@@ -888,7 +811,7 @@ ddline_shift3:
 	and #$f				; bottom nibble
 	tay
 	lda pixels_to_mode1,y
-	and colour_byte
+	and newcol_byte
 	ldy #8
 	eor (z80_hlp),y 	; XOR with what's there.
 	sta (z80_hlp),y 	; bung it in.
@@ -902,6 +825,7 @@ ddline_shift3:
 ; middle screen byte
 
 	inx
+
 ddline_spraddr4:
 	ldy $ffff,x 		; second bit of data.
 ddline_shift4:
@@ -917,7 +841,7 @@ ddline_shift4:
 	lsr a
 	tay
 	lda pixels_to_mode1,y
-	and colour_byte
+	and newcol_byte
 
 	ldy #16
 	eor (z80_hlp),y 	; XOR with what's there.
@@ -927,7 +851,7 @@ ddline_shift4:
 	and #$f				; bottom nibble
 	tay
 	lda pixels_to_mode1,y
-	and colour_byte
+	and newcol_byte
 	ldy #24
 	eor (z80_hlp),y 	; XOR with what's there.
 	sta (z80_hlp),y 	; bung it in.
@@ -943,7 +867,7 @@ ddline_shift4:
 	lsr a
 	tay
 	lda pixels_to_mode1,y
-	and colour_byte
+	and newcol_byte
 
 	ldy #32
 	eor (z80_hlp),y 	; XOR with what's there.
@@ -954,18 +878,10 @@ ddline_shift4:
 	and #$f				; bottom nibble
 	tay
 	lda pixels_to_mode1,y
-	and colour_byte
+	and newcol_byte
 	ldy #40
 	eor (z80_hlp),y 	; XOR with what's there.
 	sta (z80_hlp),y 	; bung it in.
-
-; next row of sprite data
-
-	inx
-
-	lda colour_byte
-	eor colour_xor
-	sta colour_byte
 
 ; _BEEB screen arrangement
 
@@ -1209,7 +1125,8 @@ ink_to_mode1:
 	.byte $0f, $0f ^ $0f ; solid 1
 	.byte $f0, $f0 ^ $f0 ; solid 2
 	.byte $5a, $a5 ^ $5a ; stipple 1,2
-	.byte $da, $a7 ^ $da ; stripple 1,2,3
+	.byte $a5, $5a ^ $a5 ; stipple 2,1
+;	.byte $da, $a7 ^ $da ; stripple 1,2,3
 	.byte $5f, $af ^ $5f ; stipple 1,3
 	.byte $f5, $fa ^ $f5 ; stipple 2,3
 	.byte $ff, $ff ^ $ff ; solid 3
