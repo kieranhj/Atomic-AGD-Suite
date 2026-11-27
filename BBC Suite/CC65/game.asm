@@ -8,6 +8,11 @@
 .DEFINE load_address $1200	; load address _BEEB
 .DEFINE data_address $8000	; data address _SWRAM
 
+.DEFINE COLOUR0 PAL_black
+.DEFINE COLOUR1 PAL_blue
+.DEFINE COLOUR2 PAL_red
+.DEFINE COLOUR3 PAL_white
+
 ;----------------------------------------------------------------------
 ; BBC MICRO PLATFORM DEFINES
 ;----------------------------------------------------------------------

@@ -105,6 +105,8 @@ sprshft:    .res 1
 spriteink:  .res 1
 colour_byte:.res 1
 colour_xor: .res 1
+newcol_byte:.res 1
+newcol_xor: .res 1
 
 .if mflag
 TmpAddr:	.res 2
